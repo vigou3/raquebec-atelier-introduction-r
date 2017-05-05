@@ -1,7 +1,6 @@
 TABLE DES MATIÈRES
 
-# Première partie: le langage R et les fonctionnalités statistiques de
-  base
+# Première partie: le langage R et les fonctionnalités statistiques de base
   
   
 1. Présentation de R et préparation d'un environnement de travail
