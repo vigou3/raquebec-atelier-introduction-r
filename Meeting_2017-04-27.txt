@@ -37,3 +37,4 @@ Durée 6h (2 fois 3h)
 
 Sources:
 http://openflights.org/data.html
+http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
