@@ -100,9 +100,9 @@ Encore une fois pour le bureau de Montréal, qui est inquiet que la nouvelle tar
 
 ##Auteurs
 * Superviseur:
-	* Vincent Goulet
+	* [Vincent Goulet](https://github.com/vigou3) - [Vincent.Goulet@act.ulaval.ca](mailto: Vincent.Goulet@act.ulaval.ca)
 * Concepteurs:
-	* David Beauchemin
+	* [David Beauchemin](https://github.com/davebulaval) - [david.beauchemin.5@ulaval.ca](mailto: david.beauchemin.5@ulaval.ca)
 	* [Samuel Cabral Cruz](https://github.com/SamuelCabralCruz) - [samuelcabralcruz@gmail.com](mailto: samuelcabralcruz@gmail.com)
 
 ##Liens utiles
