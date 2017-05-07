@@ -54,4 +54,4 @@ TABLE DES MATIÈRES
    
 # Deuxième partie: étude de cas
 ## Test ajout image
-![](/Statement/Octocat.png =20x20)
+![](/Statement/Octocat.png)
