@@ -54,4 +54,6 @@ TABLE DES MATIÈRES
    
 # Deuxième partie: étude de cas
 ## Test ajout image
-![](/Statement/Octocat.png = 20x20)
+![](/Statement/Octocat.png)
+
+<img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/Octocat.png" width="20" height="20">
