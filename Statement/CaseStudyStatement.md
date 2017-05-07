@@ -99,9 +99,6 @@ Encore une fois pour le bureau de Montréal, qui est inquiet que la nouvelle tar
 |  Juillet  |         1750         |
 |   Août    |         2000         |
 | Septembre |         2300         |
-|  Octobre  |         2500         |
-| Novembre  |         3000         |
-| Décembre  |         3500         |
 
 2. Pour chacun des colis, vous devez ensuite générer un poids et une destination
 3. Calculer ensuite les prix chargés par votre compagnie ainsi que la compétition pour chacun des transports
@@ -144,4 +141,4 @@ Encore une fois pour le bureau de Montréal, qui est inquiet que la nouvelle tar
 
   ​
 
-  <img src="/Octocat.png" width="100px"/>	<img src="/R_logo.svg.png" width="100px"/>	<img src="/Alecive-Flatwoken-Apps-Haroopad.ico" width="100px"/>
+  <img src="/fig/Octocat.png" height="100px"/>	<img src="/fig/R_logo.png" height="100px"/>	<img src="/fig/typora.png" height="100px"/> <img src="/fig/markdown.png" height="100px"/>

@@ -1,0 +1,530 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>CaseStudyStatement.md</title><link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}html { font-size: 14px; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51); }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { background: rgb(181, 214, 252); text-shadow: none; }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; padding-bottom: 70px; white-space: pre-wrap; overflow-x: visible; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+.typora-export #write { margin: 0px auto; }
+#write > p:first-child, #write > ul:first-child, #write > ol:first-child, #write > pre:first-child, #write > blockquote:first-child, #write > div:first-child, #write > table:first-child { margin-top: 30px; }
+#write li > table:first-child { margin-top: -20px; }
+img { max-width: 100%; vertical-align: middle; }
+input, button, select, textarea { color: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+::before, ::after, * { box-sizing: border-box; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write div, #write pre { width: inherit; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6 { position: relative; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+p { -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
+.mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0rem; -webkit-margin-after: 0rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: bold; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.701961); color: rgb(85, 85, 85); border-radius: 4px; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; margin: 4px 0px 0px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+pre { white-space: pre-wrap; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+.md-fences .CodeMirror.CodeMirror-wrap { top: -1.6em; margin-bottom: -1.6em; }
+.md-fences.mock-cm { white-space: pre-wrap; }
+.show-fences-line-number .md-fences { padding-left: 0px; }
+.show-fences-line-number .md-fences.mock-cm { padding-left: 40px; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; padding-top: 1em; padding-bottom: 1em; }
+.footnotes + .footnotes { margin-top: -1em; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: transparent; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: normal; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li p, li .mathjax-block { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; }
+@media print {
+  html, body { height: 100%; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid-page; orphans: 2; }
+  p { orphans: 4; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 1cm; padding-right: 1cm; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0mm; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 2.86rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.mathjax-block { white-space: pre; overflow: hidden; width: 100%; }
+p + .mathjax-block { margin-top: -1.143rem; }
+.mathjax-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: none; box-shadow: none; }
+.task-list { list-style-type: none; }
+.task-list-item { position: relative; padding-left: 1em; }
+.task-list-item input { position: absolute; top: 0px; left: 0px; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc::after, .md-toc-content::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); text-decoration: none; }
+.md-toc-inner:hover { }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: bold; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+.md-tag { opacity: 0.5; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: monospace; }
+code { text-align: left; }
+h1 .md-tag, h2 .md-tag, h3 .md-tag, h4 .md-tag, h5 .md-tag, h6 .md-tag { font-weight: initial; opacity: 0.35; }
+a.md-print-anchor { border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: none !important; background: transparent !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.mathjax-block .MathJax_SVG_Display { text-align: center; margin: 1em 0em; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: monospace; }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: normal; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+
+
+@include-when-export url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/**
+ * css forked from https://github.com/GitbookIO/gitbook 
+ * www.gitbook.com
+ * Apache License
+ * https://github.com/GitbookIO/gitbook/blob/master/LICENSE
+ **/
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Open Sans Regular'),url('file:///C:%5CUsers%5CSamuel%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C400.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: local('Open Sans Italic'),url('file:///C:%5CUsers%5CSamuel%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C400i.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Open Sans Bold'),url('file:///C:%5CUsers%5CSamuel%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C700.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Open Sans Bold Italic'),url('file:///C:%5CUsers%5CSamuel%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C700i.woff') format('woff')
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write{
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 20px 30px 40px 30px;
+	padding-top: 20px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+body > *:first-child {
+    margin-top: 0 !important;
+}
+body > *:last-child {
+    margin-bottom: 0 !important;
+}
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    /*background: url("file:///C:%5CUsers%5CSamuel%5CAppData%5CRoaming%5Cimages%5Cmodules%5Cstyleguide%5Cpara.png") no-repeat 10px center;*/
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 4px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+    border-bottom: 1px solid #ddd;
+}
+
+body > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h3:first-child,
+body > h4:first-child,
+body > h5:first-child,
+body > h6:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+a:first-child h1,
+a:first-child h2,
+a:first-child h3,
+a:first-child h4,
+a:first-child h5,
+a:first-child h6 {
+    margin-top: 0;
+    padding-top: 0;
+}
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
+    margin-top: 0;
+}
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dddddd;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 0.2em 1em;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+.task-list{
+	padding-left: 0;
+}
+
+.task-list-item {
+	padding-left:32px;
+}
+
+.task-list-item input {
+  top: 3px;
+  left: 8px;
+}
+
+@media screen and (min-width: 914px) {
+    /*body {
+        width: 854px;
+        margin: 0 auto;
+    }*/
+}
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag{
+	color: inherit;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#md-notification:before {
+    top: 10px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write'  class = 'is-node'><h1><a name='header-n0' class='md-header-anchor '></a>R à Québec 2017 - Atelier d’introduction à R</h1><h1><a name='header-n2' class='md-header-anchor '></a>Deuxième Partie - Étude de cas - Jeudi 25 mai 13h à 16h</h1><h1><a name='header-n3' class='md-header-anchor '></a>Table des matières</h1><ul><li><p><a href='#header-n39'>Description Sommaire</a></p></li><li><p><a href='#header-n44'>Mandat</a></p></li><li><p><a href='#-nonc-'>Énoncé</a></p><ul><li><a href='#question-1---extraction--traitement--visualisation-et-analyse-des-donn-es'>Question 1 - Extraction, traitement, visualisation et analyse des données</a></li><li><a href='#question-2---cr-ation-de-fonctions-utilitaires'>Question 2 - Création de fonctions utilitaires</a></li><li><a href='#question-3---communication-de-vos-r-sultats'>Question 3 - Communication de vos résultats</a></li><li><a href='#question-4---analyse-de-la-comp-tition'>Question 4 - Analyse de la compétition</a></li><li><a href='#question-5---ajustement-des-lois-de-distribution-sur-donn-es-empiriques'>Question 5 - Ajustement des lois de distribution sur données empiriques</a></li><li><a href='#question-6---simulation-et-analyse-de-rentabilit-'>Question 6 - Simulation et analyse de rentabilité</a></li></ul></li><li><p><a href='#header-n251'>Auteurs</a></p></li><li><p><a href='#header-n270'>Liens utiles</a></p></li></ul><h2><a name='header-n39' class='md-header-anchor '></a>Description Sommaire</h2><p>Dans le cadre de cette étude de cas, nous nous placerons dans la peau d&#39;un analyste du département de tarification oeuvrant au sein d&#39;une compagnie se spécilisant dans le transport de colis par voies aériennes en mettant à profit le jeu de données d&#39;<a href='https://openflights.org/data.html'>OpenFlights</a>.</p><h2><a name='header-n44' class='md-header-anchor '></a>Mandat</h2><p>Notre mandat consistera dans un premier temps à analyser les bases de données que nous avons à notre disposition afin de créer des fonctions qui permettront de facilement intégrer les informations qu&#39;elles contiennent lors de la tarification d&#39;une livraison spécifique. Une fois cette tarification complétée, nous devrons fournir des chartes pour facilement approximer les prix d&#39;une livraison qui s&#39;avèrront être des outils indispensable au département de marketing et au reste de la direction. Après avoir transmis les documents en question, votre gestionnaire voulant s&#39;assurer que la nouvelle tarification sera efficiente et profitable vous demandera d&#39;analyser les prix de la concurrence pour en extrapoler leur tarification. Finalement, vous serez appeler à comparer ces deux tarifications et la compétitivité de votre nouvelle tarification comparativement au reste du marché en procédant à une analyse stochastique.</p><p><div style="page-break-after: always;"></div></p><h2><a name='header-n47' class='md-header-anchor '></a>Énoncé</h2><h3><a name='header-n48' class='md-header-anchor '></a>Question 1 - Extraction, traitement, visualisation et analyse des données</h3><ol start='' ><li>Extraire les bases de données <a href='https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat'><strong>airports.dat</strong></a> et <a href='https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat'><strong>routes.dat</strong></a></li><li>Attribuer des noms aux colonnes du jeu de données en vous fiant à l&#39;information disponible sur le site</li><li>Nettoyer le jeu de données en ne conservant que les données relative au Canada</li><li>Extraire des informations générales sur la distribution des variables présente dans le jeu de données et vous informer sur la signification des différents champs</li><li>Faire une sélection des variables qui vous semble utile pour le reste du traitement</li><li>Créer une carte affichant les différents aéroports sur une carte du Canada</li><li>Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports</li><li>Calculer un indice d&#39;achalandage des aéroports en fonction de la quantitée de routes en destination</li><li>Calculer un indice d&#39;achalandage des aéroports en fonction de la quantité de routes en provenance</li><li>Calculer un indice combiné des deux derniers indices</li><li>Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles</li></ol><h3><a name='header-n83' class='md-header-anchor '></a>Question 2 - Création de fonctions utilitaires</h3><ol start='' ><li><p>Écriver le code source de la fonction <strong>calculDistance()</strong> qui permettra de calculer la distance par vol d&#39;oiseau entre deux aéroports</p></li><li><p>Écriver le code source de la fonction <strong>calculHeureArrivee()</strong> qui permettra de calculer l&#39;heure d&#39;arrivée dans la ville de destination d&#39;un colis qui serait posté immédiatement</p></li><li><p>Écriver le code source de la fonction <strong>calculPrix()</strong> qui permettre de tarifer la livraison d&#39;un colis donné en fonction de son poids, sa provenance et sa destination en tenant compte des frais fixes, des taxes (variant par province), de la marge de profits, des rabais applicables (% et $) ainsi que des normes suivantes:</p><ul><li>Distance minimale</li><li>Aucune surcharge pour colis de poids inférieur à X</li><li>Un prix ne devrait jamais être négatif ou en deça des FraisFixes*(1+MargeProfits)</li></ul></li></ol><blockquote><p>Note:
+N&#39;oubliez pas de tenir compte des différents fuseaux horaires
+Faites en sorte que votre fonction fasse la vérification des conditions en renvoie un message d&#39;aide pour remédier à la situation
+Votre fonction devrait être complètement paramétrable sans nécessairement exiger la définition de tous les paramètres afin de permettre son utilisation. Pensez donc à définir des valeurs par défauts aux arguments que vous jugerez optionnels.</p></blockquote><h3><a name='header-n110' class='md-header-anchor '></a>Question 3 - Communication de vos résultats</h3><ol start='' ><li><p>À partir de la fonction de coût programmée ci-dessus, créer des chartes graphiques permettant d&#39;analyser la tarification d&#39;un trajet en fonction de sa <strong>distance</strong> sachant que le poids moyen des colis est de Y.</p></li><li><p>Pendant que vous étiez en train de créer les chartes de distance, vous vous souvenez que vous avez reçu une demande spéciale du département de marketing pour le comptoir de dépôt de la ville de Montréal qui aimerait avoir des chartes variant selon le <strong>poids</strong> pour les trajets suivants:</p><ul><li>Montréal (YUL) - Québec (YQB)</li><li>Montréal (YUL) - Vancouver (YVR)</li><li>Montréal (YUL) - Toronto (YYZ)</li><li>Montréal (YUL) - Calgary (YYC)</li></ul></li></ol><h3><a name='header-n131' class='md-header-anchor '></a>Question 4 - Analyse de la compétition</h3><p>Grâce à la base de données <a href=''>benchmark.csv</a>, vous serez en mesure d&#39;extrapoler grâce à des techniques statistiques la tarification de la compétition.</p><ol start='' ><li>Visualiser la distribution des prix en fonction du poids</li><li>Visualiser ensuite la distribution des prix en fonction de la distance</li><li>Vous constatez qu&#39;un model linéaire serait suffisant pour faire l&#39;approximation</li><li>Tester l&#39;indépendance des deux variables</li><li>Faire une régression linéaire pour identifier les paramèetres les paramètres de la loi sous-jacente</li></ol><blockquote><p>Note:
+Vous savez que vos compétiteurs utilisent principalement le poids et la distance pour déterminer le prix des livraisons</p></blockquote><h3><a name='header-n154' class='md-header-anchor '></a>Question 5 - Ajustement des lois de distribution sur données empiriques</h3><p>En reprenant les données de la compétition, vous êtes aussi en mesure d&#39;extraire la distribution suivit par le poids des colis et des distances.</p><ol start='' ><li><p>Utiliser le package actuar et la fonction optim pour ajuster les distributions suivantes à chaque des distributions</p><ul><li>Loi Gamma</li><li>Loi Lognormale</li><li>Loi Weibull</li><li>Loi Gaussienne</li></ul></li><li><p>Calculer la qualité de l&#39;ajustement</p></li><li><p>Faire un choix de distribution</p></li></ol><blockquote><p>Note:
+Les paramètres initiaux de vos optimisations peuvent impacter le résultat de la fonction</p></blockquote><h3><a name='header-n184' class='md-header-anchor '></a>Question 6 - Simulation et analyse de rentabilité</h3><p>Encore une fois pour le bureau de Montréal, qui est inquiet que la nouvelle tarification nous fasse perdre des parts de marché qui sont actuellement de Z%, on vous demande de faire une analyse de rentabilité. Pour ce faire, vous décidez donc d&#39;utiliser des techniques stochastiques afin de simuler un bassin de clients au cours de la prochaine année.</p><ol start='' ><li>Simuler le nombre de colis envoyés au cours de chacun des prochains mois à l&#39;aide d&#39;une distribution Poisson. En raison de la saisonnalité, le nombre de colis moyens envoyés par mois au cours des trois dernières années était:</li></ol><table><thead><tr><th style='text-align:center;' >Mois</th><th style='text-align:center;' >Nb Colis (Avg. 3yrs)</th></tr></thead><tbody><tr><td style='text-align:center;' >Janvier</td><td style='text-align:center;' >2000</td></tr><tr><td style='text-align:center;' >Février</td><td style='text-align:center;' >1700</td></tr><tr><td style='text-align:center;' >Mars</td><td style='text-align:center;' >1500</td></tr><tr><td style='text-align:center;' >Avril</td><td style='text-align:center;' >1350</td></tr><tr><td style='text-align:center;' >Mai</td><td style='text-align:center;' >1600</td></tr><tr><td style='text-align:center;' >Juin</td><td style='text-align:center;' >1650</td></tr><tr><td style='text-align:center;' >Juillet</td><td style='text-align:center;' >1750</td></tr><tr><td style='text-align:center;' >Août</td><td style='text-align:center;' >2000</td></tr><tr><td style='text-align:center;' >Septembre</td><td style='text-align:center;' >2300</td></tr></tbody></table><ol start='2' ><li>Pour chacun des colis, vous devez ensuite générer un poids et une destination</li><li>Calculer ensuite les prix chargés par votre compagnie ainsi que la compétition pour chacun des transports</li><li>Déterminer les revenus totaux de votre compagnie ainsi que de la compétition au cours de la prochaine année</li><li>Déterminer comment la nouvelle tarification impactera la part de marché</li></ol><blockquote><p>Note:
+Pensez à définir un point de départ à votre générateur de nombres aléatoires afin que vos résultats soient reproductibles
+Distribution Poisson <span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-1-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="13.734ex" height="2.419ex" viewBox="0 -780.1 5913.1 1041.5" role="img" focusable="false" style="vertical-align: -0.607ex;"><defs><path stroke-width="1" id="E1-MJMATHI-6D" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path stroke-width="1" id="E1-MJMATHI-6F" d="M201 -11Q126 -11 80 38T34 156Q34 221 64 279T146 380Q222 441 301 441Q333 441 341 440Q354 437 367 433T402 417T438 387T464 338T476 268Q476 161 390 75T201 -11ZM121 120Q121 70 147 48T206 26Q250 26 289 58T351 142Q360 163 374 216T388 308Q388 352 370 375Q346 405 306 405Q243 405 195 347Q158 303 140 230T121 120Z"></path><path stroke-width="1" id="E1-MJMATHI-79" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path stroke-width="1" id="E1-MJMATHI-65" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path><path stroke-width="1" id="E1-MJMATHI-6E" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path stroke-width="1" id="E1-MJMAIN-3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path><path stroke-width="1" id="E1-MJMATHI-3BB" d="M166 673Q166 685 183 694H202Q292 691 316 644Q322 629 373 486T474 207T524 67Q531 47 537 34T546 15T551 6T555 2T556 -2T550 -11H482Q457 3 450 18T399 152L354 277L340 262Q327 246 293 207T236 141Q211 112 174 69Q123 9 111 -1T83 -12Q47 -12 47 20Q47 37 61 52T199 187Q229 216 266 252T321 306L338 322Q338 323 288 462T234 612Q214 657 183 657Q166 657 166 673Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-6D" x="0" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-6F" x="878" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-79" x="1364" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-65" x="1861" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-6E" x="2328" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-6E" x="2928" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-65" x="3529" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMAIN-3D" x="4273" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E1-MJMATHI-3BB" x="5329" y="0"></use></g></svg></span><script type="math/tex" id="MathJax-Element-1">moyenne = \lambda</script>
+On considère toutes les distributions comme équivalente et ayant la même probabilité d&#39;être la destination choisie par le client
+Nous considérons que le marché est efficient et que les clients feront leur choix de compagnie qu&#39;en fonction du prix chargé, en allant évidemment avec la compagnie chargenant le moins cher</p></blockquote><h2><a name='header-n251' class='md-header-anchor '></a>Auteurs</h2><ul><li><p>Superviseur:</p><ul><li><a href='https://github.com/vigou3'>Vincent Goulet</a> - <a href='mailto:%20Vincent.Goulet@act.ulaval.ca'>Vincent.Goulet@act.ulaval.ca</a></li></ul></li><li><p>Concepteurs:</p><ul><li><a href='https://github.com/davebulaval'>David Beauchemin</a> - <a href='mailto:%20david.beauchemin.5@ulaval.ca'>david.beauchemin.5@ulaval.ca</a></li><li><a href='https://github.com/SamuelCabralCruz'>Samuel Cabral Cruz</a> - <a href='mailto:%20samuelcabralcruz@gmail.com'>samuelcabralcruz@gmail.com</a></li></ul></li></ul><h2><a name='header-n270' class='md-header-anchor '></a>Liens utiles</h2><ul><li><p><a href='http://raquebec.ulaval.ca/2017/'>Colloque R</a></p></li><li><p><a href='www.fedex.com/ca_french/services/serviceguide/canadian-sales-taxes.html'>Taxes de vente Canada</a></p></li><li><p><a href=''>Actuar</a></p></li><li><p><a href=''>Optim</a></p></li><li><p><a href=''>sqldf</a></p></li><li><p><a href=''>Loi Normale</a></p></li><li><p><a href=''>Loi LogNormale</a></p></li><li><p><a href=''>Loi Weibull</a></p></li><li><p><a href=''>Loi Gamma</a></p></li><li><p><a href=''>Loi Poisson</a></p><p></p><p><img src="/fig/Octocat.png" height="100px"/>	<img src="/fig/R_logo.png" height="100px"/>	<img src="/fig/typora.png" height="100px"/> <img src="/fig/markdown.png" height="100px"/></p></li></ul></div>
+</body>
+</html>
