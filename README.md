@@ -54,6 +54,6 @@ TABLE DES MATIÈRES
    
 # Deuxième partie: étude de cas
 ## Test ajout image
-![](/Statement/Octocat.png)
-
 <img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/Octocat.png" width="100">
+<img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/R_logo.svg.png" width="100">
+<img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/Alecive-Flatwoken-Apps-Haroopad.ico" width="100">
