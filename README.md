@@ -53,3 +53,7 @@ TABLE DES MATIÈRES
    - options
    
 # Deuxième partie: étude de cas
+
+
+##Test ajout image
+![](raquebec-intro/Statement/Octocat.png)
