@@ -56,4 +56,4 @@ TABLE DES MATIÈRES
 ## Test ajout image
 ![](/Statement/Octocat.png)
 
-<img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/Octocat.png" width="50" height="50">
+<img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/Octocat.png" width="100">
