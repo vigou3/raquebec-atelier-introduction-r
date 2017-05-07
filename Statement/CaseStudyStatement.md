@@ -117,6 +117,6 @@ Encore une fois pour le bureau de Montréal, qui est inquiet que la nouvelle tar
 * [Loi Gamma]()
 * [Loi Poisson]()
 
-![alt text](https://github.com/vigou3/raquebec-intro/blob/master/Statement/Octocat.png)
-![alt text](https://github.com/vigou3/raquebec-intro/blob/master/Statement/R_logo.svg.png)
-![alt text](https://github.com/vigou3/raquebec-intro/blob/master/Statement/Alecive-Flatwoken-Apps-Haroopad.ico)
+![alt text](https://github.com/vigou3/raquebec-intro/blob/master/Statement/Octocat.png =20x20)
+![alt text](https://github.com/vigou3/raquebec-intro/blob/master/Statement/R_logo.svg.png =20x20)
+![alt text](https://github.com/vigou3/raquebec-intro/blob/master/Statement/Alecive-Flatwoken-Apps-Haroopad.ico =20x20)
