@@ -30,9 +30,9 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 ### Question 1 - Extraction, traitement, visualisation et analyse des données
 1. Extraire les bases de données [**airports.dat**](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat) et [**routes.dat**](https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat)
 2. Attribuer des noms aux colonnes du jeu de données en vous fiant à l'information disponible sur le site
-3. Nettoyer le jeu de données en ne conservant que les données relative au Canada
-4. Extraire des informations générales sur la distribution des variables présente dans le jeu de données et vous informer sur la signification des différents champs
-5. Faire une sélection des variables qui vous semble utile pour le reste du traitement
+3. Nettoyer le jeu de données en ne conservant que les données relatives au Canada
+4. Extraire des informations générales sur la distribution des variables présentent dans le jeu de données et vous informer sur la signification de ces dernières ainsi que sur les différentes modalités quelles peuvent prendre
+5. Corriger les modalités des variables et faire une sélection des variables qui vous semble utiles pour le reste du traitement 
 6. Créer une carte affichant les différents aéroports sur une carte du Canada
 7. Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports
 8. Calculer un indice d'achalandage des aéroports en fonction de la quantitée de routes en destination
