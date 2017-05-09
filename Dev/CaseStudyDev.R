@@ -1,3 +1,5 @@
+library(geosphere)
+
 #Question 1 - Extraction, traitement, visualisation et analyse des données
 
 #1.1 - Extraire les bases de données airports.dat et routes.dat
@@ -20,6 +22,8 @@ airports <- airports[airports$country=='Canada',]
 # prendre
 head(airports)
 summary(airports)
+nbAirportCity <- table(as.character(airports$city))
+(nbAirportCity <- sort(nbAirportCity,decreasing=TRUE))[1:10]
 
 #1.5 - Corriger les modalités des variables et faire une sélection des variables qui vous semble utiles 
 # pour le reste du traitement
@@ -34,9 +38,26 @@ airports[is.na(airports$IATA),c("airportID","name","IATA","ICAO")]
 #Cette approximation ne semble pas trop contraignante compte tenu du fait que les trois derniers caractères
 #du code ICAO correspondent au code IATA dans 82% des cas.
 sum(airports$IATA==substr(airports$ICAO,2,4),na.rm = TRUE)/sum(!is.na(airports$IATA))
-#Nous créons donc une variable IATA modifiée et nous nous débarasserons de la variable ICAO
+#Nous modifions donc la variable IATA et nous nous débarasserons de la variable ICAO
+airports$IATA <- as.character(airports$IATA)
 airports$IATA[is.na(airports$IATA)] <- substr(airports$ICAO[is.na(airports$IATA)],2,4)
+airports$IATA <- as.factor(airports$IATA)
 airports <- airports[,-match("ICAO",colnames(airports))]
+#Finalement, nous voyons qu'il semble y avoir une quarantaine d'aéroport pour lesquels nous n'avons pas
+# d'information sur le fuseau horaire
+missingTZ <- airports[is.na(airports$timezone),]
+#Puisque le fuseau horaire ne dépend que de la position géographique, tentons de voir s'il est possible 
+# de trouver des aéroports proches de c'est derniers pour en déduire les informations
+(x <- missingTZ$longitude)
+(y <- missingTZ$latitude)
+knownTZ <- airports[!is.na(airports$timezone),]
+apply(cbind(x,y),1, function(x) min(distGeo(x,cbind(knownTZ$longitude,knownTZ$latitude))/1000))
+
+summary(airports)
+
+sapply(x,function(x) min(abs(x-knownTZ$longitude)))
+
+
 
 
 routes <- routes[!is.na(match(routes$sourceAirportID,airports$airportID)) &
@@ -48,11 +69,3 @@ routes <- routes[!is.na(match(routes$sourceAirportID,airports$airportID)) &
 
 summary(routes)
 head(routes)
-airports
-
-airports$IATA[airports$IATA=='\\N']<-NA
-levels(airports$IATA)
-
-sapply(airports, function(x) x[x=='\\N']<-NA)
-sapply(airports, function(x) sum(is.na(x)))
-#1.5 - Faire une sélection des variables qui vous semble utile pour le reste du traitement 
