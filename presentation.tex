@@ -36,19 +36,21 @@
   \item Nouvelle mise en {\oe}uvre du langage --- milieu des années
     1990 --- \textbf{R}oss Ihaka et \textbf{R}obert Gentleman
   \item Inspirée de Scheme (un dérivé du Lisp) avec syntaxe du S
-    \begin{center}
-\begin{lstlisting}[language=Lisp]
+\begin{Schunk}
+\begin{Sinput}
 (define factorial (lambda (n)
   (if (= n 1)
       1
     (* n (factorial (- n 1))))))
-\end{lstlisting}
-      vs
-\begin{lstlisting}
+\end{Sinput}
+\end{Schunk}
+vs
+\begin{Schunk}
+\begin{Sinput}
 factorial <- function(n)
   if (n == 1) 1 else n * factorial(n - 1)
-\end{lstlisting}
-    \end{center}
+\end{Sinput}
+\end{Schunk}
   \item Libre («GNU S») et ouvert (CRAN) --- R surpasse S-PLUS
   \end{itemize}
 \end{frame}
@@ -79,13 +81,15 @@ factorial <- function(n)
 \end{frame}
 
 \begin{frame}
-  \frametitle{(démonstration)}
+  \frametitle{Démonstration}
   \begin{itemize}
   \item Interfaces
   \item Stratégies de travail
   \item Éditeurs de texte et environnements intégrés
   \item Anatomie d'une session de travail
   \end{itemize}
+
+  \gotoR{presentation.R}
 \end{frame}
 
 %%% Local Variables:
