@@ -1,0 +1,5 @@
+verify merge tz
+
+https://gis.stackexchange.com/questions/133625/checking-if-points-fall-within-polygon-shapefile
+
+https://www.google.ca/maps/place/Squamish,+BC/@49.4961102,-123.3281868,8.92z/data=!4m13!1m7!3m6!1s0x5486f815ac782d73:0xafa96868495a11db!2sSquamish,+BC!3b1!8m2!3d49.7016339!4d-123.1558121!3m4!1s0x5486f815ac782d73:0xafa96868495a11db!8m2!3d49.7016339!4d-123.1558121

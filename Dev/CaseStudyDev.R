@@ -1,7 +1,7 @@
-library(geosphere)
-
+#Setting working directory properly
+setwd('..')
+(path <- getwd())
 #Question 1 - Extraction, traitement, visualisation et analyse des données
-
 #1.1 - Extraire les bases de données airports.dat et routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c('\\N',''))
@@ -46,16 +46,37 @@ airports <- airports[,-match("ICAO",colnames(airports))]
 #Finalement, nous voyons qu'il semble y avoir une quarantaine d'aéroport pour lesquels nous n'avons pas
 # d'information sur le fuseau horaire
 missingTZ <- airports[is.na(airports$timezone),]
-#Puisque le fuseau horaire ne dépend que de la position géographique, tentons de voir s'il est possible 
-# de trouver des aéroports proches de c'est derniers pour en déduire les informations
-(x <- missingTZ$longitude)
-(y <- missingTZ$latitude)
-knownTZ <- airports[!is.na(airports$timezone),]
-apply(cbind(x,y),1, function(x) min(distGeo(x,cbind(knownTZ$longitude,knownTZ$latitude))/1000))
+#Puisque les fuseaux horaires ne dépendent que de la position géographique, plusieurs options s'offrent à nous:
+#1) Trouver des aéroports proches de c'est derniers pour en déduire les informations
+#2) Utiliser des outils de cartographie pour retrouver les vrais fuseaux horaires
+#Nous utiliserons ici la deuxième option qui peut sembler plus complquée de prime abord, mais qui se révèle
+#très simple et beaucoup plus précise lorsque nous avons accès à l'information et aux outils nécessaires
+library(rgdal)
+tz_world.shape <- readOGR(dsn=paste(path,"/Reference/tz_world",sep=''),layer="tz_world")
+library(foreign)
+tz_world.data <- read.dbf(paste(path,"/Reference/tz_world/tz_world.dbf",sep=''), as.is = FALSE)
+library(sp)
+unknown_tz <- airports[is.na(airports$tzFormat),c("airportID","name","longitude","latitude")]
+sppts <- SpatialPoints(unknown_tz[,c("longitude","latitude")])
+proj4string(sppts) <- CRS("+proj=longlat")
+sppts <- spTransform(sppts, proj4string(tz_word.shape))
+merged_tz <- cbind(unknown_tz,over(sppts,tz_world.shape))
 
+
+unique(merged_tz$TZID)
+
+x <- Sys.time()
+y <- Sys.timezone()
+class(x)
+
+install.packages("lubridate")
+library(lubridate)
+x
+with_tz(x, tzone = "America/Vancouver")
+
+git stunique(airports[!is.na(airports$tzFormat),c("timezone","DST","tzFormat")])
 summary(airports)
 
-sapply(x,function(x) min(abs(x-knownTZ$longitude)))
 
 
 
@@ -69,14 +90,3 @@ routes <- routes[!is.na(match(routes$sourceAirportID,airports$airportID)) &
 
 summary(routes)
 head(routes)
-
-install.packages("rgdal")
-library(rgdal)
-data.shape<-readOGR(dsn="C:/Users/Samuel/Desktop/tz_world/world",layer="tz_world")
-plot(data.shape)
-
-install.packages("foreign")
-library(foreign)
-x <- read.dbf("C:/Users/Samuel/Desktop/tz_world/world/tz_world.dbf", as.is = FALSE)
-head(x)
-unique(airports$tzFormat)
