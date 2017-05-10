@@ -69,3 +69,14 @@ routes <- routes[!is.na(match(routes$sourceAirportID,airports$airportID)) &
 
 summary(routes)
 head(routes)
+
+install.packages("rgdal")
+library(rgdal)
+data.shape<-readOGR(dsn="C:/Users/Samuel/Desktop/tz_world/world",layer="tz_world")
+plot(data.shape)
+
+install.packages("foreign")
+library(foreign)
+x <- read.dbf("C:/Users/Samuel/Desktop/tz_world/world/tz_world.dbf", as.is = FALSE)
+head(x)
+unique(airports$tzFormat)
