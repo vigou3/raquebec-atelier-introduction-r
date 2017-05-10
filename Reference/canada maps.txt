@@ -1,3 +1,5 @@
+Convert factor to numeric without loss of information
+http://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information
 
 Maps application with R
 http://www.molecularecologist.com/2012/09/making-maps-with-r/

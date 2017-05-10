@@ -5,6 +5,7 @@ setwd('..')
 #1.1 - Extraire les bases de données airports.dat et routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c('\\N',''))
+airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c('\\N',''))
 
 #1.2 - Attribuer des noms aux colonnes du jeu de données en vous fiant à l'information disponible sur le site
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
@@ -13,6 +14,7 @@ colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
 colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
                       "destinationAirport","destinationAirportID","codeshare",
                       "stops","equipment")
+colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Country","Active")
 
 #1.3 - Nettoyer le jeu de données en ne conservant que les données relatives au Canada
 airports <- airports[airports$country=='Canada',]
@@ -76,12 +78,65 @@ library(plyr)
 airports <- rename(airports, c("tzMerged"="tzFormat"))
 summary(airports)
 
-install.packages("ggmap")
+
+routes <- sqldf("
+  select *
+  from routes
+  where sourceAirportID in (select distinct airportID
+                            from airports)
+    and destinationAirportID in (select distinct airportID
+                                 from airports)")
+routes <- data.frame(as.matrix(routes),stringsAsFactors = TRUE)
+#Produira le même résultat
+#x <- routes[!is.na(match(routes$sourceAirportID,airports$airportID)) &
+#              !is.na(match(routes$destinationAirportID,airports$airportID)),]
+#routes <- routes[!is.na(match(routes$sourceAirport,airports$IATA)) &
+#                 !is.na(match(routes$destinationAirport,airports$IATA)),]
+summary(routes)
+unique(routes$airline)
+unique(routes[,c("airline","airlineID")])
+unique(routes$airlineID)
+summary(airlines)
+x <- sqldf("
+  select *
+  from airlines
+  where IATA in (select distinct airline
+                 from routes)")
+x
+routes[is.na(routes$airlineID),]
+unique(routes$airlineID)
+#Comme nous pouvons le remarquer, il n'y a que deux vols qui ne sont pas directs,
+#Pour des fins de simplification, nous allons considérer tous les vols comme étant 
+#des vols directs
+#De plus, la notion de codeshare ne sera pas utile compte tenu que la livraison de
+#de marchandise peut autant se faire par l'intermédiaire d'agence aérienne que par 
+#vol privé.
+#Nous pouvons ainsi nous débarasser de ces variables
+routes <- routes[,-match(c("codeshare","stops"),colnames(routes))]
+summary(routes)
+
+
 library(ggmap)
-map <- get_map(location = 'Canada',zoom=4)
-mapPoints <- ggmap(map) +
-  +   geom_point(aes(x = lon, y = lat, size = sqrt(flights)), data = airportD, alpha = .5)
-plot(map)
+map <- get_map(location = 'Canada',zoom=3)
+mapPoints <- ggmap(map) + geom_point(data=airports[,c("longitude","latitude","IATA")],aes(as.numeric(paste(longitude)),as.numeric(paste(latitude))), alpha = .5)
+mapPoints
+
+enteringFlights <- table(routes$destinationAirportID)
+max(enteringFlights)
+mean(enteringFlights)
+var(enteringFlights)
+sd(enteringFlights)
+head(sort(enteringFlights,decreasing = TRUE),n = 30)
+
+
+
+
+
+
+
+
+
+#time conversion
 
 x <- Sys.time()
 y <- Sys.timezone()
@@ -93,18 +148,3 @@ x
 with_tz(x, tzone = "America/Vancouver")
 
 unique(airports[!is.na(airports$tzFormat),c("timezone","DST","tzFormat")])
-summary(airports)
-
-
-
-
-
-routes <- routes[!is.na(match(routes$sourceAirportID,airports$airportID)) &
-                   !is.na(match(routes$destinationAirportID,airports$airportID)),]
-#Produira le même résultat
-#routes <- routes[!is.na(match(routes$sourceAirport,airports$IATA)) &
-#                 !is.na(match(routes$destinationAirport,airports$IATA)),]
-
-
-summary(routes)
-head(routes)
