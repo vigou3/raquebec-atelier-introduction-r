@@ -127,3 +127,19 @@ c(-2, 3, -1, 4)^(1:4)      # quatre puissances différentes
 ### FONCTIONS
 ###
 
+## une fonction est un objet normal
+seq                        # le voir
+c(seq, rep)                # vecteur de fonctions
+x <- c(seq, rep)                # vecteur de fonctions
+
+## exemple de syntaxe
+
+## règles d'appel d'une fonction
+
+## syntaxe de base pour créer une fonction
+
+## lexical scope
+
+## fonction anonyme
+
+## argument '...'
