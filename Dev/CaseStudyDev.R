@@ -59,11 +59,29 @@ library(sp)
 unknown_tz <- airports[is.na(airports$tzFormat),c("airportID","name","longitude","latitude")]
 sppts <- SpatialPoints(unknown_tz[,c("longitude","latitude")])
 proj4string(sppts) <- CRS("+proj=longlat")
-sppts <- spTransform(sppts, proj4string(tz_word.shape))
+sppts <- spTransform(sppts, proj4string(tz_world.shape))
 merged_tz <- cbind(unknown_tz,over(sppts,tz_world.shape))
 
+library(sqldf)
+airports <- sqldf("
+  select a.*, coalesce(a.tzFormat,b.TZID) as tzMerged
+  from airports a 
+  left join merged_tz b
+  on a.airportID = b.airportID
+  order by a.airportID")
+airports <- data.frame(as.matrix(airports),stringsAsFactors = TRUE)
+summary(airports)
+airports <- airports[,-match(c("timezone","DST","tzFormat"),colnames(airports))]
+library(plyr)
+airports <- rename(airports, c("tzMerged"="tzFormat"))
+summary(airports)
 
-unique(merged_tz$TZID)
+install.packages("ggmap")
+library(ggmap)
+map <- get_map(location = 'Canada',zoom=4)
+mapPoints <- ggmap(map) +
+  +   geom_point(aes(x = lon, y = lat, size = sqrt(flights)), data = airportD, alpha = .5)
+plot(map)
 
 x <- Sys.time()
 y <- Sys.timezone()
@@ -74,7 +92,7 @@ library(lubridate)
 x
 with_tz(x, tzone = "America/Vancouver")
 
-git stunique(airports[!is.na(airports$tzFormat),c("timezone","DST","tzFormat")])
+unique(airports[!is.na(airports$tzFormat),c("timezone","DST","tzFormat")])
 summary(airports)
 
 
