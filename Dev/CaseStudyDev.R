@@ -55,8 +55,6 @@ missingTZ <- airports[is.na(airports$timezone),]
 #très simple et beaucoup plus précise lorsque nous avons accès à l'information et aux outils nécessaires
 library(rgdal)
 tz_world.shape <- readOGR(dsn=paste(path,"/Reference/tz_world",sep=''),layer="tz_world")
-library(foreign)
-tz_world.data <- read.dbf(paste(path,"/Reference/tz_world/tz_world.dbf",sep=''), as.is = FALSE)
 library(sp)
 unknown_tz <- airports[is.na(airports$tzFormat),c("airportID","name","longitude","latitude")]
 sppts <- SpatialPoints(unknown_tz[,c("longitude","latitude")])
