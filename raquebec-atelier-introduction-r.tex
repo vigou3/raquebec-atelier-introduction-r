@@ -1,8 +1,10 @@
 \documentclass[aspectratio=54,10pt,xcolor=x11names]{beamer}
   \usepackage[french]{babel}
   \usepackage[autolanguage]{numprint}
+  \usepackage[noae]{Sweave}
   \usepackage{fontawesome}
   \usepackage{listings}
+  \usepackage{framed}           % env. leftbar
   \usepackage[overlay,absolute]{textpos}
 
   %% =============================
@@ -18,26 +20,13 @@
   %% Thème de beamer
   \usetheme{metropolis}
 
-  %% Polices de caractères
-  % \usepackage{fontspec}
-  % \defaultfontfeatures{Ligatures=TeX,Scale=0.88}
-  % \setmainfont[Numbers=OldStyle]{Fira Sans}
-  %\setsansfont{Lucida Sans OT}
-  %\setmathfont{Lucida Bright Math OT}
-  % \setmonofont{Inconsolata zi4r Regular}
-  % \usepackage[sfdefault,scaled=.88]{FiraSans}
-  % \usepackage[varqu,varl]{inconsolata}
-  % \usepackage{newtxsf}
-
-  %% Couleurs
-  \definecolor{comments}{rgb}{0.7,0,0}  % rouge foncé
-  \definecolor{alert}{rgb}{0,0.7,0}     % vert foncé
-  \definecolor{link}{rgb}{0,0.4,0.6}    % ~RoyalBlue de dvips
-  \definecolor{url}{rgb}{0.6,0,0}       % rouge-brun
-  \definecolor{rouge}{rgb}{0.85,0,0.07} % rouge bandeau identitaire
-  \definecolor{or}{rgb}{1,0.8,0}        % or bandeau identitaire
-  \colorlet{emphasis}{link}
-  \colorlet{exercices}{gray}
+  %% Couleurs additionnelles
+  \definecolor{comments}{rgb}{0.7,0,0}      % commentaires
+  \definecolor{link}{rgb}{0,0.4,0.6}        % liens internes
+  \definecolor{url}{rgb}{0.6,0,0}           % liens externes
+  \definecolor{codebg}{named}{LightYellow1} % fond code R
+  \definecolor{rouge}{rgb}{0.85,0,0.07}     % rouge bandeau identitaire
+  \definecolor{or}{rgb}{1,0.8,0}            % or bandeau identitaire
 
   %% Hyperliens
   \hypersetup{%
@@ -53,47 +42,6 @@
     bookmarksnumbered = {true},
     bookmarksdepth = {subsection}}
 
-  %% Paramètres de beamer
-  % \useinnertheme{default}
-  % \useoutertheme[width=10mm,height=2.2\baselineskip]{sidebar}
-  % \usefonttheme[onlylarge]{structurebold}
-  % \usefonttheme{professionalfonts}
-  % \addtobeamertemplate{headline}{\rule{0pt}{12pt}\par}{}
-  % \setbeamercolor{frametitle}{fg=white,bg=black}
-  % % \setbeamerfont{frametitle}{family=\titles}
-  % \setbeamercolor{structure}{fg=emphasis,bg=white}
-  % \setbeamercolor{block title}{fg=black,bg=Snow2}
-  % \setbeamercolor{alerted text}{fg=black}
-  % \setbeamerfont{alerted text}{series=\bfseries}
-  % \setbeamercolor{block title alerted}{fg=white,bg=alert}
-  % \setbeamercolor{block title example}{fg=white,bg=exercices}
-  % \setbeamercolor{example text}{fg=exercices,bg=white}
-  % \setbeamertemplate{frametitle continuation}{}
-  % \setbeamertemplate{theorems}[numbered]
-  % \setbeamertemplate{section in toc}[sections numbered]
-  % \setbeamertemplate{navigation symbols}{}
-  % \setbeamertemplate{section in sidebar}{}
-  % \setbeamertemplate{subsection in sidebar}{}
-  % \setbeamertemplate{section in sidebar shaded}{}
-  % \setbeamertemplate{subsection in sidebar shaded}{}
-  \AtBeginSection[]
-  {
-    \begin{frame}
-      \frametitle{Sommaire}
-      \small
-      \begin{columns}[t]
-        \begin{column}{.5\textwidth}
-          \tableofcontents[sections={1-4},%
-            currentsection,subsectionstyle=show/show/hide]
-        \end{column}
-        \begin{column}{.5\textwidth}
-          \tableofcontents[sections={5-8},%
-            currentsection,subsectionstyle=show/show/hide]
-        \end{column}
-      \end{columns}
-    \end{frame}
-  }
-
   %% Paramétrage de babel pour les guillemets
   \frenchbsetup{og=«, fg=»}
 
@@ -105,9 +53,26 @@
     commentstyle=\color{comments}\slshape,
     keywordstyle=\mdseries,
     showstringspaces=false,
-    backgroundcolor=\color{LightYellow1},
-    frame=leftline,framerule=1.5pt}
+    backgroundcolor=\color{codebg},
+    frame=leftline,framerule=3pt}
 
+  %% =========================
+  %%  Nouveaux environnements
+  %% =========================
+
+  %% Environnements de Sweave. Les environnements Sinput et Soutput
+  %% utilisent Verbatim (de fancyvrb). On les réinitialise pour
+  %% enlever la configuration par défaut de Sweave, puis on réduit
+  %% l'écart entre les blocs Sinput et Soutput. L'environnement Schunk
+  %% est complètement redéfini à partir de leftbar (de framed) pour
+  %% insérer un fond de couleur derrière les blocs de code source.
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{fontsize=\small,listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \def\FrameCommand{\vrule width 3pt \colorbox{codebg}}%
+    \MakeFramed {\advance\hsize-\width \FrameRestore}}%
+    {\endMakeFramed}
 
   %% =====================
   %%  Nouvelles commandes
@@ -127,6 +92,15 @@
       \makebox[2.5mm]{\raisebox{-1pt}{\footnotesize\faGithub}}\;%
       {\sffamily Voir sur GitHub}}}
 
+  %% Renvois vers les scripts R
+  \newcommand{\gotoR}[1]{%
+    \begin{center}
+      \setlength{\fboxrule}{0.5pt}%
+      \framebox[40mm][c]{%
+        \makebox[5mm]{\raisebox{-1pt}{\large\faChevronCircleDown}}\;%
+        {\ttfamily #1}}
+    \end{center}}
+
   %%% =======
   %%%  Varia
   %%% =======
@@ -142,7 +116,7 @@
 \begin{document}
 
 \include{presentation}
-\include{base}
+\include{bases}
 
 \end{document}
 
