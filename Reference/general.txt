@@ -1,2 +1,8 @@
 rename columsn data frame
 http://www.cookbook-r.com/Manipulating_data/Renaming_columns_in_a_data_frame/
+
+format R
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/format.html
+
+ecdf R
+https://stat.ethz.ch/R-manual/R-devel/library/stats/html/ecdf.html

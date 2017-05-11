@@ -6,3 +6,6 @@ http://www.molecularecologist.com/2012/09/making-maps-with-r/
 
 verify aeroport mapping
 http://www.huffingtonpost.ca/2014/04/17/canada-empty-maps_n_5169055.html
+
+map multiple segments
+http://stackoverflow.com/questions/24617414/enriching-a-ggplot2-plot-with-multiple-geom-segment-in-a-loop
