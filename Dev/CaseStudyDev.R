@@ -103,6 +103,7 @@ x <- sqldf("
 x
 routes[is.na(routes$airlineID),]
 unique(routes$airlineID)
+unique(routes[is.na(routes$airlineID),]$airline)
 #Comme nous pouvons le remarquer, il n'y a que deux vols qui ne sont pas directs,
 #Pour des fins de simplification, nous allons considérer tous les vols comme étant 
 #des vols directs
@@ -113,25 +114,77 @@ unique(routes$airlineID)
 routes <- routes[,-match(c("codeshare","stops"),colnames(routes))]
 summary(routes)
 
-
+#1.6 - Créer une carte affichant les différents aéroports sur une carte du Canada
 library(ggmap)
 map <- get_map(location = 'Canada',zoom=3)
-mapPoints <- ggmap(map) + geom_point(data=airports[,c("longitude","latitude","IATA")],aes(as.numeric(paste(longitude)),as.numeric(paste(latitude))), alpha = .5)
+lon <- as.numeric(paste(airports$longitude))
+lat <- as.numeric(paste(airports$latitude))
+airportsCoord <- as.data.frame(lon,lat)
+mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5)
 mapPoints
 
-enteringFlights <- table(routes$destinationAirportID)
-max(enteringFlights)
-mean(enteringFlights)
-var(enteringFlights)
-sd(enteringFlights)
-head(sort(enteringFlights,decreasing = TRUE),n = 30)
+#1.7 - Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports
+summary(routes)
+summary(airports)
+routesCoord <- sqldf("
+  select 
+    a.sourceAirport, 
+    a.destinationAirport,
+    b.longitude as sourceLon,
+    b.latitude as sourceLat,
+    c.longitude as destLon,
+    c.latitude as destLat
+  from routes a
+  left join airports b
+    on a.sourceAirport = b.IATA
+  left join airports c
+    on a.destinationAirport = c.IATA"
+)
+lonBeg <- as.numeric(paste(routesCoord$sourceLon))
+latBeg <- as.numeric(paste(routesCoord$sourceLat))
+lonEnd <- as.numeric(paste(routesCoord$destLon))
+latEnd <- as.numeric(paste(routesCoord$destLat))
+routesCoord <- as.data.frame(cbind(lonBeg,latBeg,lonEnd,latEnd))
+mapRoutes <- mapPoints + geom_segment(data=routesCoord,aes(x=lonBeg,y=latBeg,xend=lonEnd,yend=latEnd),alpha=0.5)
+mapRoutes
+
+#1.8 - Calculer un indice d'achalandage des aéroports en fonction de la quantitée de routes en destination
+arrivalFlights <- table(routes$destinationAirport)
+max(arrivalFlights)
+mean(arrivalFlights)
+var(arrivalFlights)
+sd(arrivalFlights)
+head(sort(arrivalFlights,decreasing = TRUE),n = 30)
+arrivalCDF <- ecdf(arrivalFlights)
+arrivalIndex <- format(arrivalCDF(arrivalFlights-1), digits = 5)
+IATA <- names(arrivalFlights)
+arrivalIndexTable <- as.data.frame(cbind(IATA,arrivalFlights,arrivalIndex))
+rownames(arrivalIndexTable) <- NULL
+arrivalIndexTable
+
+#1.9 - Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en provenance
+departureFlights <- table(routes$sourceAirportID)
+max(departureFlights)
+mean(departureFlights)
+var(departureFlights)
+sd(departureFlights)
+head(sort(departureFlights,decreasing = TRUE),n = 30)
+departureCDF <- ecdf(departureFlights)
+departureIndex <- format(departureCDF(departureFlights-1), digits = 5)
+IATA <- names(departureFlights)
+departureIndexTable <- as.data.frame(cbind(IATA,departureFlights,departureIndex))
+rownames(departureIndexTable) <- NULL
+departureIndexTable
 
 
+par(mfrow=c(1,2))
+curve(arrivalCDF(x-1),from = 0,to = 60, n = 100)
+curve(departureCDF(x-1),from = 0,to = 60, n = 100)
 
+#1.10 - Calculer un indice combiné des deux derniers indices
+combinedIndex <- pmean(arrivalIndex,departureIndex)
 
-
-
-
+par(mfrow=c(1,1))
 
 
 #time conversion
