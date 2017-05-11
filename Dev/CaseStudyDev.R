@@ -6,6 +6,7 @@
 # Setting working directory properly
 setwd('..')
 (path <- getwd())
+set.seed(31459)
 
 
 #### Question 1 - Extraction, traitement, visualisation et analyse des données ####
@@ -252,7 +253,7 @@ mapTraffic <-
   scale_size_continuous(range = c(0, 20),name = "Traffic Index")
 mapTraffic
 
-
+#### Question 2 #####
 # time conversion
 x <- Sys.time()
 y <- Sys.timezone()
@@ -261,3 +262,17 @@ class(x)
 library(lubridate)
 x
 with_tz(x, tzone = "America/Vancouver")
+
+
+#### Question 3 ####
+
+
+#### Question 4 ####
+
+# Génération du fichier benchmark.csv
+n <- 100000
+x <- matrix(runif(4*n),ncol = 4,byrow = TRUE)
+mu1 <- 3000
+sigma1 <- 100
+
+poids <- qlnorm(x[,1],log(mu1),log(sigma1))
