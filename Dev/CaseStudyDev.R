@@ -351,3 +351,5 @@ weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
 weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
 weightsPriceFinal <- weightsPrice + weightsError
 cbind(weights,weightsPriceFinal)
+
+test git push branch
