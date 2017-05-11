@@ -254,6 +254,52 @@ mapTraffic <-
 mapTraffic
 
 #### Question 2 #####
+
+library(geosphere)
+
+# distance
+#PRE nécessite l'existence de la base de donnée 
+dist <- function(sourceIATA,destIATA)
+{
+  # vérifions que sourceIATA et destIATA sont des IATA valides
+  sourceFindIndex <- match(sourceIATA,airportsCanada$IATA)
+  if(is.na(sourceFindIndex))
+  {
+    stop(paste('sourceIATA :',sourceIATA,'is not a valid IATA code'))
+  }
+  destFindIndex <- match(destIATA,airportsCanada$IATA)
+  if(is.na(destFindIndex))
+  {
+    stop(paste('destIATA :',destIATA,'is not a valid IATA code'))
+  }
+  # vérifions qu'il existe une route entre sourceIATA et destIATA 
+  #(n'est pas nécessaire puisque nous pourrions être intéressé à connaître la distance
+  #entre deux aéroports n'ayant toujours pas de route entre eux)
+  routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
+  if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
+  {
+    stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,'do not corresponds to existing route'))
+  }
+  sourceLon <- as.numeric(paste(airportsCanada$longitude))[sourceFindIndex]
+  sourceLat <- as.numeric(paste(airportsCanada$latitude))[sourceFindIndex]
+  sourceCoord <- c(sourceLon,sourceLat)
+  destLon <- as.numeric(paste(airportsCanada$longitude))[destFindIndex]
+  destLat <- as.numeric(paste(airportsCanada$latitude))[destFindIndex]
+  destCoord <- c(destLon,destLat)
+  distList <- list()
+  distList$source <- sourceIATA
+  distList$dest <- destIATA
+  distList$value <- round(distGeo(sourceCoord,destCoord)/1000)
+  distList$metric <- "Km"
+  distList$xy_dist <- sqrt((sourceLon - destLon)**2 + (sourceLat - destLat)**2)
+  distList
+}
+dist('AAA','YQB')
+dist('YUL','AAA')
+dist('YPA','YQB')
+dist('YUL','YQB')
+dist('YUL','YQB')$value
+
 # time conversion
 x <- Sys.time()
 y <- Sys.timezone()

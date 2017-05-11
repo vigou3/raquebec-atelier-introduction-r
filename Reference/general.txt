@@ -6,3 +6,6 @@ https://stat.ethz.ch/R-manual/R-devel/library/base/html/format.html
 
 ecdf R
 https://stat.ethz.ch/R-manual/R-devel/library/stats/html/ecdf.html
+
+error generation R
+http://www.dummies.com/programming/r/how-to-generate-your-own-error-messages-in-r/
