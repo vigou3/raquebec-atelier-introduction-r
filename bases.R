@@ -128,18 +128,84 @@ c(-2, 3, -1, 4)^(1:4)      # quatre puissances différentes
 ###
 
 ## une fonction est un objet normal
-seq                        # le voir
-c(seq, rep)                # vecteur de fonctions
-x <- c(seq, rep)                # vecteur de fonctions
+seq                        # contenu est le code source
+mode(seq)                  # mode d'une fonction
+c(seq, rep)                # vecteur de fonctions!
 
 ## exemple de syntaxe
 
 ## règles d'appel d'une fonction
 
+## \begin{itemize}
+## \item Il n'y a pas de limite pratique quant au nombre d'arguments que
+##   peut avoir une fonction.
+## \item Les arguments d'une fonction peuvent être spécifiés selon
+##   l'ordre établi dans la définition de la fonction. Cependant, il est
+##   beaucoup plus prudent et \emph{fortement recommandé} de spécifier
+##   les arguments par leur nom, avec une construction de la forme
+##   \code{nom = valeur}, surtout après les deux ou trois premiers
+##   arguments.
+## \item L'ordre des arguments est important; il est donc nécessaire de
+##   les nommer s'ils ne sont pas appelés dans l'ordre.
+## \item Certains arguments ont une valeur par défaut qui sera utilisée
+##   si l'argument n'est pas spécifié dans l'appel de la fonction.
+## \end{itemize}
+matrix()
+
+## Les invocations de la fonction 'matrix' ci-dessous sont
+## toutes équivalentes. On remarquera, entre autres, comment
+## les arguments sont spécifiés (par nom ou par position).
+matrix(1:12, 3, 4)
+matrix(1:12, ncol = 4, nrow = 3)
+matrix(nrow = 3, ncol = 4, data = 1:12)
+matrix(nrow = 3, ncol = 4, byrow = FALSE, 1:12)
+matrix(nrow = 3, ncol = 4, 1:12, FALSE)
+
+
 ## syntaxe de base pour créer une fonction
+## On définit une nouvelle fonction avec la syntaxe suivante:
+## \begin{quote}
+##   \Indexfonction{function}
+##   \code{fun <- function(\emph{arguments}) \emph{expression}}
+## \end{quote}
+## où
+## \begin{itemize}
+## \item \code{fun} est le nom de la fonction (les règles pour les noms
+##   de fonctions étant les mêmes que celles présentées à la
+##   \autoref{bases:noms} pour tout autre objet);
+## \item \code{\itshape arguments} est la liste des arguments, séparés
+##   par des virgules;
+## \item \code{\itshape expression} constitue le corps de la fonction,
+##   soit une expression ou un groupe d'expressions réunies par des
+##   accolades.
+## \end{itemize}
 
 ## lexical scope
+x <- 5
+f <- function(x)
+    x * x
+f(10)
+x
+f(x)
+f(x = x)
+
+f <- function(x)
+{
+    g <- function(y)
+        x + y
+    g(x^2)
+}
+
+
 
 ## fonction anonyme
+dist <- function(x, y)
+    sum((x - y)^2)
+
+dist <- function(x, y = 0)
+    sum((x - y)^2)
+
+dist <- function(x, y = 0, FUN)
+    sum((x - y))
 
 ## argument '...'
