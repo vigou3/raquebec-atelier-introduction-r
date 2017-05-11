@@ -1,13 +1,13 @@
 #Setting working directory properly
 setwd('..')
 (path <- getwd())
-#Question 1 - Extraction, traitement, visualisation et analyse des données
-#1.1 - Extraire les bases de données airports.dat et routes.dat
+#### Question 1 - Extraction, traitement, visualisation et analyse des données ####
+# 1.1 - Extraire les bases de données airports.dat et routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c('\\N',''))
 airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c('\\N',''))
 
-#1.2 - Attribuer des noms aux colonnes du jeu de données en vous fiant à l'information disponible sur le site
+# 1.2 - Attribuer des noms aux colonnes du jeu de données en vous fiant à l'information disponible sur le site
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "latitude", "longitude", "altitude", "timezone", "DST",
                         "tzFormat","typeAirport","Source")
@@ -16,10 +16,10 @@ colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
                       "stops","equipment")
 colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Country","Active")
 
-#1.3 - Nettoyer le jeu de données en ne conservant que les données relatives au Canada
+# 1.3 - Nettoyer le jeu de données en ne conservant que les données relatives au Canada
 airports <- airports[airports$country=='Canada',]
 
-#1.4 - Extraire des informations générales sur la distribution des variables présentent dans le jeu de données 
+# 1.4 - Extraire des informations générales sur la distribution des variables présentent dans le jeu de données 
 # et vous informer sur la signification de ces dernières ainsi que sur les différentes modalités quelles peuvent 
 # prendre
 head(airports)
@@ -27,7 +27,7 @@ summary(airports)
 nbAirportCity <- table(as.character(airports$city))
 (nbAirportCity <- sort(nbAirportCity,decreasing=TRUE))[1:10]
 
-#1.5 - Corriger les modalités des variables et faire une sélection des variables qui vous semble utiles 
+# 1.5 - Corriger les modalités des variables et faire une sélection des variables qui vous semble utiles 
 # pour le reste du traitement
 #Nous observons que les variables typeAirport et Source ne sont d'aucune utilité dans la situation présente
 #compte tenu que nous n'utilisons que l'information sur le transport par voies aériennes.
@@ -53,9 +53,9 @@ missingTZ <- airports[is.na(airports$timezone),]
 #2) Utiliser des outils de cartographie pour retrouver les vrais fuseaux horaires
 #Nous utiliserons ici la deuxième option qui peut sembler plus complquée de prime abord, mais qui se révèle
 #très simple et beaucoup plus précise lorsque nous avons accès à l'information et aux outils nécessaires
+library(sp)
 library(rgdal)
 tz_world.shape <- readOGR(dsn=paste(path,"/Reference/tz_world",sep=''),layer="tz_world")
-library(sp)
 unknown_tz <- airports[is.na(airports$tzFormat),c("airportID","name","longitude","latitude")]
 sppts <- SpatialPoints(unknown_tz[,c("longitude","latitude")])
 proj4string(sppts) <- CRS("+proj=longlat")
