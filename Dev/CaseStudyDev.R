@@ -102,7 +102,6 @@ airportsCanada <- data.frame(as.matrix(airportsCanada),stringsAsFactors = TRUE)
 airportsCanada <- airportsCanada[,-match(c("timezone","DST","tzFormat"),colnames(airportsCanada))]
 summary(airportsCanada)
 
-
 # install.packages("plyr")
 library(plyr)
 airportsCanada <- rename(airportsCanada, c("tzMerged"="tzFormat"))
@@ -140,7 +139,6 @@ x
 routesCanada[is.na(routesCanada$airlineID),]
 unique(routesCanada$airlineID)
 unique(routesCanada[is.na(routesCanada$airlineID),]$airline)
-
 summary(routesCanada$stops)
 # Comme nous pouvons le remarquer, il n'y a que deux vols qui ne sont pas directs,
 # Pour des fins de simplification, nous allons considérer tous les vols comme étant 
@@ -197,47 +195,69 @@ sd(arrivalFlights)
 head(sort(arrivalFlights,decreasing = TRUE),n = 30)
 arrivalCDF <- ecdf(arrivalFlights)
 arrivalIndex <- format(arrivalCDF(arrivalFlights-1), digits = 5)
+arrivalIndex <- format(arrivalFlights, digits = 5)
 IATA <- names(arrivalFlights)
 arrivalIndexTable <- as.data.frame(cbind(IATA,arrivalFlights,arrivalIndex))
 rownames(arrivalIndexTable) <- NULL
 arrivalIndexTable
 
 # 1.9 - Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en provenance
-departureFlights <- table(routesCanada$sourceAirportID)
+departureFlights <- table(routesCanada$sourceAirport)
 max(departureFlights)
-mean(departureFlights)
+mu <- mean(departureFlights)
 var(departureFlights)
-sd(departureFlights)
+sigma <- sd(departureFlights)
 head(sort(departureFlights,decreasing = TRUE),n = 30)
 departureCDF <- ecdf(departureFlights)
 departureIndex <- format(departureCDF(departureFlights-1), digits = 5)
+departureIndex <- format(departureFlights, digits = 5)
 IATA <- names(departureFlights)
 departureIndexTable <- as.data.frame(cbind(IATA,departureFlights,departureIndex))
 rownames(departureIndexTable) <- NULL
 departureIndexTable
 
-
+# Tracer les index 
 par(mfrow=c(1,2))
-curve(arrivalCDF(x-1),from = 0,to = 60, n = 100)
-curve(departureCDF(x-1),from = 0,to = 60, n = 100)
+curve(arrivalCDF(x-1), from = 0,to = 60, n = 100)
+curve(departureCDF(x-1), from = 0,to = 60, n = 100)
 
 # 1.10 - Calculer un indice combiné des deux derniers indices
+combinedIndex <- (as.numeric(arrivalIndex)+as.numeric(departureIndex))/2
+combinedIndexTable <- data.frame(arrivalIndexTable$IATA,
+                                 arrivalIndexTable$arrivalIndex,
+                                 departureIndexTable$departureIndex,
+                                 combinedIndex,stringsAsFactors = TRUE)
+rownames(combinedIndexTable) <- NULL
+colnames(combinedIndexTable) <- c("IATA","arrivalIndex","departureIndex","combinedIndex")
+combinedIndexTable
+airportsCanada <- sqldf("
+  select 
+    a.*,
+    coalesce(b.combinedIndex,0) as combinedIndex
+  from airportsCanada a
+  left join combinedIndexTable b
+  on a.IATA = b.IATA")
 
-####################################################### Pmean ???
-combinedIndex <- pmean(arrivalIndex,departureIndex)
-
+#1.11 - Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles
 par(mfrow=c(1,1))
+lon <- as.numeric(paste(airportsCanada$longitude))
+lat <- as.numeric(paste(airportsCanada$latitude))
+size <- as.numeric(paste(airportsCanada$combinedIndex))
+airportsCoord <- as.data.frame(cbind(lon, lat, size))
+mapPoints <- 
+  ggmap(map) + 
+  geom_point(data=airportsCoord,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
+mapTraffic <-  
+  mapPoints + 
+  scale_size_continuous(range = c(0, 20),name = "Traffic Index")
+mapTraffic
 
 
 # time conversion
-
 x <- Sys.time()
 y <- Sys.timezone()
 class(x)
-
 # install.packages("lubridate")
 library(lubridate)
 x
 with_tz(x, tzone = "America/Vancouver")
-
-unique(airportsCanada[!is.na(airportsCanada$tzFormat),"tzFormat"])
