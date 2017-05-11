@@ -318,7 +318,36 @@ with_tz(x, tzone = "America/Vancouver")
 # Génération du fichier benchmark.csv
 n <- 100000
 x <- matrix(runif(4*n),ncol = 4,byrow = TRUE)
-mu1 <- 3000
-sigma1 <- 100
 
-poids <- qlnorm(x[,1],log(mu1),log(sigma1))
+# Générer des poids selon logNormale
+mu1 <- log(3000)
+sigma1 <- log(1.8)
+exp(mu1+sigma1**2/2)
+exp(2*mu1+4*sigma1**2/2)-exp(mu1+sigma1**2/2)**2
+weights <- qlnorm(x[,1],mu1,sigma1)
+mean(weights)
+weights
+hist(weights,breaks = 100)
+max(weights)*2.2/1000
+
+# Générer des distances selon logNormale
+routesCanada
+routesIATA <- cbind(paste(routesCanada$sourceAirport),paste(routesCanada$destinationAirport))
+routesDistance <- apply(routesIATA, 1, function(x) dist(x[1],x[2])$value)
+max(routesDistance)
+mean(routesDistance)
+mu2 <- log(650)
+sigma2 <- log(1.4)
+distances <- qlnorm(x[,2],mu2,sigma2)
+mean(distances)
+distances
+hist(distances,breaks = 100)
+max(distances)
+
+# Générer des erreurs sur le poids
+weightsTarifParamA <- 5/1000
+weightsTarifParamB <- 5
+weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
+weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
+weightsPriceFinal <- weightsPrice + weightsError
+cbind(weights,weightsPriceFinal)
