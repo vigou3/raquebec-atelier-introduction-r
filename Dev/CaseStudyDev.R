@@ -352,24 +352,24 @@ calCost <- function(sourceIATA, destIATA, weight, province,
   #
   # logical test
   #
-  if (weight <= 0 | costFactor <= 0 | fixeCost <= 0 | marginProfit <= 0 | rebate >= 1)
+  if (weight <= 0 | distanceFactor <= 0 | fixeCost <= 0 | profitMargin <= 0 | percentCredit >= 1)
   {
     stop("One of the input are illogical to the situation")
   }
   
-  distShipping <- dist(depAirport, arrAirport)$value
-  if (distShipping <= minDist)
+  distShipping <- airportsDist(sourceIATA, destIATA)$value
+  if (distShipping <= mininalDist)
   {
     #
     # We verify if the distance of shipping is further than the minimal requierement
     #
-    stop("The shipping is under the minimal distance of ", minDist)
+    stop("The shipping is under the minimal distance of ", mininalDist)
   }
   
   #
   # Calculation of the base cost
   #
-  baseCost <-  distShipping * weight * costFactor
+  baseCost <-  distShipping * weight * weightFactor
   
   #
   # Calculation of taxe rate and control of text
@@ -399,26 +399,18 @@ calCost <- function(sourceIATA, destIATA, weight, province,
     stop(paste("Province :", province, "is not a valid province"))
   }
   
-  price <- (baseCost + fixeCost) * marginProfit * (1 - rebate) * taxeRate
+  price <- (baseCost + fixeCost) * profitMargin * (1 - percentCredit) * taxeRate - dollarCredit
   
   #
   # Automatic rebate
   #
-  if (weight > 2 & weight <= 4)
+  if (weight > 2)
   {
-    price <- price * 0.95
+    price <- price * (1 - (weightFactor * weight) / 2)
   }
-  else if (weight > 4)
+  else if (distShipping > 500)
   {
-    price <- price * 0.9
-  }
-  else if (distShipping > 1500 & distShipping <= 2500)
-  {
-    price <- price * 0.95
-  }
-  else if (distShipping > 2500)
-  {
-    price <- price * 0.9
+    price <- price * (1 - distanceFactor * (distShipping %/% 250))
   }
   else if (price >= 300)
   {
@@ -427,7 +419,7 @@ calCost <- function(sourceIATA, destIATA, weight, province,
   price
 }
 
-calCost("YUL", "YVR", 0.2, "Québec")
+calCost("YUL", "YQB", 0.2, "Québec")
 
 #### Question 3 ####
 
@@ -438,6 +430,9 @@ calCost("YUL", "YVR", 0.2, "Québec")
 airportProvince <- read.csv("~/GitHub/raquebec-intro/Data/airport_province.txt", 
                             header = F, ";", stringsAsFactors = T)
 
+colnames(airportProvince) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
+                        "latitude", "longitude", "altitude", "timezone", "DST",
+                        "tzFormat","typeAirport","Source")
 numbSimul <- 10000
 
 distVector <- numeric(numbSimul)
