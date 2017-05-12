@@ -431,6 +431,23 @@ calCost("YUL", "YVR", 0.2, "Québec")
 
 #### Question 3 ####
 
+#
+# Frequency index by province
+#
+
+airportProvince <- read.csv("~/GitHub/raquebec-intro/Data/airport_province.txt", 
+                            header = F, ";", stringsAsFactors = T)
+
+numbSimul <- 10000
+
+distVector <- numeric(numbSimul)
+for (i in 1:numbSimul)
+{
+     distVector[i] <- round(runif(n = 1, min = 1, max = 13))
+}
+distVector
+mean(distVector)
+
 
 #### Question 4 ####
 

@@ -1,4 +1,3 @@
-IATA;AirpotID;Province
 HNX;Hanna;Alberta
 KES;Kelsey;Alberta
 WPC;Pincher Creek;Alberta
@@ -194,7 +193,7 @@ YQG;Windsor;New Brunswick
 YQM;Moncton;New Brunswick
 YQS;St Thomas;New Brunswick
 YSJ;Saint John;New Brunswick
-YSL;Saint-LÃ©onard;New Brunswick
+YSL;Saint-Léonard;New Brunswick
 YTA;Pembroke;New Brunswick
 YTF;Alma;New Brunswick
 ZBF;Bathurst;New Brunswick
@@ -240,11 +239,11 @@ YGH;Fort Good Hope;Northwest Territories
 YHI;Ulukhaktok;Northwest Territories
 YHY;Hay River;Northwest Territories
 YJF;Fort Liard;Northwest Territories
-YLE;WhatÃ¬;Northwest Territories
+YLE;Whatì;Northwest Territories
 YOA;Ekati Diamond Mine;Northwest Territories
 YPC;Paulatuk;Northwest Territories
 YPP;Pine Point;Northwest Territories
-YRA;GamÃ¨ti;Northwest Territories
+YRA;Gamèti;Northwest Territories
 YSG;Lutselk'e;Northwest Territories
 YSM;Fort Smith;Northwest Territories
 YSY;Sachs Harbour;Northwest Territories
@@ -410,7 +409,7 @@ YFE;Forestville;Quebec
 YFG;Fontanges;Quebec
 YGA;Gagnon;Quebec
 YGL;Radisson;Quebec
-YGR;ÃŽles-de-la-Madeleine;Quebec
+YGR;Îles-de-la-Madeleine;Quebec
 YGV;Havre-Saint-Pierre;Quebec
 YGW;Kuujjuarapik;Quebec
 YGY;Deception;Quebec
@@ -444,13 +443,13 @@ YPH;Inukjuak;Quebec
 YPJ;Aupaluk;Quebec
 YPN;Port-Menier;Quebec
 YPX;Puvirnituq;Quebec
-YQB;QuÃ©bec City;Quebec
+YQB;Québec City;Quebec
 YQC;Quaqtaq;Quebec
-YRI;RiviÃ¨re-du-Loup;Quebec
+YRI;Rivière-du-Loup;Quebec
 YRJ;Roberval;Quebec
 YRQ;Trois-Rivieres;Quebec
 YTM;Mont-Tremblant (La Macaza);Quebec
-YTN;RiviÃ¨re-au-Tonnerre;Quebec
+YTN;Rivière-au-Tonnerre;Quebec
 YUD;Umiujaq;Quebec
 YUL;Montreal;Quebec
 YUY;Rouyn-Noranda;Quebec
