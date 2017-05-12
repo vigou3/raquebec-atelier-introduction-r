@@ -257,8 +257,11 @@ mapTraffic
 
 library(geosphere)
 
-# distance
-#PRE nécessite l'existence de la base de donnée 
+#
+# Fonction de calcul de distance entre deux aéroports
+#
+
+# PRE nécessite l'existence de la base de donnée 
 dist <- function(sourceIATA,destIATA)
 {
   # vérifions que sourceIATA et destIATA sont des IATA valides
@@ -300,15 +303,122 @@ dist('YPA','YQB')
 dist('YUL','YQB')
 dist('YUL','YQB')$value
 
-# time conversion
-x <- Sys.time()
-y <- Sys.timezone()
-class(x)
+
+#
+# Fonction pour déterminer l'heure d'arriver
+#
+
 # install.packages("lubridate")
 library(lubridate)
-x
-with_tz(x, tzone = "America/Vancouver")
 
+timeArrival <- function(depAirport, arrAirport)
+{
+     # depAirpot as a string
+     # arrAirport as a string
+     # We assume time of departure to be the actual time
+     
+     timeDep <- Sys.time()
+     timeArr <- with_tz(timeDep + ms(round_any(dist(depAirport, arrAirport)$value / 900 * 60 ,accuracy = 0.1 )), 
+                         tzone = as.character(airportsCanada[match(arrAirport, airportsCanada$IATA), "tzFormat"]))
+     timeArr
+}
+
+timeArrival("YUL", "YYZ")
+
+
+#
+# Fonction de calcul des coûts
+#
+calCost <- function(depAirport, arrAirport, weight, province, costFactor = 0.1, fixeCost = 3.75, marginProfit = 1.04, rebate = 0)
+{
+     # depAirport as a string
+     # arrAirport as a strin
+     # Weight as an integer ; in KG
+     # province as a string
+     
+     # costFactor as an float ; we assume an uniforme costFactor for all canadian shipping
+     # fixeCost as a default integer ; we assume an uniform cost for all canadian shipping
+     # marginProfit as a default float ; we assume an uniform margin profit for all canadian shipping
+     # rebate as a default float
+     
+     #
+     # Minimal distance for shipping, in KM
+     #
+     minDist <- 100
+     
+     #
+     # logical test
+     #
+     if (weight <= 0 | costFactor <= 0 | fixeCost <= 0 | marginProfit <= 0 | rebate >= 1)
+     {
+          stop("One of the input are illogical to the situation")
+     }
+     
+     distShipping <- dist(depAirport, arrAirport)$value
+     if (distShipping <= minDist)
+     {
+          #
+          # We verify if the distance of shipping is further than the minimal requierement
+          #
+          stop("The shipping is under the minimal distance of ", minDist)
+     }
+     
+     #
+     # Calculation of the base cost
+     #
+     baseCost <-  distShipping * weight * costFactor
+     
+     #
+     # Calculation of taxe rate and control of text
+     #
+     province <- gsub(" ", "_", province)
+     province <- gsub("-", "_", province)
+     
+     taxeRate <- switch(province, 
+                        Nouveau_Brunswick = 1.15, Terre_Neuve_et_Labrador = 1.15, Nouvelle_Écosse = 1.15, 
+                        Île_du_Prince_Édouard = 1.15, 
+                        Alberta = 1.05,  Nunavut = 1.05, Territoires_du_Nord_Ouest =1.05, Yukon = 1.05, 
+                        Colombie_Britannique = 1.12, 
+                        Manitoba =1.13,  Ontario = 1.13,  
+                        Québec = 1.14975, 
+                        Saskatchewan = 1.16 )
+     #
+     # Test if taxeRate is wrong 
+     #
+     if (is.null(taxeRate))
+     {
+          stop(paste("Province :", province, "is not a valid province"))
+     }
+     
+     price <- (baseCost + fixeCost) * marginProfit * (1 - rebate) * taxeRate
+     
+     #
+     # Automatic rebate
+     #
+     if (weight > 2 & weight <= 4)
+     {
+          price <- price * 0.95
+     }
+     else if (weight > 4)
+     {
+          price <- price * 0.9
+     }
+     else if (distShipping > 1500 & distShipping <= 2500)
+     {
+          price <- price * 0.95
+     }
+     else if (distShipping > 2500)
+     {
+          price <- price * 0.9
+     }
+     else if (price >= 300)
+     {
+          price <- price * 0.95
+     }
+     price
+}
+
+calCost("YUL", "YVR", 0.2, "Québec")
 
 #### Question 3 ####
 
