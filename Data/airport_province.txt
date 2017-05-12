@@ -1,0 +1,509 @@
+IATA;AirpotID;Province
+HNX;Hanna;Alberta
+KES;Kelsey;Alberta
+WPC;Pincher Creek;Alberta
+YBA;Banff;Alberta
+YBW;Calgary;Alberta
+YBY;Bonnyville;Alberta
+YCT;Coronation;Alberta
+YDC;Drayton Valley;Alberta
+YED;Edmonton;Alberta
+YEG;Edmonton;Alberta
+YET;Edson;Alberta
+YGC;Grande Cache;Alberta
+YLB;Lac La Biche;Alberta
+YMM;Fort Mcmurray;Alberta
+YOD;Cold Lake;Alberta
+YOE;Falher;Alberta
+YOJ;High Level;Alberta
+YOP;Rainbow Lake;Alberta
+YPE;Peace River;Alberta
+YPY;Fort Chipewyan;Alberta
+YQF;Red Deer;Alberta
+YQU;Grande Prairie;Alberta
+YRM;Rocky Mountain House;Alberta
+YSD;Canadian Forces Base Suffield;Alberta
+YVG;Vermilion;Alberta
+YWV;Wainwright;Alberta
+YXD;Edmonton;Alberta
+YXH;Medicine Hat;Alberta
+YYC;Calgary;Alberta
+YYM;Cowley;Alberta
+YZH;Slave Lake;Alberta
+YZU;Whitecourt;Alberta
+ZFW;Fairview;Alberta
+ZHP;High Prairie;Alberta
+ZSP;St Paul;Alberta
+CJH;Chilko Lake;British Columbia
+DUQ;Duncan;British Columbia
+IUM;Summit Lake;British Columbia
+QBC;Bella Coola;British Columbia
+SYF;Gabriola Island;British Columbia
+TUX;Tumbler Ridge;British Columbia
+XBB;Blubber Bay;British Columbia
+XKO;Kemano;British Columbia
+XQU;Qualicum Beach;British Columbia
+YAA;Anahim Lake;British Columbia
+YAE;Alta Lake;British Columbia
+YAJ;Lyall Harbour;British Columbia
+YAL;Alert Bay;British Columbia
+YAQ;Maple Bay;British Columbia
+YAV;Miners Bay;British Columbia
+YAZ;Tofino;British Columbia
+YBD;New Westminster;British Columbia
+YBF;Bamfield;British Columbia
+YBH;Bull Harbour;British Columbia
+YBL;Campbell River;British Columbia
+YBM;Bronson Creek;British Columbia
+YBO;Bob Quinn Lake;British Columbia
+YBQ;Thetis Island;British Columbia
+YCA;Courtenay;British Columbia
+YCD;Nanaimo;British Columbia
+YCF;Cortes Island;British Columbia
+YCG;Castlegar;British Columbia
+YCJ;Cape St James;British Columbia
+YCP;Blue River;British Columbia
+YCQ;Chetwynd;British Columbia
+YCW;Chilliwack;British Columbia
+YCZ;Fairmont Hot Springs;British Columbia
+YDL;Dease Lake;British Columbia
+YDQ;Dawson Creek;British Columbia
+YDS;Desolation Sound;British Columbia
+YDT;Vancouver;British Columbia
+YDX;Doc Creek;British Columbia
+YEP;Estevan Point;British Columbia
+YGB;Gillies Bay;British Columbia
+YGE;Gorge Harbour;British Columbia
+YGG;Ganges;British Columbia
+YGN;Greenway Sound;British Columbia
+YGS;Germansen;British Columbia
+YHC;Hakai Pass;British Columbia
+YHH;Campbell River;British Columbia
+YHS;Sechelt;British Columbia
+YIG;Stuart Island;British Columbia
+YKA;Kamloops;British Columbia
+YKK;Kitkatla;British Columbia
+YKT;Klemtu;British Columbia
+YLA;Langara;British Columbia
+YLT;Alert Bay;British Columbia
+YLW;Kelowna;British Columbia
+YLY;Langley;British Columbia
+YMB;Merritt;British Columbia
+YMF;Montague Harbour;British Columbia
+YMP;Port McNeill;British Columbia
+YMR;Merry Island;British Columbia
+YNK;Nootka Sound;British Columbia
+YPB;Port Alberni;British Columbia
+YPF;Esquimalt;British Columbia
+YPI;Port Simpson;British Columbia
+YPR;Prince Rupert;British Columbia
+YPT;Pender Harbour;British Columbia
+YPW;Powell River;British Columbia
+YPZ;Burns Lake;British Columbia
+YQQ;Comox;British Columbia
+YQZ;Quesnel;British Columbia
+YRD;Dean River;British Columbia
+YRN;Owekeno Village;British Columbia
+YRR;Stuart Island;British Columbia
+YRV;Revelstoke;British Columbia
+YSE;Squamish;British Columbia
+YSN;Salmon Arm;British Columbia
+YSZ;Squirrel Cove;British Columbia
+YTB;Hartley Bay;British Columbia
+YTC;Sturdee;British Columbia
+YTG;Sullivan Bay;British Columbia
+YTP;Tofino;British Columbia
+YTX;Telegraph Creek;British Columbia
+YVR;Vancouver;British Columbia
+YWL;Williams Lake;British Columbia
+YWS;Whistler;British Columbia
+YXC;Cranbrook;British Columbia
+YXJ;Fort St John;British Columbia
+YXS;Prince George;British Columbia
+YXT;Terrace;British Columbia
+YYD;Smithers;British Columbia
+YYE;Fort Nelson;British Columbia
+YYF;Penticton;British Columbia
+YYJ;Victoria;British Columbia
+YYW;Armstrong;British Columbia
+YZA;Ashcroft;British Columbia
+YZC;Beatton River;British Columbia
+YZP;Sandspit;British Columbia
+YZT;Port Hardy;British Columbia
+ZAA;Alice Arm;British Columbia
+ZEL;Bella Bella;British Columbia
+ZGF;Grand Forks;British Columbia
+ZMH;108 Mile Ranch;British Columbia
+ZMT;Masset;British Columbia
+ZNU;Namu;British Columbia
+ZOF;Ocean Falls;British Columbia
+ZQS;Haida Gwaii;British Columbia
+ZST;Stewart;British Columbia
+ILF;Ilford;Manitoba
+LRQ;Laurie River;Manitoba
+PIW;Pikwitonei;Manitoba
+XGL;Granville Lake;Manitoba
+XLB;Lac Brochet;Manitoba
+XPK;Pukatawagan;Manitoba
+XPP;Poplar River;Manitoba
+XSI;South Indian Lake;Manitoba
+XTL;Tadoule Lake;Manitoba
+YAD;Moose Lake;Manitoba
+YBR;Brandon;Manitoba
+YBT;Brochet;Manitoba
+YBV;Berens River;Manitoba
+YCR;Cross Lake;Manitoba
+YDN;Dauphin;Manitoba
+YFO;Flin Flon;Manitoba
+YGM;Gimli;Manitoba
+YGO;God's Lake Narrows;Manitoba
+YGX;Gillam;Manitoba
+YIV;Island Lake;Manitoba
+YKE;Knee Lake;Manitoba
+YKI;Kennosao Lake;Manitoba
+YLO;Shilo;Manitoba
+YLR;Leaf Rapids;Manitoba
+YNE;Norway House;Manitoba
+YNR;Arnes;Manitoba
+YOH;Oxford House;Manitoba
+YPG;Portage La Prairie;Manitoba
+YQD;The Pas;Manitoba
+YRS;Red Sucker Lake;Manitoba
+YST;Ste Therese Point;Manitoba
+YTD;Thicket Portage;Manitoba
+YTH;Thompson;Manitoba
+YWG;Winnipeg;Manitoba
+YYI;Rivers;Manitoba
+YYL;Lynn Lake;Manitoba
+YYQ;Churchill;Manitoba
+ZAC;York Landing;Manitoba
+ZGI;Gods River;Manitoba
+ZGR;Little Grand Rapids;Manitoba
+ZJG;Jenpeg;Manitoba
+ZJN;Swan River;Manitoba
+ZNG;Negginan;Manitoba
+ZTM;Shamattawa;Manitoba
+New Brunswick Airport Codes
+YCH;Miramichi;New Brunswick
+YCL;Charlo;New Brunswick
+YCX;Gagetown;New Brunswick
+YFC;Fredericton;New Brunswick
+YGK;Kingston;New Brunswick
+YKD;Kincardine;New Brunswick
+YQG;Windsor;New Brunswick
+YQM;Moncton;New Brunswick
+YQS;St Thomas;New Brunswick
+YSJ;Saint John;New Brunswick
+YSL;Saint-Léonard;New Brunswick
+YTA;Pembroke;New Brunswick
+YTF;Alma;New Brunswick
+ZBF;Bathurst;New Brunswick
+CFQ;Creston;Newfoundland and Labrador
+YAY;St Anthony;Newfoundland and Labrador
+YBI;Black Tickle;Newfoundland and Labrador
+YDE;Paradise River;Newfoundland and Labrador
+YDF;Deer Lake;Newfoundland and Labrador
+YDH;Daniels Harbour;Newfoundland and Labrador
+YDI;Davis Inlet;Newfoundland and Labrador
+YDP;Nain;Newfoundland and Labrador
+YFX;St. Lewis;Newfoundland and Labrador
+YHA;Port Hope Simpson;Newfoundland and Labrador
+YHG;Charlottetown;Newfoundland and Labrador
+YHO;Hopedale;Newfoundland and Labrador
+YJT;Stephenville;Newfoundland and Labrador
+YMN;Makkovik;Newfoundland and Labrador
+YNF;Corner Brook;Newfoundland and Labrador
+YNP;Natuashish;Newfoundland and Labrador
+YQL;Lethbridge;Newfoundland and Labrador
+YQX;Gander;Newfoundland and Labrador
+YRF;Cartwright;Newfoundland and Labrador
+YRG;Rigolet;Newfoundland and Labrador
+YSO;Postville;Newfoundland and Labrador
+YSV;Saglek;Newfoundland and Labrador
+YVZ;Deer Lake;Newfoundland and Labrador
+YWK;Wabush;Newfoundland and Labrador
+YWM;Williams Harbour;Newfoundland and Labrador
+YYG;Charlottetown;Newfoundland and Labrador
+YYN;Swift Current;Newfoundland and Labrador
+YYR;Goose Bay;Newfoundland and Labrador
+YYT;St. John's;Newfoundland and Labrador
+YZM;Buchans;Newfoundland and Labrador
+ZUM;Churchill Falls;Newfoundland and Labrador
+LAK;Aklavik;Northwest Territories
+YCK;Colville Lake;Northwest Territories
+YDW;Obre Lake;Northwest Territories
+YEV;Inuvik;Northwest Territories
+YFL;Fort Reliance;Northwest Territories
+YFR;Fort Resolution;Northwest Territories
+YFS;Fort Simpson;Northwest Territories
+YGH;Fort Good Hope;Northwest Territories
+YHI;Ulukhaktok;Northwest Territories
+YHY;Hay River;Northwest Territories
+YJF;Fort Liard;Northwest Territories
+YLE;Whatì;Northwest Territories
+YOA;Ekati Diamond Mine;Northwest Territories
+YPC;Paulatuk;Northwest Territories
+YPP;Pine Point;Northwest Territories
+YRA;Gamèti;Northwest Territories
+YSG;Lutselk'e;Northwest Territories
+YSM;Fort Smith;Northwest Territories
+YSY;Sachs Harbour;Northwest Territories
+YUB;Tuktoyaktuk;Northwest Territories
+YVQ;Norman Wells;Northwest Territories
+YWJ;Deline;Northwest Territories
+YWY;Wrigley;Northwest Territories
+YZF;Yellowknife;Northwest Territories
+ZFM;Fort Mcpherson;Northwest Territories
+ZFN;Tulita;Northwest Territories
+Nova Scotia Airport Codes
+YAW;Shearwater;Nova Scotia
+YCY;Clyde River;Nova Scotia
+YDG;Digby;Nova Scotia
+YDJ;Hatchet Lake;Nova Scotia
+YHZ;Halifax;Nova Scotia
+YLX;Long Point;Nova Scotia
+YPS;Port Hawkesbury;Nova Scotia
+YQI;Yarmouth;Nova Scotia
+YQY;Sydney;Nova Scotia
+YSA;Sable Island;Nova Scotia
+YSC;Sherbrooke;Nova Scotia
+YSX;Shearwater;Nova Scotia
+YTR;Trenton;Nova Scotia
+YWF;Halifax;Nova Scotia
+YAB;Arctic Bay;Nunavut
+YBB;Kugaaruk;Nunavut
+YBK;Baker Lake;Nunavut
+YCB;Cambridge Bay;Nunavut
+YCO;Kugluktuk;Nunavut
+YCS;Chesterfield Inlet;Nunavut
+YEK;Arviat;Nunavut
+YEU;Eureka;Nunavut
+YFB;Iqaluit;Nunavut
+YGT;Igloolik;Nunavut
+YGZ;Grise Fiord;Nunavut
+YHK;Gjoa Haven;Nunavut
+YIO;Pond Inlet;Nunavut
+YLC;Kimmirut/Lake Harbour;Nunavut
+YRB;Resolute;Nunavut
+YRE;Resolution Island;Nunavut
+YRT;Rankin Inlet;Nunavut
+YSK;Sanikiluaq;Nunavut
+YSR;Nanisivik;Nunavut
+YTE;Cape Dorset;Nunavut
+YTK;Tulugak;Nunavut
+YUT;Repulse Bay;Nunavut
+YUX;Hall Beach;Nunavut
+YVM;Qikiqtarjuaq;Nunavut
+YWO;Lupin;Nunavut
+YXN;Whale Cove;Nunavut
+YXP;Pangnirtung;Nunavut
+YYH;Taloyoak;Nunavut
+YZS;Coral Harbour;Nunavut
+KEW;Keewaywin;Ontario
+KIF;Kingfisher Lake;Ontario
+MSA;Muskrat Dam;Ontario
+SUR;Summer Beaver;Ontario
+WNN;Wunnummin Lake;Ontario
+XBE;Bearskin Lake;Ontario
+XBR;Brockville;Ontario
+XCM;Chatham;Ontario
+XKS;Kasabonika;Ontario
+YAC;Cat Lake;Ontario
+YAG;Dryden;Ontario
+YAM;Sault Ste Marie;Ontario
+YAT;Attawapiskat;Ontario
+YAX;Angling Lake;Ontario
+YBS;Opapimiskan Lake;Ontario
+YCE;Centralia;Ontario
+YCI;Caribou Island;Ontario
+YCM;St Catharines;Ontario
+YCN;Cochrane;Ontario
+YDK;Main Duck Island;Ontario
+YEL;Elliot Lake;Ontario
+YEM;Manitowaning;Ontario
+YER;Fort Severn;Ontario
+YFA;Fort Albany;Ontario
+YFH;Fort Hope;Ontario
+YGQ;Geraldton;Ontario
+YHD;Dryden;Ontario
+YHF;Hearst;Ontario
+YHM;Hamilton;Ontario
+YHN;Hornepayne;Ontario
+YHP;Poplar Hill;Ontario
+YIB;Atikokan;Ontario
+YKF;Kitchener/Waterloo;Ontario
+YKX;Kirkland Lake;Ontario
+YKZ;Toronto;Ontario
+YLD;Chapleau;Ontario
+YLH;Lansdowne House;Ontario
+YMG;Manitouwadge;Ontario
+YMI;Minaki;Ontario
+YMO;Moosonee;Ontario
+YND;Ottawa;Ontario
+YNO;North Spirit Lake;Ontario
+YOG;Ogoki;Ontario
+YOO;Oshawa;Ontario
+YOS;Owen Sound;Ontario
+YOW;Ottawa;Ontario
+YPA;Prince Albert;Ontario
+YPD;Parry Sound;Ontario
+YPL;Pickle Lake;Ontario
+YPM;Pikangikum;Ontario
+YPO;Peawanuck;Ontario
+YPQ;Peterborough;Ontario
+YQA;Muskoka;Ontario
+YQE;Kimberley;Ontario
+YQK;Kenora;Ontario
+YQN;Nakina;Ontario
+YQT;Thunder Bay;Ontario
+YRL;Red Lake;Ontario
+YSB;Sudbury;Ontario
+YSH;Smith Falls;Ontario
+YSI;Frying Pan Island;Ontario
+YSP;Marathon;Ontario
+YTJ;Terrace Bay;Ontario
+YTL;Big Trout Lake;Ontario
+YTO;Toronto;Ontario
+YTS;Timmins;Ontario
+YTZ;Toronto;Ontario
+YVE;Vernon;Ontario
+YVV;Wiarton;Ontario
+YWA;Petawawa;Ontario
+YWN;Winisk;Ontario
+YWP;Webequie;Ontario
+YWR;White River;Ontario
+YXI;Killaloe;Ontario
+YXL;Sioux Lookout;Ontario
+YXR;Earlton;Ontario
+YXU;London;Ontario
+YXZ;Wawa;Ontario
+YYB;North Bay;Ontario
+YYU;Kapuskasing;Ontario
+YYZ;Toronto;Ontario
+YZD;Toronto;Ontario
+YZE;Gore Bay;Ontario
+YZR;Sarnia;Ontario
+YZX;Greenwood;Ontario
+ZFL;South Trout Lake;Ontario
+ZKE;Kashechewan;Ontario
+ZPB;Sachigo Lake;Ontario
+ZRJ;Round Lake;Ontario
+ZSJ;Sandy Lake;Ontario
+ZUC;Ignace;Ontario
+YCC;Cornwall;Prince Edward Island
+YSU;Summerside;Prince Edward Island
+AKV;Akulivik;Quebec
+SSQ;La Sarre;Quebec
+XFZ;Quebec;Quebec
+XGR;Kangiqsualujjuaq;Quebec
+YAF;Asbestos Hill;Quebec
+YAH;Northern Quebec;Quebec
+YAU;Raglan Mines;Quebec
+YBC;Baie-Comeau;Quebec
+YBG;Saguenay-Bagotville;Quebec
+YBJ;Baie-Johan-Beetz;Quebec
+YBX;Blanc-Sablon;Quebec
+YCV;Montreal;Quebec
+YDO;Dolbeau-Mistassini;Quebec
+YEY;Amos;Quebec
+YFE;Forestville;Quebec
+YFG;Fontanges;Quebec
+YGA;Gagnon;Quebec
+YGL;Radisson;Quebec
+YGR;Îles-de-la-Madeleine;Quebec
+YGV;Havre-Saint-Pierre;Quebec
+YGW;Kuujjuarapik;Quebec
+YGY;Deception;Quebec
+YHE;Hope;Quebec
+YHR;Chevery;Quebec
+YHU;Montreal;Quebec
+YIF;Saint-Augustin;Quebec
+YIK;Ivujivik;Quebec
+YJN;Saint-Jean-sur-Richelieu;Quebec
+YKG;Kangirsuk;Quebec
+YKL;Schefferville;Quebec
+YKQ;Waskaganish;Quebec
+YKU;Chisasibi;Quebec
+YLF;LaForges;Quebec
+YLP;Mingan;Quebec
+YLQ;La Tuque;Quebec
+YLS;Lebel-Sur-Quevillon;Quebec
+YMC;Maricourt;Quebec
+YME;Matane;Quebec
+YML;La Malbaie;Quebec
+YMT;Chibougamau;Quebec
+YMW;Maniwaki;Quebec
+YMX;Montreal;Quebec
+YNA;Natashquan;Quebec
+YNC;Wemindji;Quebec
+YNI;Nitchequon;Quebec
+YNM;Matagami;Quebec
+YNS;Nemiscau;Quebec
+YOY;Valcartier;Quebec
+YPH;Inukjuak;Quebec
+YPJ;Aupaluk;Quebec
+YPN;Port-Menier;Quebec
+YPX;Puvirnituq;Quebec
+YQB;Québec City;Quebec
+YQC;Quaqtaq;Quebec
+YRI;Rivière-du-Loup;Quebec
+YRJ;Roberval;Quebec
+YRQ;Trois-Rivieres;Quebec
+YTM;Mont-Tremblant (La Macaza);Quebec
+YTN;Rivière-au-Tonnerre;Quebec
+YUD;Umiujaq;Quebec
+YUL;Montreal;Quebec
+YUY;Rouyn-Noranda;Quebec
+YVB;Bonaventure;Quebec
+YVP;Kuujjuaq;Quebec
+YWB;Kangiqsujuaq;Quebec
+YXK;Rimouski;Quebec
+YXX;Abbotsford;Quebec
+YYY;Mont-Joli;Quebec
+YZG;Salluit;Quebec
+YZV;Sept-Iles;Quebec
+ZBM;Bromont;Quebec
+ZEM;Eastmain;Quebec
+ZFB;Old Fort Bay;Quebec
+ZGS;Gethsemani;Quebec
+ZKG;Kegaska;Quebec
+ZLT;La Tabatiere;Quebec
+ZTB;Tete-a-La-Baleine;Quebec
+KNY;Kinoosao;Saskatchewan
+XCL;Cluff Lake;Saskatchewan
+YBE;Uranium City;Saskatchewan
+YBN;Borden;Saskatchewan
+YDR;Broadview;Saskatchewan
+YEN;Estevan;Saskatchewan
+YHB;Hudson Bay;Saskatchewan
+YKC;Collins Bay;Saskatchewan
+YKJ;Key Lake;Saskatchewan
+YKY;Kindersley;Saskatchewan
+YLJ;Meadow Lake;Saskatchewan
+YLL;Lloydminster;Saskatchewan
+YMJ;Moose Jaw;Saskatchewan
+YNL;Points North Landing;Saskatchewan
+YQR;Regina;Saskatchewan
+YQV;Yorkton;Saskatchewan
+YQW;North Battleford;Saskatchewan
+YSF;Stony Rapids;Saskatchewan
+YTT;Tisdale;Saskatchewan
+YVC;La Ronge;Saskatchewan
+YVT;Buffalo Narrows;Saskatchewan
+YXE;Saskatoon;Saskatchewan
+ZFD;Fond Du Lac;Saskatchewan
+ZPO;Pinehouse Lake;Saskatchewan
+ZWL;Wollaston Lake;Saskatchewan
+XMP;Macmillan Pass;Yukon
+XRR;Ross River;Yukon
+YDA;Dawson City;Yukon
+YDB;Burwash Landings;Yukon
+YHT;Haines Junction;Yukon
+YMA;Mayo;Yukon
+YOC;Old Crow;Yukon
+YQH;Watson Lake;Yukon
+YXF;Snake River;Yukon
+YXQ;Beaver Creek;Yukon
+YXY;Whitehorse;Yukon
+YZW;Teslin;Yukon
+ZFA;Faro;Yukon
