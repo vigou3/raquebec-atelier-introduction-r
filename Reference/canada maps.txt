@@ -15,3 +15,6 @@ http://stackoverflow.com/questions/20251119/increase-the-size-of-variable-size-p
 
 scale_size_area
 http://stackoverflow.com/questions/11517411/ggplot2-how-to-manually-adjust-scale-area
+
+extract canada maps informations
+http://www12.statcan.gc.ca/census-recensement/2011/geo/bound-limit/bound-limit-2011-eng.cfm

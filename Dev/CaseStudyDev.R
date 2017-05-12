@@ -13,9 +13,9 @@ set.seed(31459)
 
 
 # 1.1 - Extraire les bases de données airports.dat et routes.dat
-airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
-routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c('\\N',''))
-airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c('\\N',''))
+airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
+airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE,  stringsAsFactors = TRUE, na.strings=c('\\N',''))
 
 # 1.2 - Attribuer des noms aux colonnes du jeu de données en vous fiant à l'information disponible sur le site
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
@@ -158,7 +158,7 @@ library(ggmap)
 map <- get_map(location = 'Canada',zoom=3)
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
-airportsCoord <- as.data.frame(lon, lat)
+airportsCoord <- as.data.frame(cbind(lon, lat))
 mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5)
 mapPoints
 
@@ -196,7 +196,7 @@ sd(arrivalFlights)
 head(sort(arrivalFlights,decreasing = TRUE),n = 30)
 arrivalCDF <- ecdf(arrivalFlights)
 arrivalIndex <- format(arrivalCDF(arrivalFlights-1), digits = 5)
-arrivalIndex <- format(arrivalFlights, digits = 5)
+arrivalIndex <- arrivalFlights
 IATA <- names(arrivalFlights)
 arrivalIndexTable <- as.data.frame(cbind(IATA,arrivalFlights,arrivalIndex))
 rownames(arrivalIndexTable) <- NULL
@@ -211,7 +211,7 @@ sigma <- sd(departureFlights)
 head(sort(departureFlights,decreasing = TRUE),n = 30)
 departureCDF <- ecdf(departureFlights)
 departureIndex <- format(departureCDF(departureFlights-1), digits = 5)
-departureIndex <- format(departureFlights, digits = 5)
+departureIndex <- departureFlights
 IATA <- names(departureFlights)
 departureIndexTable <- as.data.frame(cbind(IATA,departureFlights,departureIndex))
 rownames(departureIndexTable) <- NULL
@@ -255,14 +255,14 @@ mapTraffic
 
 #### Question 2 #####
 
-library(geosphere)
 
 #
 # Fonction de calcul de distance entre deux aéroports
 #
 
+library(geosphere)
 # PRE nécessite l'existence de la base de donnée 
-dist <- function(sourceIATA,destIATA)
+airportsDist <- function(sourceIATA,destIATA)
 {
   # vérifions que sourceIATA et destIATA sont des IATA valides
   sourceFindIndex <- match(sourceIATA,airportsCanada$IATA)
@@ -275,33 +275,27 @@ dist <- function(sourceIATA,destIATA)
   {
     stop(paste('destIATA :',destIATA,'is not a valid IATA code'))
   }
-  # vérifions qu'il existe une route entre sourceIATA et destIATA 
-  #(n'est pas nécessaire puisque nous pourrions être intéressé à connaître la distance
-  #entre deux aéroports n'ayant toujours pas de route entre eux)
-  routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
-  if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
-  {
-    stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,'do not corresponds to existing route'))
-  }
   sourceLon <- as.numeric(paste(airportsCanada$longitude))[sourceFindIndex]
   sourceLat <- as.numeric(paste(airportsCanada$latitude))[sourceFindIndex]
   sourceCoord <- c(sourceLon,sourceLat)
   destLon <- as.numeric(paste(airportsCanada$longitude))[destFindIndex]
   destLat <- as.numeric(paste(airportsCanada$latitude))[destFindIndex]
   destCoord <- c(destLon,destLat)
-  distList <- list()
-  distList$source <- sourceIATA
-  distList$dest <- destIATA
-  distList$value <- round(distGeo(sourceCoord,destCoord)/1000)
-  distList$metric <- "Km"
-  distList$xy_dist <- sqrt((sourceLon - destLon)**2 + (sourceLat - destLat)**2)
-  distList
+  airportDistList <- list()
+  airportDistList$source <- sourceIATA
+  airportDistList$dest <- destIATA
+  airportDistList$value <- round(distGeo(sourceCoord,destCoord)/1000)
+  airportDistList$metric <- "Km"
+  airportDistList$xy_dist <- sqrt((sourceLon - destLon)**2 + (sourceLat - destLat)**2)
+  airportDistList$sourceIndex <- sourceFindIndex
+  airportDistList$destIndex <- destFindIndex
+  airportDistList
 }
-dist('AAA','YQB')
-dist('YUL','AAA')
-dist('YPA','YQB')
-dist('YUL','YQB')
-dist('YUL','YQB')$value
+airportsDist('AAA','YQB')
+airportsDist('YUL','AAA')
+airportsDist('YPA','YQB')
+airportsDist('YUL','YQB')
+airportsDist('YUL','YQB')$value
 
 
 #
@@ -311,111 +305,126 @@ dist('YUL','YQB')$value
 # install.packages("lubridate")
 library(lubridate)
 
-timeArrival <- function(depAirport, arrAirport)
+arrivalTime <- function(sourceIATA,destIATA,cruizingSpeed = 900, adjustFactor = 0.45)
 {
-     # depAirpot as a string
-     # arrAirport as a string
-     # We assume time of departure to be the actual time
-     
-     timeDep <- Sys.time()
-     timeArr <- with_tz(timeDep + ms(round_any(dist(depAirport, arrAirport)$value / 900 * 60 ,accuracy = 0.1 )), 
-                         tzone = as.character(airportsCanada[match(arrAirport, airportsCanada$IATA), "tzFormat"]))
-     timeArr
+  arrivalTimeList <- list()
+  arrivalTimeList$source <- sourceIATA
+  arrivalTimeList$dest <- destIATA
+  arrivalTimeList$departureTime <- Sys.time()
+  distance <- airportsDist(sourceIATA,destIATA)
+  arrivalTimeList$flightTime <- ms(round(distance$value/(cruizingSpeed*adjustFactor)*60, digits = 1))
+  arrivalTimeList$departureTZ <- paste(airportsCanada[distance$sourceIndex, "tzFormat"])
+  arrivalTimeList$arrivalTZ <- paste(airportsCanada[distance$destIndex, "tzFormat"])
+  arrivalTimeList$value <- with_tz(arrivalTimeList$departureTime + arrivalTimeList$flightTime, 
+                                   tzone = arrivalTimeList$arrivalTZ)
+  arrivalTimeList
 }
-
-timeArrival("YUL", "YYZ")
-
+arrivalTime("AAA","YYZ")
+arrivalTime("YUL","AAA")
+arrivalTime("YUL", "YYZ")
+arrivalTime("YUL", "YYZ")$value
+difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
 #
 # Fonction de calcul des coûts
 #
-calCost <- function(depAirport, arrAirport, weight, province, costFactor = 0.1, fixeCost = 3.75, marginProfit = 1.04, rebate = 0)
+calCost <- function(sourceIATA, destIATA, weight, province, 
+                    distanceFactor = 0.01, weightFactor = 0.1, fixeCost = 3.75, 
+                    profitMargin = 1.12, percentCredit = 0, dollarCredit = 0,
+                    mininalDist = 100)
 {
-     # depAirport as a string
-     # arrAirport as a strin
-     # Weight as an integer ; in KG
-     # province as a string
-     
-     # costFactor as an float ; we assume an uniforme costFactor for all canadian shipping
-     # fixeCost as a default integer ; we assume an uniform cost for all canadian shipping
-     # marginProfit as a default float ; we assume an uniform margin profit for all canadian shipping
-     # rebate as a default float
-     
-     #
-     # Minimal distance for shipping, in KM
-     #
-     minDist <- 100
-     
-     #
-     # logical test
-     #
-     if (weight <= 0 | costFactor <= 0 | fixeCost <= 0 | marginProfit <= 0 | rebate >= 1)
-     {
-          stop("One of the input are illogical to the situation")
-     }
-     
-     distShipping <- dist(depAirport, arrAirport)$value
-     if (distShipping <= minDist)
-     {
-          #
-          # We verify if the distance of shipping is further than the minimal requierement
-          #
-          stop("The shipping is under the minimal distance of ", minDist)
-     }
-     
-     #
-     # Calculation of the base cost
-     #
-     baseCost <-  distShipping * weight * costFactor
-     
-     #
-     # Calculation of taxe rate and control of text
-     #
-     province <- gsub(" ", "_", province)
-     province <- gsub("-", "_", province)
-     
-     taxeRate <- switch(province, 
-                        Nouveau_Brunswick = 1.15, Terre_Neuve_et_Labrador = 1.15, Nouvelle_Écosse = 1.15, 
-                        Île_du_Prince_Édouard = 1.15, 
-                        Alberta = 1.05,  Nunavut = 1.05, Territoires_du_Nord_Ouest =1.05, Yukon = 1.05, 
-                        Colombie_Britannique = 1.12, 
-                        Manitoba =1.13,  Ontario = 1.13,  
-                        Québec = 1.14975, 
-                        Saskatchewan = 1.16 )
-     #
-     # Test if taxeRate is wrong 
-     #
-     if (is.null(taxeRate))
-     {
-          stop(paste("Province :", province, "is not a valid province"))
-     }
-     
-     price <- (baseCost + fixeCost) * marginProfit * (1 - rebate) * taxeRate
-     
-     #
-     # Automatic rebate
-     #
-     if (weight > 2 & weight <= 4)
-     {
-          price <- price * 0.95
-     }
-     else if (weight > 4)
-     {
-          price <- price * 0.9
-     }
-     else if (distShipping > 1500 & distShipping <= 2500)
-     {
-          price <- price * 0.95
-     }
-     else if (distShipping > 2500)
-     {
-          price <- price * 0.9
-     }
-     else if (price >= 300)
-     {
-          price <- price * 0.95
-     }
-     price
+  # depAirport as a string
+  # arrAirport as a strin
+  # Weight as an integer ; in KG
+  # province as a string
+  # costFactor as an float ; we assume an uniforme costFactor for all canadian shipping
+  # fixeCost as a default integer ; we assume an uniform cost for all canadian shipping
+  # marginProfit as a default float ; we assume an uniform margin profit for all canadian shipping
+  # rebate as a default float
+  
+  # vérifions qu'il existe une route entre sourceIATA et destIATA 
+  routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
+  if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
+  {
+    stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
+  }
+  
+  #
+  # logical test
+  #
+  if (weight <= 0 | costFactor <= 0 | fixeCost <= 0 | marginProfit <= 0 | rebate >= 1)
+  {
+    stop("One of the input are illogical to the situation")
+  }
+  
+  distShipping <- dist(depAirport, arrAirport)$value
+  if (distShipping <= minDist)
+  {
+    #
+    # We verify if the distance of shipping is further than the minimal requierement
+    #
+    stop("The shipping is under the minimal distance of ", minDist)
+  }
+  
+  #
+  # Calculation of the base cost
+  #
+  baseCost <-  distShipping * weight * costFactor
+  
+  #
+  # Calculation of taxe rate and control of text
+  #
+  province <- gsub(" ", "_", province)
+  province <- gsub("-", "_", province)
+  
+  taxeRate <- switch(province, 
+                     Nouveau_Brunswick = 1.15, 
+                     Terre_Neuve_et_Labrador = 1.15, 
+                     Nouvelle_Écosse = 1.15, 
+                     Île_du_Prince_Édouard = 1.15, 
+                     Alberta = 1.05,  
+                     Nunavut = 1.05, 
+                     Territoires_du_Nord_Ouest =1.05, 
+                     Yukon = 1.05, 
+                     Colombie_Britannique = 1.12, 
+                     Manitoba =1.13,  
+                     Ontario = 1.13,  
+                     Québec = 1.14975, 
+                     Saskatchewan = 1.16 )
+  #
+  # Test if taxeRate is wrong 
+  #
+  if (is.null(taxeRate))
+  {
+    stop(paste("Province :", province, "is not a valid province"))
+  }
+  
+  price <- (baseCost + fixeCost) * marginProfit * (1 - rebate) * taxeRate
+  
+  #
+  # Automatic rebate
+  #
+  if (weight > 2 & weight <= 4)
+  {
+    price <- price * 0.95
+  }
+  else if (weight > 4)
+  {
+    price <- price * 0.9
+  }
+  else if (distShipping > 1500 & distShipping <= 2500)
+  {
+    price <- price * 0.95
+  }
+  else if (distShipping > 2500)
+  {
+    price <- price * 0.9
+  }
+  else if (price >= 300)
+  {
+    price <- price * 0.95
+  }
+  price
 }
 
 calCost("YUL", "YVR", 0.2, "Québec")
