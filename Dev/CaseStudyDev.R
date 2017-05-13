@@ -353,13 +353,13 @@ taxRates
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-  # depAirport as a string
-  # arrAirport as a string
-  # Weight as an integer ; in KG
-  # costFactor as an float ; we assume an uniforme costFactor for all canadian shipping
-  # fixeCost as a default integer ; we assume an uniform cost for all canadian shipping
-  # marginProfit as a default float ; we assume an uniform margin profit for all canadian shipping
-  # rebate as a default float
+  #
+  # sourceIATA as a string
+  # destIATA as a string
+  # weight as an integer ; in KG
+  # percentCredit as a default float
+  # dollarCredit as a default float
+  #
 
   # vérifions qu'il existe une route entre sourceIATA et destIATA 
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
@@ -368,12 +368,15 @@ shippingCost <- function(sourceIATA, destIATA, weight,
     stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
   }
   
-  if (0 < weight <= 50)
-  {
-    stop("The weight must be between 0 and 50 Kg")
-  }
+  ### To verify
+  ifelse(weight < 50, TRUE, stop("The weight must be between 0 and 50 Kg"))
   
-  if (0 < percentCredit <= 100)
+  #if (weight > 50) 
+  #{
+  #  stop("The weight must be between 0 and 50 Kg")
+  #}
+  
+  if (percentCredit >= 1 & percentCredit < 0)
   {
     stop("The percentage of credit must be between 0 % and 100 %")
   }
@@ -391,6 +394,9 @@ shippingCost <- function(sourceIATA, destIATA, weight,
     stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
   }
   
+  #
+  # Ajustment factor
+  #
   distanceFactor <- 0.025
   weightFactor <- 0.5
   fixedCost <- 3.75
@@ -405,7 +411,33 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   
   # Calculation of taxe rate and control of text
   taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
-  (price <- ((baseCost*profitMargin - dollarCredit)*(1 - percentCredit))*taxRate)
+  price <- ((baseCost*profitMargin - dollarCredit)*(1 - percentCredit))*taxRate
+  
+  #
+  # Additional rebate on the price
+  #
+  price <-  price * ifelse(weight > 5, 0.95, 1)
+  
+  if (distance$value < 250)
+  {
+       price <- price * 0.9
+  }
+  else if (distance$value < 500 & distance$value >= 250)
+  {
+       price <- price * 0.925
+  }
+  else if (distance$value < 1250 & distance$value >= 500)
+  {
+       price <- price * 0.95
+  }
+  else if (distance$value < 2000 & distance$value >= 1250)
+  {
+       price <- price * 0.975
+  }
+  if (price >= 300)
+  {
+       price <- price * 0.95
+  }
   
   shippingCostList <- list()
   shippingCostList$distance <- distance
