@@ -436,6 +436,10 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   price <- pmax(fixedCost*profitMargin*automatedCredit*taxRate,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate)
 
   # Return List
+  # Calculation of taxe rate and control of text
+  taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
+  price <- round(((baseCost*profitMargin - dollarCredit)*(1 - percentCredit))*taxRate,2)
+  
   shippingCostList <- list()
   shippingCostList$distance <- distance
   shippingCostList$weight <- weight
@@ -481,33 +485,53 @@ mu1 <- log(3000)
 sigma1 <- log(1.8)
 exp(mu1+sigma1**2/2)
 exp(2*mu1+4*sigma1**2/2)-exp(mu1+sigma1**2/2)**2
-weights <- qlnorm(x[,1],mu1,sigma1)
+(weights <- round(qlnorm(x[,1],mu1,sigma1)/1000,3))
 mean(weights)
-weights
-hist(weights,breaks = 100)
-max(weights)*2.2/1000
+hist(weights,breaks = 100,freq=FALSE)
+max(weights)
+
+# Générer des erreurs sur le poids
+weightsTarifParam <- 0.7
+weightsPrice <- weightsTarifParam*weights
+weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParam
+weightsFinalPrice <- weightsPrice + weightsError
+mean(weightsFinalPrice)
+var(weightsFinalPrice)
 
 # Générer des distances selon logNormale
 routesCanada
 routesIATA <- cbind(paste(routesCanada$sourceAirport),paste(routesCanada$destinationAirport))
-routesDistance <- apply(routesIATA, 1, function(x) dist(x[1],x[2])$value)
+routesDistance <- apply(routesIATA, 1, function(x) airportsDist(x[1],x[2])$value)
 max(routesDistance)
 mean(routesDistance)
 mu2 <- log(650)
 sigma2 <- log(1.4)
-distances <- qlnorm(x[,2],mu2,sigma2)
+(distances <- round(qlnorm(x[,2],mu2,sigma2)))
 mean(distances)
-distances
-hist(distances,breaks = 100)
+hist(distances,breaks = 100,freq=FALSE)
 max(distances)
 
-# Générer des erreurs sur le poids
-weightsTarifParamA <- 5/1000
-weightsTarifParamB <- 5
-weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
-weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
-weightsPriceFinal <- weightsPrice + weightsError
-cbind(weights,weightsPriceFinal)
+# Générer des erreurs sur la distance
+distancesTarifParam <- 0.02
+distancesPrice <- distancesTarifParam*distances
+distancesError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(distances)*distancesTarifParam
+distancesFinalPrice <- distancesPrice + distancesError
+mean(distancesFinalPrice)
+var(distancesFinalPrice)
+
+# Générer prix totaux
+baseCost <- 10
+taxRate <- 1.12
+profitMargin <- 1.15
+(totalCost <- round((baseCost + weightsFinalPrice + distancesFinalPrice)*profitMargin*taxRate,2))
+mean(totalCost)
+var(totalCost)
+max(totalCost)
+
+# Exporter le data en csv
+(dataExport <- cbind(weights,distances,totalCost))
+colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
+write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE)
 
 #### Question 5 ####
 
