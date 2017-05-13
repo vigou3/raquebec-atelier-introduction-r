@@ -1,13 +1,9 @@
-#
 # Code source Case Study R à Québec 2017
-#
 
-
-# Setting working directory properly
+#### Setting working directory properly ####
 setwd('..')
 (path <- getwd())
 set.seed(31459)
-
 
 #### Question 1 - Extraction, traitement, visualisation et analyse des données ####
 
@@ -88,26 +84,42 @@ proj4string(sppts) <- CRS("+proj=longlat")
 sppts <- spTransform(sppts, proj4string(tz_world.shape))
 merged_tz <- cbind(unknown_tz,over(sppts,tz_world.shape))
 
+#Nous pouvons aussi remarquer que nous n'avons qu'une information dérivée de la province dans laquelle
+#est situé chaque aéroport via la ville. Dans le cas de l'application des taxes qui varie par province,
+#il sera donc indispensable de rendre cette donnée plus accessible. Nous procéderons encore une fois via
+#des techniques de cartographie afin d'extraire la province en fonction des coordonnées x et y
+prov_terr.shape <- readOGR(dsn=paste(path,"/Reference/prov_terr",sep=''),layer="gpr_000b11a_e")
+unknown_prov <- airportsCanada[,c("airportID","city","longitude","latitude")]
+sppts <- SpatialPoints(unknown_prov[,c("longitude","latitude")])
+proj4string(sppts) <- CRS("+proj=longlat")
+sppts <- spTransform(sppts, proj4string(prov_terr.shape))
+merged_prov <- cbind(airportsCanada,over(sppts,prov_terr.shape))
+
 # install.packages("sqldf")
 library(sqldf)
 airportsCanada <- sqldf("
-  select a.*, coalesce(a.tzFormat,b.TZID) as tzMerged
+  select 
+    a.*, 
+    coalesce(a.tzFormat,b.TZID) as tzMerged,
+    c.PRENAME as provMerged
   from airportsCanada a 
   left join merged_tz b
   on a.airportID = b.airportID
+  left join merged_prov c
+  on a.airportID = c.airportID
   order by a.airportID")
 airportsCanada <- data.frame(as.matrix(airportsCanada),stringsAsFactors = TRUE)
 
 # On retire timezone et DST car les données sont inutiles
 # On retire tzFormat car il s'Agit des données incomplet et on le remplace plus tard par tzMerged
-airportsCanada <- airportsCanada[,-match(c("timezone","DST","tzFormat"),colnames(airportsCanada))]
+# On retire city qui ne sera plus utile puisque nous avons maintenant la province
+airportsCanada <- airportsCanada[,-match(c("timezone","DST","tzFormat","city"),colnames(airportsCanada))]
 summary(airportsCanada)
 
 # install.packages("plyr")
 library(plyr)
-airportsCanada <- rename(airportsCanada, c("tzMerged"="tzFormat"))
+airportsCanada <- rename(airportsCanada, c("tzMerged"="tzFormat", "provMerged"="province"))
 summary(airportsCanada)
-
 
 routesCanada <- sqldf("
   select *
@@ -155,7 +167,7 @@ summary(routesCanada)
 
 # install.packages("ggmap")
 library(ggmap)
-map <- get_map(location = 'Canada',zoom=3)
+map <- get_map(location = 'Canada', zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
 airportsCoord <- as.data.frame(cbind(lon, lat))
@@ -177,8 +189,7 @@ routesCoord <- sqldf("
   left join airportsCanada b
     on a.sourceAirport = b.IATA
   left join airportsCanada c
-    on a.destinationAirport = c.IATA"
-)
+    on a.destinationAirport = c.IATA")
 lonBeg <- as.numeric(paste(routesCoord$sourceLon))
 latBeg <- as.numeric(paste(routesCoord$sourceLat))
 lonEnd <- as.numeric(paste(routesCoord$destLon))
@@ -223,7 +234,7 @@ curve(arrivalCDF(x-1), from = 0,to = 60, n = 100)
 curve(departureCDF(x-1), from = 0,to = 60, n = 100)
 
 # 1.10 - Calculer un indice combiné des deux derniers indices
-combinedIndex <- (as.numeric(arrivalIndex)+as.numeric(departureIndex))/2
+combinedIndex <- (as.numeric(arrivalIndex)+as.numeric(departureIndex))/(2*as.numeric(max(cbind(arrivalIndex,departureIndex))))
 combinedIndexTable <- data.frame(arrivalIndexTable$IATA,
                                  arrivalIndexTable$arrivalIndex,
                                  departureIndexTable$departureIndex,
@@ -238,6 +249,7 @@ airportsCanada <- sqldf("
   from airportsCanada a
   left join combinedIndexTable b
   on a.IATA = b.IATA")
+airportsCanada <- data.frame(as.matrix(airportsCanada ),stringsAsFactors = TRUE)
 
 #1.11 - Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles
 par(mfrow=c(1,1))
@@ -255,11 +267,7 @@ mapTraffic
 
 #### Question 2 #####
 
-
-#
 # Fonction de calcul de distance entre deux aéroports
-#
-
 library(geosphere)
 # PRE nécessite l'existence de la base de donnée 
 airportsDist <- function(sourceIATA,destIATA)
@@ -297,22 +305,23 @@ airportsDist('YPA','YQB')
 airportsDist('YUL','YQB')
 airportsDist('YUL','YQB')$value
 
-
-#
 # Fonction pour déterminer l'heure d'arriver
-#
-
 # install.packages("lubridate")
 library(lubridate)
-
-arrivalTime <- function(sourceIATA,destIATA,cruizingSpeed = 900, adjustFactor = 0.45)
+arrivalTime <- function(sourceIATA,destIATA)
 {
+  topSpeed <- 850
+  adjustFactor <- list()
+  adjustFactor$a <- 0.0001007194
+  adjustFactor$b <- 0.4273381
   arrivalTimeList <- list()
   arrivalTimeList$source <- sourceIATA
   arrivalTimeList$dest <- destIATA
   arrivalTimeList$departureTime <- Sys.time()
   distance <- airportsDist(sourceIATA,destIATA)
-  arrivalTimeList$flightTime <- ms(round(distance$value/(cruizingSpeed*adjustFactor)*60, digits = 1))
+  cruiseSpeed <- (distance$value*adjustFactor$a + adjustFactor$b)*topSpeed
+  arrivalTimeList$avgCruiseSpeed <- cruiseSpeed
+  arrivalTimeList$flightTime <- ms(round(distance$value/cruiseSpeed*60, digits = 1))
   arrivalTimeList$departureTZ <- paste(airportsCanada[distance$sourceIndex, "tzFormat"])
   arrivalTimeList$arrivalTZ <- paste(airportsCanada[distance$destIndex, "tzFormat"])
   arrivalTimeList$value <- with_tz(arrivalTimeList$departureTime + arrivalTimeList$flightTime, 
@@ -322,26 +331,36 @@ arrivalTime <- function(sourceIATA,destIATA,cruizingSpeed = 900, adjustFactor = 
 arrivalTime("AAA","YYZ")
 arrivalTime("YUL","AAA")
 arrivalTime("YUL", "YYZ")
+arrivalTime("YUL","YVR")
 arrivalTime("YUL", "YYZ")$value
 difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
-#
+#Importer les taux de taxation par province directement du web
+#install.packages("XML")
+#install.packages("RCurl")
+#install.packages("rlist")
+library(XML)
+library(RCurl)
+library(rlist)
+theurl <- getURL("http://www.calculconversion.com/sales-tax-calculator-hst-gst.html",.opts = list(ssl.verifypeer = FALSE) )
+tables <- readHTMLTable(theurl)
+provinceName <- as.character(sort(unique(airportsCanada$province)))
+taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`[-13,5]))/100+1),stringsAsFactors = TRUE)
+colnames(taxRates) <- c("province","taxRate")
+taxRates
+
 # Fonction de calcul des coûts
-#
-calCost <- function(sourceIATA, destIATA, weight, province, 
-                    distanceFactor = 0.01, weightFactor = 0.1, fixeCost = 3.75, 
-                    profitMargin = 1.12, percentCredit = 0, dollarCredit = 0,
-                    mininalDist = 100)
+shippingCost <- function(sourceIATA, destIATA, weight, 
+                         percentCredit = 0, dollarCredit = 0)
 {
   # depAirport as a string
-  # arrAirport as a strin
+  # arrAirport as a string
   # Weight as an integer ; in KG
-  # province as a string
   # costFactor as an float ; we assume an uniforme costFactor for all canadian shipping
   # fixeCost as a default integer ; we assume an uniform cost for all canadian shipping
   # marginProfit as a default float ; we assume an uniform margin profit for all canadian shipping
   # rebate as a default float
-  
+
   # vérifions qu'il existe une route entre sourceIATA et destIATA 
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
   if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
@@ -349,88 +368,72 @@ calCost <- function(sourceIATA, destIATA, weight, province,
     stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
   }
   
-  #
-  # logical test
-  #
-  if (weight <= 0 | costFactor <= 0 | fixeCost <= 0 | marginProfit <= 0 | rebate >= 1)
+  if (0 < weight <= 50)
   {
-    stop("One of the input are illogical to the situation")
+    stop("The weight must be between 0 and 50 Kg")
   }
   
-  distShipping <- dist(depAirport, arrAirport)$value
-  if (distShipping <= minDist)
+  if (0 < percentCredit <= 100)
   {
-    #
+    stop("The percentage of credit must be between 0 % and 100 %")
+  }
+  
+  if (dollarCredit > 0)
+  {
+    stop("The dollar credit must be superior to 0 $")
+  }
+  
+  minimalDist = 100
+  distance <- airportsDist(sourceIATA, destIATA)
+  if (distance$value < minimalDist)
+  {
     # We verify if the distance of shipping is further than the minimal requierement
-    #
-    stop("The shipping is under the minimal distance of ", minDist)
+    stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
   }
   
-  #
+  distanceFactor <- 0.025
+  weightFactor <- 0.5
+  fixedCost <- 3.75
+  profitMargin <- 1.12
+  
+  # Trafic Index
+  traficIndexSource <- as.numeric(paste(airportsCanada[distance$sourceIndex,"combinedIndex"]))
+  traficIndexDest <- as.numeric(paste(airportsCanada[distance$destIndex,"combinedIndex"]))
+  
   # Calculation of the base cost
-  #
-  baseCost <-  distShipping * weight * costFactor
+  baseCost <-  fixedCost + (distance$value*distanceFactor + weight*weightFactor)/(traficIndexSource*traficIndexDest)
   
-  #
   # Calculation of taxe rate and control of text
-  #
-  province <- gsub(" ", "_", province)
-  province <- gsub("-", "_", province)
+  taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
+  (price <- ((baseCost*profitMargin - dollarCredit)*(1 - percentCredit))*taxRate)
   
-  taxeRate <- switch(province, 
-                     Nouveau_Brunswick = 1.15, 
-                     Terre_Neuve_et_Labrador = 1.15, 
-                     Nouvelle_Écosse = 1.15, 
-                     Île_du_Prince_Édouard = 1.15, 
-                     Alberta = 1.05,  
-                     Nunavut = 1.05, 
-                     Territoires_du_Nord_Ouest =1.05, 
-                     Yukon = 1.05, 
-                     Colombie_Britannique = 1.12, 
-                     Manitoba =1.13,  
-                     Ontario = 1.13,  
-                     Québec = 1.14975, 
-                     Saskatchewan = 1.16 )
-  #
-  # Test if taxeRate is wrong 
-  #
-  if (is.null(taxeRate))
-  {
-    stop(paste("Province :", province, "is not a valid province"))
-  }
-  
-  price <- (baseCost + fixeCost) * marginProfit * (1 - rebate) * taxeRate
-  
-  #
-  # Automatic rebate
-  #
-  if (weight > 2 & weight <= 4)
-  {
-    price <- price * 0.95
-  }
-  else if (weight > 4)
-  {
-    price <- price * 0.9
-  }
-  else if (distShipping > 1500 & distShipping <= 2500)
-  {
-    price <- price * 0.95
-  }
-  else if (distShipping > 2500)
-  {
-    price <- price * 0.9
-  }
-  else if (price >= 300)
-  {
-    price <- price * 0.95
-  }
-  price
+  shippingCostList <- list()
+  shippingCostList$distance <- distance
+  shippingCostList$weight <- weight
+  shippingCostList$distanceFactor <- distanceFactor
+  shippingCostList$weightFactor <- weightFactor
+  shippingCostList$fixedCost <- fixedCost
+  shippingCostList$profitMargin <- profitMargin
+  shippingCostList$percentCredit <- percentCredit
+  shippingCostList$dollarCredit <- dollarCredit
+  shippingCostList$minimalDist <- minimalDist
+  shippingCostList$traficIndex <- list(traficIndexSource,traficIndexDest)
+  shippingCostList$baseCost <- baseCost
+  shippingCostList$taxRate <- taxRate
+  shippingCostList$price <- price
+  shippingCostList
 }
-
-calCost("YUL", "YVR", 0.2, "Québec")
+shippingCost("YUL", "YVR", 1)
+shippingCost("YUL", "YQB", 1)
+shippingCost("YUL", "YVR", 30)
+shippingCost("YUL", "YQB", 30)
 
 #### Question 3 ####
-
+curve(shippingCost("YUL","YQB",x)$price,0.01,50,ylim=c(0,300),main="Shipping Variation with Weight",xlab="weight (Kg)",ylab="price (CND $)")
+curve(shippingCost("YUL","YVR",x)$price,0.01,50,xlab="weight (Kg)",ylab="price (CND $)",add=TRUE)
+curve(shippingCost("YUL","YYZ",x)$price,0.01,50,xlab="weight (Kg)",ylab="price (CND $)",add=TRUE)
+curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",ylab="price (CND $)",add=TRUE)
+#text(locator(), labels = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"))
 
 #### Question 4 ####
 
@@ -470,3 +473,20 @@ weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
 weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
 weightsPriceFinal <- weightsPrice + weightsError
 cbind(weights,weightsPriceFinal)
+
+#### Question 6 ####
+f<-function(x)
+{
+  if(x < 0)
+  {
+    stop("x must be positive")
+  }
+  log(x) 
+}
+
+test <- try(f(2))
+test
+is(test,"try-error")
+
+test <- try(f(-2),silent=TRUE)
+is(test,"try-error")
