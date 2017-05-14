@@ -539,49 +539,40 @@ library("actuar")
 (paramLogNormal <- optim(par = c(1,1), function(par) -sum(dlnorm(compData$weight,par[1],par[2],log = TRUE))))
 (paramWeibull <- optim(par = c(1,1), function(par) -sum(dweibull(compData$weight,par[1],par[2],log = TRUE))))
 (paramPareto <- optim(par = c(1,1), function(par) -sum(dpareto(compData$weight,par[1],par[2],log = TRUE))))
+(paramInvGaussian <- optim(par = c(1,1), function(par) -sum(dinvgauss(compData$weight,par[1],par[2],log = TRUE))))
 
-plot(ecdf(compData$Prix), xlim = c(15,80), main = "lois..")
-curve(pgamma(x, gamModel$par[1], gamModel$par[2]), from = 15, to = 80, add = TRUE,
-      lwd = 2, col = "darkblue")
-curve(plnorm(x, lnModel$par[1], lnModel$par[2]), from = 15, to = 80, add = TRUE,
-      lwd = 2, col = "darkred")
-curve(pweibull(x, weibullModel$par[1], weibullModel$par[2]), from = 15, to = 80,  add = TRUE, 
-       lwd = 2, col = "darkgreen")
-curve(ppareto(x, paretoModel$par[1], paretoModel$par[2]), from = 15, to = 80, add = TRUE, 
-        lwd = 2, col = "gray")
-legend(x=58,y=0.2,c("Gamma","LogN","Weibull","Pareto"), fill = c("darkblue","darkred","darkgreen","grey"), cex = 0.5, ncol = 2)
+par(mfrow = c(1,1),font = 2)
+plot(ecdf(compData$weight), xlim = c(0,15), main = "Ajustement sur distribution empirique", ylab = "CDF(x)", xlab = "weight (Kg)")
+curve(pnorm(x, paramNormal$par[1],paramNormal$par[2]), add = TRUE, lwd = 2, col = "darkgreen")
+curve(pgamma(x, paramGamma$par[1],paramGamma$par[2]), add = TRUE, lwd = 2, col = "darkblue")
+curve(plnorm(x, paramLogNormal$par[1], paramLogNormal$par[2]), add = TRUE, lwd = 2, col = "darkred")
+curve(pweibull(x, paramWeibull$par[1], paramWeibull$par[2]), add = TRUE, lwd = 2, col = "yellow")
+curve(ppareto(x, paramPareto$par[1], paramPareto$par[2]), add = TRUE, lwd = 2, col = "gray")
+curve(pinvgauss(x, paramInvGaussian$par[1], paramInvGaussian$par[2]), add = TRUE, lwd = 2, col = "purple")
+legend(x=7.5,y=0.6,c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian"), fill = c("darkgreen","darkblue","darkred","yellow","purple","gray"), cex = 0.75, ncol = 2, title = "Distribution")
 
-plot(density(compData$price), xlim = c(15,80), main = "lois..")
-curve(dgamma(x, gamModel$par[1], gamModel$par[2]), from = 15, to = 80, add = TRUE,
-      lwd = 2, col = "darkblue")
-curve(dlnorm(x, lnModel$par[1], lnModel$par[2]), from = 15, to = 80, add = TRUE,
-      lwd = 2, col = "darkred")
-curve(pweibull(x, weibullModel$par[1], weibullModel$par[2]), from = 15, to = 80,  add = TRUE, 
-      lwd = 2, col = "darkgreen")
-curve(ppareto(x, paretoModel$par[1], paretoModel$par[2]), from = 15, to = 80, add = TRUE, 
-      lwd = 2, col = "gray")
-
+par(mfrow = c(1,1),font = 2)
+hist(compData$weight, xlim = c(0,15), main = "Ajustement sur distribution empirique", xlab = "weight (Kg)", breaks = 500,freq = FALSE)
+curve(dnorm(x, paramNormal$par[1],paramNormal$par[2]), add = TRUE, lwd = 2, col = "darkgreen")
+curve(dgamma(x, paramGamma$par[1],paramGamma$par[2]), add = TRUE, lwd = 2, col = "darkblue")
+curve(dlnorm(x, paramLogNormal$par[1], paramLogNormal$par[2]), add = TRUE, lwd = 2, col = "darkred")
+curve(dweibull(x, paramWeibull$par[1], paramWeibull$par[2]), add = TRUE, lwd = 2, col = "yellow")
+curve(dpareto(x, paramPareto$par[1], paramPareto$par[2]), add = TRUE, lwd = 2, col = "gray")
+curve(dinvgauss(x, paramInvGaussian$par[1], paramInvGaussian$par[2]), add = TRUE, lwd = 2, col = "purple")
+legend(x=7.5,y=0.2,c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian"), fill = c("darkgreen","darkblue","darkred","yellow","purple","gray"), cex = 0.75, ncol = 2, title = "Distribution")
 
 # On peut déjà retirer la loi de Weibull et la loi de Pareto
 # Il nous reste la loi Gamma ou la loi LogNormale
 # On choisi donc la distribution donc le MLE est le plus petit, soit la loi LogNormale.
 min(c(gamModel$value, lnModel$value))
 
-# ?? une fonction pour présenter l'information
-
-
-#
-# Ou avec fitdistr
-#
-
+# Il est aussi possible de faire l'équivalent avec fitdistr de la library MASS, 
+# mais nous sommes toutefois restrient sur la sélection des distributions
 library("MASS")
-
-fit.ln <- fitdistr(compData$Prix, "lognormal")
-fit.ln
-
-fit.gamma <- fitdistr(compData$Prix, "gamma")
-fit.gamma
-
+(fit.normal <- fitdistr(compData$weight,"normal"))
+(fit.gamma <- fitdistr(compData$weight, "gamma"))
+(fit.lognormal <- fitdistr(compData$weight, "lognormal"))
+(fit.weibull <- fitdistr(compData$weight, "weibull"))
 
 #### Question 6 ####
 f<-function(x)
