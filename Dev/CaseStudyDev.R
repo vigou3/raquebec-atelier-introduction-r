@@ -541,15 +541,35 @@ library("actuar")
 (paramPareto <- optim(par = c(1,1), function(par) -sum(dpareto(compData$weight,par[1],par[2],log = TRUE))))
 (paramInvGaussian <- optim(par = c(1,1), function(par) -sum(dinvgauss(compData$weight,par[1],par[2],log = TRUE))))
 
+distName <- c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian")
+errorValue <- round(c(paramNormal$value,
+                      paramGamma$value,
+                      paramLogNormal$value,
+                      paramWeibull$value,
+                      paramPareto$value,
+                      paramInvGaussian$value))
+empCDF <- ecdf(compData$weight)
+empPDF <- function(x,delta=0.01)
+{
+  (empCDF(x)-empCDF(x-delta))/delta
+}
+devValue <- round(c(sum((empPDF(x <- seq(0,30,0.1))-dnorm(x,paramNormal$par[1],paramNormal$par[2]))**2),
+                    sum((empPDF(x <- seq(0,30,0.1))-dgamma(x,paramGamma$par[1],paramGamma$par[2]))**2),
+                    sum((empPDF(x <- seq(0,30,0.1))-dlnorm(x,paramLogNormal$par[1],paramLogNormal$par[2]))**2),
+                    sum((empPDF(x <- seq(0,30,0.1))-dweibull(x,paramWeibull$par[1],paramWeibull$par[2]))**2),
+                    sum((empPDF(x <- seq(0,30,0.1))-dpareto(x,paramPareto$par[1],paramPareto$par[2]))**2),
+                    sum((empPDF(x <- seq(0,30,0.1))-dinvgauss(x,paramInvGaussian$par[1],paramInvGaussian$par[2]))**2)),3)
+(resultDistFitting <- as.data.frame(cbind(distName,errorValue,devValue)))
+
 par(mfrow = c(1,1),font = 2)
-plot(ecdf(compData$weight), xlim = c(0,15), main = "Ajustement sur distribution empirique", ylab = "CDF(x)", xlab = "weight (Kg)")
+plot(function(x) empCDF(x), xlim = c(0,15), main = "Ajustement sur distribution empirique", ylab = "CDF(x)", xlab = "weight (Kg)")
 curve(pnorm(x, paramNormal$par[1],paramNormal$par[2]), add = TRUE, lwd = 2, col = "darkgreen")
 curve(pgamma(x, paramGamma$par[1],paramGamma$par[2]), add = TRUE, lwd = 2, col = "darkblue")
 curve(plnorm(x, paramLogNormal$par[1], paramLogNormal$par[2]), add = TRUE, lwd = 2, col = "darkred")
 curve(pweibull(x, paramWeibull$par[1], paramWeibull$par[2]), add = TRUE, lwd = 2, col = "yellow")
 curve(ppareto(x, paramPareto$par[1], paramPareto$par[2]), add = TRUE, lwd = 2, col = "gray")
 curve(pinvgauss(x, paramInvGaussian$par[1], paramInvGaussian$par[2]), add = TRUE, lwd = 2, col = "purple")
-legend(x=7.5,y=0.6,c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian"), fill = c("darkgreen","darkblue","darkred","yellow","purple","gray"), cex = 0.75, ncol = 2, title = "Distribution")
+legend(x=7.5,y=0.6,distName, fill = c("darkgreen","darkblue","darkred","yellow","gray","purple"), cex = 0.75, ncol = 2, title = "Distribution")
 
 par(mfrow = c(1,1),font = 2)
 hist(compData$weight, xlim = c(0,15), main = "Ajustement sur distribution empirique", xlab = "weight (Kg)", breaks = 500,freq = FALSE)
@@ -559,12 +579,7 @@ curve(dlnorm(x, paramLogNormal$par[1], paramLogNormal$par[2]), add = TRUE, lwd =
 curve(dweibull(x, paramWeibull$par[1], paramWeibull$par[2]), add = TRUE, lwd = 2, col = "yellow")
 curve(dpareto(x, paramPareto$par[1], paramPareto$par[2]), add = TRUE, lwd = 2, col = "gray")
 curve(dinvgauss(x, paramInvGaussian$par[1], paramInvGaussian$par[2]), add = TRUE, lwd = 2, col = "purple")
-legend(x=7.5,y=0.2,c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian"), fill = c("darkgreen","darkblue","darkred","yellow","purple","gray"), cex = 0.75, ncol = 2, title = "Distribution")
-
-# On peut déjà retirer la loi de Weibull et la loi de Pareto
-# Il nous reste la loi Gamma ou la loi LogNormale
-# On choisi donc la distribution donc le MLE est le plus petit, soit la loi LogNormale.
-min(c(gamModel$value, lnModel$value))
+legend(x=7.5,y=0.2,distName, fill = c("darkgreen","darkblue","darkred","yellow","gray","purple"), cex = 0.75, ncol = 2, title = "Distribution")
 
 # Il est aussi possible de faire l'équivalent avec fitdistr de la library MASS, 
 # mais nous sommes toutefois restrient sur la sélection des distributions
