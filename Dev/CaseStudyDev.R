@@ -471,48 +471,90 @@ curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",
 text(x=c(45,45,45,45),y=c(50,110,140,175),c("YUL-YYZ","YUL-YQB","YUL-YVR","YUL-YYC"),adj = 0.5,cex = 0.75,font = 2,col = c("blue","black","red","purple"))
 
 #### Question 4 ####
+# Import data
+compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=''))
+colnames(compData) <- c("weight","distance","price")
+View(compData) 
+summary(compData)
 
-# Génération du fichier benchmark.csv
-n <- 100000
-x <- matrix(runif(4*n),ncol = 4,byrow = TRUE)
+# Weight visualisation
+hist(compData$Poids, freq = TRUE, main = "Répartition data..", xlab = "Poids (Kg)", col = "cadetblue")
+plot(sort(compData$Poids), (1:length(compData$Poids)) / 100000, xlab = "Poids (Kg)", ylim = c(0,1), ylab = ".." )
 
-# Générer des poids selon logNormale
-mu1 <- log(3000)
-sigma1 <- log(1.8)
-exp(mu1+sigma1**2/2)
-exp(2*mu1+4*sigma1**2/2)-exp(mu1+sigma1**2/2)**2
-weights <- qlnorm(x[,1],mu1,sigma1)
-mean(weights)
-weights
-hist(weights,breaks = 100)
-max(weights)*2.2/1000
+# Distance visualisation
+hist(compData$Distance, freq = TRUE, main = "Répartition data..", xlab = "Distance (Km)", col = "cadetblue")
+plot(sort(compData$Distance), (1:length(compData$Distance)) / 100000, xlab = "Distance (Km)", ylim = c(0,1), ylab = ".." )
 
-# Générer des distances selon logNormale
-routesCanada
-routesIATA <- cbind(paste(routesCanada$sourceAirport),paste(routesCanada$destinationAirport))
-routesDistance <- apply(routesIATA, 1, function(x) dist(x[1],x[2])$value)
-max(routesDistance)
-mean(routesDistance)
-mu2 <- log(650)
-sigma2 <- log(1.4)
-distances <- qlnorm(x[,2],mu2,sigma2)
-mean(distances)
-distances
-hist(distances,breaks = 100)
-max(distances)
+# Linear model without intercept
+modelsComp<- lm(Prix~ Poids + Distance, compData)
+modelsComp
 
-# Générer des erreurs sur le poids
-weightsTarifParamA <- 5/1000
-weightsTarifParamB <- 5
-weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
-weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
-weightsPriceFinal <- weightsPrice + weightsError
-cbind(weights,weightsPriceFinal)
+# We plot the model
+plot(modelsComp)
+
+# We take a look at the ANOVA table
+aov(modelsComp)
 
 
 #### Question 5 ####
+# install.packages("actuar")
+library("actuar")
+
+minGamma <- function(par)
+{
+     -sum(dgamma(compData$Prix, par[1], par[2], log = TRUE))
+}
+gamModel <- optim(c(1,1), minGamma)
+
+minLN <- function(par) 
+{
+     -sum(dlnorm(compData$Prix, par[1], par[2], log = TRUE))
+}
+lnModel <- optim(c(1,1), minLN)
+
+minWeibull <- function(par)
+{
+     -sum(dweibull(compData$Prix, par[1], par[2], log = TRUE))
+}
+weibullModel <- optim(c(1,1), minWeibull)
+
+minPareto <- function(par)
+{
+     -sum(dpareto(compData$Prix, par[1], par[2], log = TRUE))
+}
+paretoModel <- optim(c(1,1), minPareto)
 
 
+plot(ecdf(compData$Prix), xlim = c(15,80), main = "lois..")
+curve(pgamma(x, gamModel$par[1], gamModel$par[2]), from = 15, to = 80, add = TRUE,
+      lwd = 2, col = "darkblue")
+curve(plnorm(x, lnModel$par[1], lnModel$par[2]), from = 15, to = 80, add = TRUE,
+      lwd = 2, col = "darkred")
+curve(pweibull(x, weibullModel$par[1], weibullModel$par[2]), from = 15, to = 80,  add = TRUE, 
+       lwd = 2, col = "darkgreen")
+curve(ppareto(x, paretoModel$par[1], paretoModel$par[2]), from = 15, to = 80, add = TRUE, 
+        lwd = 2, col = "gray")
+legend(x=58,y=0.2,c("Gamma","LogN","Weibull","Pareto"), fill = c("darkblue","darkred","darkgreen","grey"), cex = 0.5, ncol = 2)
+
+# On peut déjà retirer la loi de Weibull et la loi de Pareto
+# Il nous reste la loi Gamma ou la loi LogNormale
+# On choisi donc la distribution donc le MLE est le plus petit, soit la loi LogNormale.
+min(c(gamModel$value, lnModel$value))
+
+# ?? une fonction pour présenter l'information
+
+
+#
+# Ou avec fitdistr
+#
+
+library("MASS")
+
+fit.ln <- fitdistr(compData$Prix, "lognormal")
+fit.ln
+
+fit.gamma <- fitdistr(compData$Prix, "gamma")
+fit.gamma
 
 
 #### Question 6 ####
