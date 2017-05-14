@@ -6,8 +6,6 @@ setwd('..')
 set.seed(31459)
 
 #### Question 1 - Extraction, traitement, visualisation et analyse des données ####
-
-
 # 1.1 - Extraire les bases de données airports.dat et routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
@@ -130,13 +128,11 @@ routesCanada <- sqldf("
                                  from airportsCanada)")
 routesCanada  <- data.frame(as.matrix(routesCanada ),stringsAsFactors = TRUE)
 
-#
 # Produira le même résultat
 # x <- routesCanada[!is.na(match(routesCanada$sourceAirportID,airportsCanada$airportID)) &
 #              !is.na(match(routesCanada$destinationAirportID,airportsCanada$airportID)),]
 # routesCanada <- routesCanada[!is.na(match(routesCanada$sourceAirport,airportsCanada$IATA)) &
 #                 !is.na(match(routesCanada$destinationAirport,airportsCanada$IATA)),]
-#
 
 summary(routesCanada)
 unique(routesCanada$airline)
@@ -164,7 +160,6 @@ routesCanada <- routesCanada[,-match(c("codeshare","stops"),colnames(routesCanad
 summary(routesCanada)
 
 # 1.6 - Créer une carte affichant les différents aéroports sur une carte du Canada
-
 # install.packages("ggmap")
 library(ggmap)
 map <- get_map(location = 'Canada', zoom = 3)
@@ -333,6 +328,7 @@ arrivalTime("YUL","AAA")
 arrivalTime("YUL", "YYZ")
 arrivalTime("YUL","YVR")
 arrivalTime("YUL", "YYZ")$value
+difftime(arrivalTime("YUL", "YVR")$value,Sys.time())
 difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
 #Importer les taux de taxation par province directement du web
@@ -353,13 +349,11 @@ taxRates
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-  #
   # sourceIATA as a string
   # destIATA as a string
   # weight as an integer ; in KG
   # percentCredit as a default float
   # dollarCredit as a default float
-  #
 
   # vérifions qu'il existe une route entre sourceIATA et destIATA 
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
@@ -368,20 +362,17 @@ shippingCost <- function(sourceIATA, destIATA, weight,
     stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
   }
   
-  ### To verify
-  #ifelse(weight <= 50, TRUE, stop("The weight must be between 0 and 50 Kg"))
+  if(weight < 0 | weight > 30) 
+  {
+    stop("The weight must be between 0 and 30 Kg")
+  }
   
-  #if (weight > 50) 
-  #{
-  #  stop("The weight must be between 0 and 50 Kg")
-  #}
-  
-  if (percentCredit >= 1 & percentCredit < 0)
+  if(percentCredit < 0 || percentCredit > 1)
   {
     stop("The percentage of credit must be between 0 % and 100 %")
   }
   
-  if (dollarCredit > 0)
+  if(dollarCredit < 0)
   {
     stop("The dollar credit must be superior to 0 $")
   }
@@ -394,9 +385,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
     stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
   }
   
-  #
-  # Ajustment factor
-  #
+  # Pricing variables
   distanceFactor <- 0.025
   weightFactor <- 0.5
   fixedCost <- 3.75
@@ -411,11 +400,12 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   
   # Calculation of taxe rate and control of text
   taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
-  price <- ((baseCost*profitMargin - dollarCredit)*(1 - percentCredit))*taxRate
-  
-  #
+  price <- (baseCost*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate
+
+  # Verify if the price is inferior to fixedCost 
+  if(price < fixedCost)
+    
   # Additional rebate on the price
-  #
   price <-  price * ifelse(weight > 5, 0.95, 1)
   price <-  price * ifelse(price >= 300, 0.90, 1)
   if (distance$value < 250)
@@ -435,7 +425,16 @@ shippingCost <- function(sourceIATA, destIATA, weight,
        price <- price * 0.975
   }
   
-  
+  if (weight > 2)
+  {
+    price <- price * (1 - (weightFactor * weight) / 2)
+  }
+  else if (distShipping > 500)
+  {
+    price <- price * (1 - distanceFactor * (distShipping %/% 250))
+  }
+
+  # Return List
   shippingCostList <- list()
   shippingCostList$distance <- distance
   shippingCostList$weight <- weight
@@ -467,7 +466,6 @@ curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",
       ylab="price (CND $)",add=TRUE, col = "green")
 legend(0, 300, legend = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"), 
        title = "Trajet" ,fill = c("black", "red", "blue", "green"), cex = 0.55, ncol = 2)
-
 
 
 #### Question 4 ####
@@ -508,6 +506,12 @@ weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
 weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
 weightsPriceFinal <- weightsPrice + weightsError
 cbind(weights,weightsPriceFinal)
+
+
+#### Question 5 ####
+
+
+
 
 #### Question 6 ####
 f<-function(x)
