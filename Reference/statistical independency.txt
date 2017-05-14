@@ -1,0 +1,9 @@
+independency test
+chi's square test
+http://www.r-tutor.com/elementary-statistics/goodness-fit/chi-squared-test-independence
+
+covariance
+http://stats.seandolinar.com/making-a-covariance-matrix-in-r/
+
+correlation
+https://stat.ethz.ch/R-manual/R-devel/library/stats/html/cor.html
