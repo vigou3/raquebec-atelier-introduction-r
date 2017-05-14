@@ -570,6 +570,17 @@ curve(ppareto(x, paretoModel$par[1], paretoModel$par[2]), from = 15, to = 80, ad
         lwd = 2, col = "gray")
 legend(x=58,y=0.2,c("Gamma","LogN","Weibull","Pareto"), fill = c("darkblue","darkred","darkgreen","grey"), cex = 0.5, ncol = 2)
 
+plot(density(compData$price), xlim = c(15,80), main = "lois..")
+curve(dgamma(x, gamModel$par[1], gamModel$par[2]), from = 15, to = 80, add = TRUE,
+      lwd = 2, col = "darkblue")
+curve(dlnorm(x, lnModel$par[1], lnModel$par[2]), from = 15, to = 80, add = TRUE,
+      lwd = 2, col = "darkred")
+curve(pweibull(x, weibullModel$par[1], weibullModel$par[2]), from = 15, to = 80,  add = TRUE, 
+      lwd = 2, col = "darkgreen")
+curve(ppareto(x, paretoModel$par[1], paretoModel$par[2]), from = 15, to = 80, add = TRUE, 
+      lwd = 2, col = "gray")
+
+
 # On peut déjà retirer la loi de Weibull et la loi de Pareto
 # Il nous reste la loi Gamma ou la loi LogNormale
 # On choisi donc la distribution donc le MLE est le plus petit, soit la loi LogNormale.
