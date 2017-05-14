@@ -477,24 +477,58 @@ colnames(compData) <- c("weight","distance","price")
 View(compData) 
 summary(compData)
 
+par(mfrow = c(1,1))
 # Weight visualisation
-hist(compData$Poids, freq = TRUE, main = "Répartition data..", xlab = "Poids (Kg)", col = "cadetblue")
-plot(sort(compData$Poids), (1:length(compData$Poids)) / 100000, xlab = "Poids (Kg)", ylim = c(0,1), ylab = ".." )
+hist(compData$weight, freq = TRUE, main = "Repartition according to the weight", 
+     xlab = "weight (Kg)", col = "cadetblue")
+weightCDF <- ecdf(compData$weight)
+curve(weightCDF(x),0,40,ylim = c(0,1),lwd = 2,
+      xlab = "weight (Kg)",
+      ylab = "Cumulative Distribution Function")
 
 # Distance visualisation
-hist(compData$Distance, freq = TRUE, main = "Répartition data..", xlab = "Distance (Km)", col = "cadetblue")
-plot(sort(compData$Distance), (1:length(compData$Distance)) / 100000, xlab = "Distance (Km)", ylim = c(0,1), ylab = ".." )
+hist(compData$distance, freq = TRUE, main = "Repartition according to the distance", 
+     xlab = "distance (Km)", col = "cadetblue")
+distanceCDF <- ecdf(compData$distance)
+curve(distanceCDF(x),0,2500,ylim = c(0,1),lwd = 2,
+      xlab = "distance (Km)",
+      ylab = "Cumulative Distribution Function")
+
+# Price according to weight
+plot(compData$weight,compData$price,main = "Price according to the weight",
+     xlab = "weight (Kg)", ylab = "Price (CAD $)")
+
+# Price according to distance
+plot(compData$distance,compData$price,main = "Price according to the distance",
+     xlab = "distance (Km)", ylab = "Price (CAD $)")
+
+# Price according to weight and distance
+# install.packages("rgl")
+library(rgl)
+plot3d(compData$weight,compData$distance,compData$price)
+
+#Tester l'indépendance entre weight et distance
+# Chi's Square Test of Independency
+weightsBinded <- as.numeric(cut(compData$weight,25))
+distancesBinded <- as.numeric(cut(compData$distance,25))
+(contingencyTable <- table(weightsBinded,distancesBinded))
+independencyTest <- chisq.test(contingencyTable)
+head(independencyTest$expected)
+head(independencyTest$observed)
+head(independencyTest$stdres)
+independencyTest
+cov(compData$weight,compData$distance)
+cor(compData$weight,compData$distance)
 
 # Linear model without intercept
-modelsComp<- lm(Prix~ Poids + Distance, compData)
-modelsComp
+profitMargin <- 1.12
+avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
+modelsComp<- lm(price/(profitMargin*avgTaxRate) ~ weight + distance, compData)
+summary(modelsComp)
 
 # We plot the model
+par(mfrow=c(2,2))
 plot(modelsComp)
-
-# We take a look at the ANOVA table
-aov(modelsComp)
-
 
 #### Question 5 ####
 # install.packages("actuar")
