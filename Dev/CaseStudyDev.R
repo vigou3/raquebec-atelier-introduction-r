@@ -6,6 +6,7 @@ setwd('..')
 set.seed(31459)
 
 #### Question 1 - Extraction, traitement, visualisation et analyse des données ####
+library("readr")
 # 1.1 - Extraire les bases de données airports.dat et routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
@@ -475,6 +476,39 @@ curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",
 text(x=c(45,45,45,45),y=c(50,110,140,175),c("YUL-YYZ","YUL-YQB","YUL-YVR","YUL-YYC"),adj = 0.5,cex = 0.75,font = 2,col = c("blue","black","red","purple"))
 
 #### Question 4 ####
+#
+# See genCSV.R file for the generation of data
+#
+
+# Import data
+compData <- read_csv("~/GitHub/raquebec-intro/Reference/benchmark.csv")
+View(compData) 
+summary(compData)
+
+# Weight visualisation
+hist(compData$`Poids (Kg)`, freq = TRUE, main = "Répartition data..", xlab = "Poids (Kg)", col = "cadetblue")
+plot(sort(compData$`Poids (Kg)`), (1:length(compData$`Poids (Kg)`)) / 100000, xlab = "Poids (Kg)", ylim = c(0,1), ylab = ".." )
+
+# Distance visualisation
+hist(compData$`Distance (Km)`, freq = TRUE, main = "Répartition data..", xlab = "Distance (Km)", col = "cadetblue")
+plot(sort(compData$`Distance (Km)`), (1:length(compData$`Poids (Kg)`)) / 100000, xlab = "Distance (Km)", ylim = c(0,1), ylab = ".." )
+
+# Linear model without intercet
+modelsComp<- lm(`Prix (CAD $)`~`Poids (Kg)` + `Distance (Km)`, compData)
+modelsComp
+
+# We plot the model
+plot(modelsComp)
+
+# We take a look at the ANOVA table
+aov(modelsComp)
+
+
+#### Question 5 ####
+
+library("actuar")
+
+optim()
 
 # Génération du fichier benchmark.csv
 n <- 100000
@@ -534,7 +568,6 @@ colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
 write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE)
 
 #### Question 5 ####
-
 
 
 

@@ -45,21 +45,23 @@ hist(distances,breaks = 100,freq=FALSE)
 max(distances)
 
 # Générer des erreurs sur la distance
-distancesTarifParam <- 0.02
-distancesPrice <- distancesTarifParam*distances
+distancesTarifParam <- 0.0275
+distancesPrice <- distancesTarifParam*distances #pondéré par aéroport
 distancesError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(distances)*distancesTarifParam
 distancesFinalPrice <- distancesPrice + distancesError
 mean(distancesFinalPrice)
 var(distancesFinalPrice)
 
 # Générer prix totaux
-baseCost <- 10
-taxRate <- 1.12
+baseCost <- 5
+taxRate <- mean(as.numeric(as.character(taxRates$taxRate)))
 profitMargin <- 1.15
 (totalCost <- round((baseCost + weightsFinalPrice + distancesFinalPrice)*profitMargin*taxRate,2))
 mean(totalCost)
 var(totalCost)
 max(totalCost)
+min(totalCost)
+
 
 # Exporter le data en csv
 (dataExport <- cbind(weights,distances,totalCost))
