@@ -7,7 +7,7 @@ set.seed(31459)
 
 #### Question 1 - Extraction, traitement, visualisation et analyse des données ####
 
-
+library("readr")
 # 1.1 - Extraire les bases de données airports.dat et routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
@@ -471,72 +471,40 @@ legend(0, 300, legend = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"),
 
 
 #### Question 4 ####
+#
+# See genCSV.R file for the generation of data
+#
 
-# Génération du fichier benchmark.csv
-n <- 100000
-x <- matrix(runif(4*n),ncol = 4,byrow = TRUE)
+# Import data
+compData <- read_csv("~/GitHub/raquebec-intro/Reference/benchmark.csv")
+View(compData) 
+summary(compData)
 
-# Générer des poids selon logNormale
-mu1 <- log(3000)
-sigma1 <- log(1.8)
-exp(mu1+sigma1**2/2)
-exp(2*mu1+4*sigma1**2/2)-exp(mu1+sigma1**2/2)**2
-(weights <- round(qlnorm(x[,1],mu1,sigma1)/1000,3))
-mean(weights)
-hist(weights,breaks = 100,freq=FALSE)
-max(weights)
+# Weight visualisation
+hist(compData$`Poids (Kg)`, freq = TRUE, main = "Répartition data..", xlab = "Poids (Kg)", col = "cadetblue")
+plot(sort(compData$`Poids (Kg)`), (1:length(compData$`Poids (Kg)`)) / 100000, xlab = "Poids (Kg)", ylim = c(0,1), ylab = ".." )
 
-# Générer des erreurs sur le poids
-weightsTarifParam <- 0.7
-weightsPrice <- weightsTarifParam*weights
-weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParam
-weightsFinalPrice <- weightsPrice + weightsError
-mean(weightsFinalPrice)
-var(weightsFinalPrice)
+# Distance visualisation
+hist(compData$`Distance (Km)`, freq = TRUE, main = "Répartition data..", xlab = "Distance (Km)", col = "cadetblue")
+plot(sort(compData$`Distance (Km)`), (1:length(compData$`Poids (Kg)`)) / 100000, xlab = "Distance (Km)", ylim = c(0,1), ylab = ".." )
 
-# Générer des distances selon logNormale
-routesCanada
-routesIATA <- cbind(paste(routesCanada$sourceAirport),paste(routesCanada$destinationAirport))
-routesDistance <- apply(routesIATA, 1, function(x) airportsDist(x[1],x[2])$value)
-max(routesDistance)
-mean(routesDistance)
-mu2 <- log(650)
-sigma2 <- log(1.4)
-(distances <- round(qlnorm(x[,2],mu2,sigma2)))
-mean(distances)
-hist(distances,breaks = 100,freq=FALSE)
-max(distances)
+# Linear model without intercet
+modelsComp<- lm(`Prix (CAD $)`~`Poids (Kg)` + `Distance (Km)`, compData)
+modelsComp
 
-# Générer des erreurs sur la distance
-distancesTarifParam <- 0.02
-distancesPrice <- distancesTarifParam*distances
-distancesError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(distances)*distancesTarifParam
-distancesFinalPrice <- distancesPrice + distancesError
-mean(distancesFinalPrice)
-var(distancesFinalPrice)
+# We plot the model
+plot(modelsComp)
 
-# Générer prix totaux
-baseCost <- 10
-taxRate <- 1.12
-profitMargin <- 1.15
-(totalCost <- round((baseCost + weightsFinalPrice + distancesFinalPrice)*profitMargin*taxRate,2))
-mean(totalCost)
-var(totalCost)
-max(totalCost)
-
-# Exporter le data en csv
-(dataExport <- cbind(weights,distances,totalCost))
-colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
-write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE)
+# We take a look at the ANOVA table
+aov(modelsComp)
 
 
-# Générer des erreurs sur le poids
-weightsTarifParamA <- 5/1000
-weightsTarifParamB <- 5
-weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
-weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
-weightsPriceFinal <- weightsPrice + weightsError
-cbind(weights,weightsPriceFinal)
+#### Question 5 ####
+
+library("actuar")
+
+optim()
+
 
 #### Question 6 ####
 f<-function(x)
