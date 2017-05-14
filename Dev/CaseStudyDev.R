@@ -7,7 +7,7 @@ set.seed(31459)
 
 #### Question 1 - Extraction, traitement, visualisation et analyse des données ####
 
-library("readr")
+
 # 1.1 - Extraire les bases de données airports.dat et routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
@@ -476,7 +476,7 @@ legend(0, 300, legend = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"),
 #
 
 # Import data
-compData <- read_csv("~/GitHub/raquebec-intro/Reference/benchmark.csv")
+compData <- read.csv("~/GitHub/raquebec-intro/Reference/benchmark.csv")
 View(compData) 
 summary(compData)
 
@@ -503,7 +503,7 @@ aov(modelsComp)
 
 library("actuar")
 
-optim()
+optim(c(modelsComp$coefficients), )
 
 
 #### Question 6 ####
