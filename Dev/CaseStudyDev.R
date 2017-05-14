@@ -369,7 +369,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   }
   
   ### To verify
-  ifelse(weight < 50, TRUE, stop("The weight must be between 0 and 50 Kg"))
+  #ifelse(weight <= 50, TRUE, stop("The weight must be between 0 and 50 Kg"))
   
   #if (weight > 50) 
   #{
@@ -417,7 +417,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   # Additional rebate on the price
   #
   price <-  price * ifelse(weight > 5, 0.95, 1)
-  
+  price <-  price * ifelse(price >= 300, 0.90, 1)
   if (distance$value < 250)
   {
        price <- price * 0.9
@@ -434,10 +434,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   {
        price <- price * 0.975
   }
-  if (price >= 300)
-  {
-       price <- price * 0.95
-  }
+  
   
   shippingCostList <- list()
   shippingCostList$distance <- distance
@@ -462,10 +459,16 @@ shippingCost("YUL", "YQB", 30)
 
 #### Question 3 ####
 curve(shippingCost("YUL","YQB",x)$price,0.01,50,ylim=c(0,300),main="Shipping Variation with Weight",xlab="weight (Kg)",ylab="price (CND $)")
-curve(shippingCost("YUL","YVR",x)$price,0.01,50,xlab="weight (Kg)",ylab="price (CND $)",add=TRUE)
-curve(shippingCost("YUL","YYZ",x)$price,0.01,50,xlab="weight (Kg)",ylab="price (CND $)",add=TRUE)
-curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",ylab="price (CND $)",add=TRUE)
-#text(locator(), labels = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"))
+curve(shippingCost("YUL","YVR",x)$price,0.01,50,xlab="weight (Kg)",
+      ylab="price (CND $)",add=TRUE, col = "red")
+curve(shippingCost("YUL","YYZ",x)$price,0.01,50,xlab="weight (Kg)",
+      ylab="price (CND $)",add=TRUE, col = "blue")
+curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",
+      ylab="price (CND $)",add=TRUE, col = "green")
+legend(0, 300, legend = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"), 
+       title = "Trajet" ,fill = c("black", "red", "blue", "green"), cex = 0.55, ncol = 2)
+
+
 
 #### Question 4 ####
 
