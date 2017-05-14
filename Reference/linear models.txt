@@ -1,0 +1,5 @@
+lm
+https://stat.ethz.ch/R-manual/R-devel/library/stats/html/lm.html
+
+ANOVA table:
+http://personality-project.org/r/r.guide/r.anova.html#oneway
