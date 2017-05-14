@@ -15,3 +15,7 @@ http://stackoverflow.com/questions/3903157/how-can-i-check-whether-a-function-ca
 
 all values are true R
 https://stat.ethz.ch/R-manual/R-devel/library/base/html/all.html
+
+split into groups
+http://stackoverflow.com/questions/6104836/splitting-a-continuous-variable-into-equal-sized-groups
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/split.html
