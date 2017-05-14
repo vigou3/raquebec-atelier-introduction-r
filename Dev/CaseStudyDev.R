@@ -503,31 +503,32 @@ plot(compData$distance,compData$price,main = "Price according to the distance",
      xlab = "distance (Km)", ylab = "Price (CAD $)")
 
 # Price according to weight and distance
-# install.packages("plot3D")
-# library(plot3D)
 # install.packages("rgl")
 library(rgl)
 plot3d(compData$weight,compData$distance,compData$price)
 
 #Tester l'indépendance entre weight et distance
-weightsBinded <- as.numeric(cut(compData$weight,30))
-distancesBinded <- as.numeric(cut(compData$distance,30))
-table(weightsBinded)
-table(distancesBinded)
-
+# Chi's Square Test of Independency
+weightsBinded <- as.numeric(cut(compData$weight,25))
+distancesBinded <- as.numeric(cut(compData$distance,25))
 (contingencyTable <- table(weightsBinded,distancesBinded))
-chisq.test(contingencyTable)
+independencyTest <- chisq.test(contingencyTable)
+head(independencyTest$expected)
+head(independencyTest$observed)
+head(independencyTest$stdres)
+independencyTest
+cov(compData$weight,compData$distance)
 cor(compData$weight,compData$distance)
 
 # Linear model without intercept
-(modelsComp<- lm(price ~ weight + distance, compData))
+profitMargin <- 1.12
+avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
+modelsComp<- lm(price/(profitMargin*avgTaxRate) ~ weight + distance, compData)
+summary(modelsComp)
 
 # We plot the model
 par(mfrow=c(2,2))
 plot(modelsComp)
-
-# We take a look at the ANOVA table
-aov(modelsComp)
 
 #### Question 5 ####
 # install.packages("actuar")
