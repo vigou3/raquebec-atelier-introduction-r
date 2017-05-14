@@ -9,3 +9,9 @@ https://stat.ethz.ch/R-manual/R-devel/library/stats/html/ecdf.html
 
 error generation R
 http://www.dummies.com/programming/r/how-to-generate-your-own-error-messages-in-r/
+
+error checking R
+http://stackoverflow.com/questions/3903157/how-can-i-check-whether-a-function-call-results-in-a-warning/4947528
+
+all values are true R
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/all.html

@@ -1,21 +1,17 @@
-#
 # Code source Case Study R à Québec 2017
-#
 
-
-# Setting working directory properly
+#### Setting working directory properly ####
 setwd('..')
 (path <- getwd())
 set.seed(31459)
-
 
 #### Question 1 - Extraction, traitement, visualisation et analyse des données ####
 
 
 # 1.1 - Extraire les bases de données airports.dat et routes.dat
-airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
-routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c('\\N',''))
-airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c('\\N',''))
+airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
+airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE,  stringsAsFactors = TRUE, na.strings=c('\\N',''))
 
 # 1.2 - Attribuer des noms aux colonnes du jeu de données en vous fiant à l'information disponible sur le site
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
@@ -88,26 +84,42 @@ proj4string(sppts) <- CRS("+proj=longlat")
 sppts <- spTransform(sppts, proj4string(tz_world.shape))
 merged_tz <- cbind(unknown_tz,over(sppts,tz_world.shape))
 
+#Nous pouvons aussi remarquer que nous n'avons qu'une information dérivée de la province dans laquelle
+#est situé chaque aéroport via la ville. Dans le cas de l'application des taxes qui varie par province,
+#il sera donc indispensable de rendre cette donnée plus accessible. Nous procéderons encore une fois via
+#des techniques de cartographie afin d'extraire la province en fonction des coordonnées x et y
+prov_terr.shape <- readOGR(dsn=paste(path,"/Reference/prov_terr",sep=''),layer="gpr_000b11a_e")
+unknown_prov <- airportsCanada[,c("airportID","city","longitude","latitude")]
+sppts <- SpatialPoints(unknown_prov[,c("longitude","latitude")])
+proj4string(sppts) <- CRS("+proj=longlat")
+sppts <- spTransform(sppts, proj4string(prov_terr.shape))
+merged_prov <- cbind(airportsCanada,over(sppts,prov_terr.shape))
+
 # install.packages("sqldf")
 library(sqldf)
 airportsCanada <- sqldf("
-  select a.*, coalesce(a.tzFormat,b.TZID) as tzMerged
+  select 
+    a.*, 
+    coalesce(a.tzFormat,b.TZID) as tzMerged,
+    c.PRENAME as provMerged
   from airportsCanada a 
   left join merged_tz b
   on a.airportID = b.airportID
+  left join merged_prov c
+  on a.airportID = c.airportID
   order by a.airportID")
 airportsCanada <- data.frame(as.matrix(airportsCanada),stringsAsFactors = TRUE)
 
 # On retire timezone et DST car les données sont inutiles
 # On retire tzFormat car il s'Agit des données incomplet et on le remplace plus tard par tzMerged
-airportsCanada <- airportsCanada[,-match(c("timezone","DST","tzFormat"),colnames(airportsCanada))]
+# On retire city qui ne sera plus utile puisque nous avons maintenant la province
+airportsCanada <- airportsCanada[,-match(c("timezone","DST","tzFormat","city"),colnames(airportsCanada))]
 summary(airportsCanada)
 
 # install.packages("plyr")
 library(plyr)
-airportsCanada <- rename(airportsCanada, c("tzMerged"="tzFormat"))
+airportsCanada <- rename(airportsCanada, c("tzMerged"="tzFormat", "provMerged"="province"))
 summary(airportsCanada)
-
 
 routesCanada <- sqldf("
   select *
@@ -155,10 +167,10 @@ summary(routesCanada)
 
 # install.packages("ggmap")
 library(ggmap)
-map <- get_map(location = 'Canada',zoom=3)
+map <- get_map(location = 'Canada', zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
-airportsCoord <- as.data.frame(lon, lat)
+airportsCoord <- as.data.frame(cbind(lon, lat))
 mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5)
 mapPoints
 
@@ -177,8 +189,7 @@ routesCoord <- sqldf("
   left join airportsCanada b
     on a.sourceAirport = b.IATA
   left join airportsCanada c
-    on a.destinationAirport = c.IATA"
-)
+    on a.destinationAirport = c.IATA")
 lonBeg <- as.numeric(paste(routesCoord$sourceLon))
 latBeg <- as.numeric(paste(routesCoord$sourceLat))
 lonEnd <- as.numeric(paste(routesCoord$destLon))
@@ -196,7 +207,7 @@ sd(arrivalFlights)
 head(sort(arrivalFlights,decreasing = TRUE),n = 30)
 arrivalCDF <- ecdf(arrivalFlights)
 arrivalIndex <- format(arrivalCDF(arrivalFlights-1), digits = 5)
-arrivalIndex <- format(arrivalFlights, digits = 5)
+arrivalIndex <- arrivalFlights
 IATA <- names(arrivalFlights)
 arrivalIndexTable <- as.data.frame(cbind(IATA,arrivalFlights,arrivalIndex))
 rownames(arrivalIndexTable) <- NULL
@@ -211,7 +222,7 @@ sigma <- sd(departureFlights)
 head(sort(departureFlights,decreasing = TRUE),n = 30)
 departureCDF <- ecdf(departureFlights)
 departureIndex <- format(departureCDF(departureFlights-1), digits = 5)
-departureIndex <- format(departureFlights, digits = 5)
+departureIndex <- departureFlights
 IATA <- names(departureFlights)
 departureIndexTable <- as.data.frame(cbind(IATA,departureFlights,departureIndex))
 rownames(departureIndexTable) <- NULL
@@ -223,7 +234,7 @@ curve(arrivalCDF(x-1), from = 0,to = 60, n = 100)
 curve(departureCDF(x-1), from = 0,to = 60, n = 100)
 
 # 1.10 - Calculer un indice combiné des deux derniers indices
-combinedIndex <- (as.numeric(arrivalIndex)+as.numeric(departureIndex))/2
+combinedIndex <- (as.numeric(arrivalIndex)+as.numeric(departureIndex))/(2*as.numeric(max(cbind(arrivalIndex,departureIndex))))
 combinedIndexTable <- data.frame(arrivalIndexTable$IATA,
                                  arrivalIndexTable$arrivalIndex,
                                  departureIndexTable$departureIndex,
@@ -238,6 +249,7 @@ airportsCanada <- sqldf("
   from airportsCanada a
   left join combinedIndexTable b
   on a.IATA = b.IATA")
+airportsCanada <- data.frame(as.matrix(airportsCanada ),stringsAsFactors = TRUE)
 
 #1.11 - Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles
 par(mfrow=c(1,1))
@@ -255,11 +267,10 @@ mapTraffic
 
 #### Question 2 #####
 
+# Fonction de calcul de distance entre deux aéroports
 library(geosphere)
-
-# distance
-#PRE nécessite l'existence de la base de donnée 
-dist <- function(sourceIATA,destIATA)
+# PRE nécessite l'existence de la base de donnée 
+airportsDist <- function(sourceIATA,destIATA)
 {
   # vérifions que sourceIATA et destIATA sont des IATA valides
   sourceFindIndex <- match(sourceIATA,airportsCanada$IATA)
@@ -272,45 +283,84 @@ dist <- function(sourceIATA,destIATA)
   {
     stop(paste('destIATA :',destIATA,'is not a valid IATA code'))
   }
-  # vérifions qu'il existe une route entre sourceIATA et destIATA 
-  #(n'est pas nécessaire puisque nous pourrions être intéressé à connaître la distance
-  #entre deux aéroports n'ayant toujours pas de route entre eux)
-  routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
-  if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
-  {
-    stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,'do not corresponds to existing route'))
-  }
   sourceLon <- as.numeric(paste(airportsCanada$longitude))[sourceFindIndex]
   sourceLat <- as.numeric(paste(airportsCanada$latitude))[sourceFindIndex]
   sourceCoord <- c(sourceLon,sourceLat)
   destLon <- as.numeric(paste(airportsCanada$longitude))[destFindIndex]
   destLat <- as.numeric(paste(airportsCanada$latitude))[destFindIndex]
   destCoord <- c(destLon,destLat)
-  distList <- list()
-  distList$source <- sourceIATA
-  distList$dest <- destIATA
-  distList$value <- round(distGeo(sourceCoord,destCoord)/1000)
-  distList$metric <- "Km"
-  distList$xy_dist <- sqrt((sourceLon - destLon)**2 + (sourceLat - destLat)**2)
-  distList
+  airportDistList <- list()
+  airportDistList$source <- sourceIATA
+  airportDistList$dest <- destIATA
+  airportDistList$value <- round(distGeo(sourceCoord,destCoord)/1000)
+  airportDistList$metric <- "Km"
+  airportDistList$xy_dist <- sqrt((sourceLon - destLon)**2 + (sourceLat - destLat)**2)
+  airportDistList$sourceIndex <- sourceFindIndex
+  airportDistList$destIndex <- destFindIndex
+  airportDistList
 }
-dist('AAA','YQB')
-dist('YUL','AAA')
-dist('YPA','YQB')
-dist('YUL','YQB')
-dist('YUL','YQB')$value
+airportsDist('AAA','YQB')
+airportsDist('YUL','AAA')
+airportsDist('YPA','YQB')
+airportsDist('YUL','YQB')
+airportsDist('YUL','YQB')$value
 
-# time conversion
-x <- Sys.time()
-y <- Sys.timezone()
-class(x)
+# Fonction pour déterminer l'heure d'arriver
 # install.packages("lubridate")
 library(lubridate)
-x
-with_tz(x, tzone = "America/Vancouver")
+arrivalTime <- function(sourceIATA,destIATA)
+{
+  topSpeed <- 850
+  adjustFactor <- list()
+  adjustFactor$a <- 0.0001007194
+  adjustFactor$b <- 0.4273381
+  arrivalTimeList <- list()
+  arrivalTimeList$source <- sourceIATA
+  arrivalTimeList$dest <- destIATA
+  arrivalTimeList$departureTime <- Sys.time()
+  distance <- airportsDist(sourceIATA,destIATA)
+  cruiseSpeed <- (distance$value*adjustFactor$a + adjustFactor$b)*topSpeed
+  arrivalTimeList$avgCruiseSpeed <- cruiseSpeed
+  arrivalTimeList$flightTime <- ms(round(distance$value/cruiseSpeed*60, digits = 1))
+  arrivalTimeList$departureTZ <- paste(airportsCanada[distance$sourceIndex, "tzFormat"])
+  arrivalTimeList$arrivalTZ <- paste(airportsCanada[distance$destIndex, "tzFormat"])
+  arrivalTimeList$value <- with_tz(arrivalTimeList$departureTime + arrivalTimeList$flightTime, 
+                                   tzone = arrivalTimeList$arrivalTZ)
+  arrivalTimeList
+}
+arrivalTime("AAA","YYZ")
+arrivalTime("YUL","AAA")
+arrivalTime("YUL", "YYZ")
+arrivalTime("YUL","YVR")
+arrivalTime("YUL", "YYZ")$value
+difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
-<<<<<<< Updated upstream
-=======
+#Importer les taux de taxation par province directement du web
+#install.packages("XML")
+#install.packages("RCurl")
+#install.packages("rlist")
+library(XML)
+library(RCurl)
+library(rlist)
+theurl <- getURL("http://www.calculconversion.com/sales-tax-calculator-hst-gst.html",.opts = list(ssl.verifypeer = FALSE) )
+tables <- readHTMLTable(theurl)
+provinceName <- as.character(sort(unique(airportsCanada$province)))
+taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`[-13,5]))/100+1),stringsAsFactors = TRUE)
+colnames(taxRates) <- c("province","taxRate")
+taxRates
+
+# Fonction de calcul des coûts
+shippingCost <- function(sourceIATA, destIATA, weight, 
+                         percentCredit = 0, dollarCredit = 0)
+{
+  #
+  # sourceIATA as a string
+  # destIATA as a string
+  # weight as an integer ; in KG
+  # percentCredit as a default float
+  # dollarCredit as a default float
+  #
+
   # vérifions qu'il existe une route entre sourceIATA et destIATA 
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
   if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
@@ -318,12 +368,15 @@ with_tz(x, tzone = "America/Vancouver")
     stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
   }
   
-  if (0 < weight <= 50)
-  {
-    stop("The weight must be between 0 and 50 Kg")
-  }
+  ### To verify
+  #ifelse(weight <= 50, TRUE, stop("The weight must be between 0 and 50 Kg"))
   
-  if (0 < percentCredit <= 100)
+  #if (weight > 50) 
+  #{
+  #  stop("The weight must be between 0 and 50 Kg")
+  #}
+  
+  if (percentCredit >= 1 & percentCredit < 0)
   {
     stop("The percentage of credit must be between 0 % and 100 %")
   }
@@ -341,6 +394,9 @@ with_tz(x, tzone = "America/Vancouver")
     stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
   }
   
+  #
+  # Ajustment factor
+  #
   distanceFactor <- 0.025
   weightFactor <- 0.5
   fixedCost <- 3.75
@@ -356,6 +412,29 @@ with_tz(x, tzone = "America/Vancouver")
   # Calculation of taxe rate and control of text
   taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
   price <- round(((baseCost*profitMargin - dollarCredit)*(1 - percentCredit))*taxRate,2)
+
+  
+  #
+  # Additional rebate on the price
+  #
+  price <-  price * ifelse(weight > 5, 0.95, 1)
+  price <-  price * ifelse(price >= 300, 0.90, 1)
+  if (distance$value < 250)
+  {
+       price <- price * 0.9
+  }
+  else if (distance$value < 500 & distance$value >= 250)
+  {
+       price <- price * 0.925
+  }
+  else if (distance$value < 1250 & distance$value >= 500)
+  {
+       price <- price * 0.95
+  }
+  else if (distance$value < 2000 & distance$value >= 1250)
+  {
+       price <- price * 0.975
+  }
   
   shippingCostList <- list()
   shippingCostList$distance <- distance
@@ -377,9 +456,18 @@ shippingCost("YUL", "YVR", 1)
 shippingCost("YUL", "YQB", 1)
 shippingCost("YUL", "YVR", 30)
 shippingCost("YUL", "YQB", 30)
->>>>>>> Stashed changes
 
 #### Question 3 ####
+curve(shippingCost("YUL","YQB",x)$price,0.01,50,ylim=c(0,300),main="Shipping Variation with Weight",xlab="weight (Kg)",ylab="price (CND $)")
+curve(shippingCost("YUL","YVR",x)$price,0.01,50,xlab="weight (Kg)",
+      ylab="price (CND $)",add=TRUE, col = "red")
+curve(shippingCost("YUL","YYZ",x)$price,0.01,50,xlab="weight (Kg)",
+      ylab="price (CND $)",add=TRUE, col = "blue")
+curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",
+      ylab="price (CND $)",add=TRUE, col = "green")
+legend(0, 300, legend = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"), 
+       title = "Trajet" ,fill = c("black", "red", "blue", "green"), cex = 0.55, ncol = 2)
+
 
 
 #### Question 4 ####
@@ -441,3 +529,28 @@ max(totalCost)
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
 write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE)
 
+
+# Générer des erreurs sur le poids
+weightsTarifParamA <- 5/1000
+weightsTarifParamB <- 5
+weightsPrice <- weightsTarifParamA*weights+weightsTarifParamB
+weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParamA
+weightsPriceFinal <- weightsPrice + weightsError
+cbind(weights,weightsPriceFinal)
+
+#### Question 6 ####
+f<-function(x)
+{
+  if(x < 0)
+  {
+    stop("x must be positive")
+  }
+  log(x) 
+}
+
+test <- try(f(2))
+test
+is(test,"try-error")
+
+test <- try(f(-2),silent=TRUE)
+is(test,"try-error")

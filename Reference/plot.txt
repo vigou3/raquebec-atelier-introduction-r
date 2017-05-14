@@ -1,0 +1,5 @@
+Legend for plot
+https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/legend.html
+
+curve
+https://www.math.ucla.edu/~anderson/rw1001/library/base/html/curve.html

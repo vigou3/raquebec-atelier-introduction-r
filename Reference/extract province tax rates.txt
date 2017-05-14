@@ -1,0 +1,13 @@
+tax rate canada per province
+http://www.cra-arc.gc.ca/tx/bsnss/tpcs/gst-tps/rts-eng.html#rt
+view-source:http://www.cra-arc.gc.ca/tx/bsnss/tpcs/gst-tps/rts-eng.html#rt
+
+combined
+http://www.calculconversion.com/sales-tax-calculator-hst-gst.html
+view-source:http://www.calculconversion.com/sales-tax-calculator-hst-gst.html
+
+how to parse html table to R
+http://stackoverflow.com/questions/1395528/scraping-html-tables-into-r-data-frames-using-the-xml-package
+
+how to apply credit with tax
+http://blog.taxjar.com/sales-tax-discounts-coupons-promotions/
