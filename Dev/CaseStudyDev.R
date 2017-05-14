@@ -362,7 +362,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
     stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
   }
   
-  if(weight < 0 | weight > 30) 
+  if(weight < 0 || weight > 30) 
   {
     stop("The weight must be between 0 and 30 Kg")
   }
@@ -398,41 +398,42 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   # Calculation of the base cost
   baseCost <-  fixedCost + (distance$value*distanceFactor + weight*weightFactor)/(traficIndexSource*traficIndexDest)
   
-  # Calculation of taxe rate and control of text
-  taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
-  price <- (baseCost*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate
-
-  # Verify if the price is inferior to fixedCost 
-  if(price < fixedCost)
-    
-  # Additional rebate on the price
-  price <-  price * ifelse(weight > 5, 0.95, 1)
-  price <-  price * ifelse(price >= 300, 0.90, 1)
-  if (distance$value < 250)
+  # Additional automated credits
+  automatedCredit <- 1
+  # Lightweight
+  automatedCredit <-  automatedCredit * ifelse(weight < 1, 0.9, 1)
+  # Gold Member
+  automatedCredit <-  automatedCredit * ifelse(baseCost > 100, 0.9, 1)
+  # Partnership
+  automatedCredit <- automatedCredit * switch(sourceIATA,
+                                              "YUL" = 0.85,
+                                              "YHU" = 0.95,
+                                              "YMX" = 0.95,
+                                              "YYZ" = 0.9,
+                                              "YKZ" = 0.975,
+                                              "YTZ" = 0.975,
+                                              "YZD" = 0.975)
+  # The Migrator
+  if(distance$value > 2000)
   {
-       price <- price * 0.9
+    automatedCredit <- automatedCredit * 0.9
   }
-  else if (distance$value < 500 & distance$value >= 250)
+  else if(distance$value >= 2500)
   {
-       price <- price * 0.925
+    automatedCredit <- automatedCredit * 0.85
   }
-  else if (distance$value < 1250 & distance$value >= 500)
+  else if(distance$value >= 3000)
   {
-       price <- price * 0.95
+    automatedCredit <- automatedCredit * 0.825
   }
-  else if (distance$value < 2000 & distance$value >= 1250)
+  else if(distance$value >= 3500)
   {
-       price <- price * 0.975
+    automatedCredit <- automatedCredit * 0.8125
   }
   
-  if (weight > 2)
-  {
-    price <- price * (1 - (weightFactor * weight) / 2)
-  }
-  else if (distShipping > 500)
-  {
-    price <- price * (1 - distanceFactor * (distShipping %/% 250))
-  }
+  # Calculation of taxe rate and control of text
+  taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
+  price <- pmax(fixedCost*profitMargin*automatedCredit*taxRate,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate)
 
   # Return List
   shippingCostList <- list()
@@ -447,6 +448,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   shippingCostList$minimalDist <- minimalDist
   shippingCostList$traficIndex <- list(traficIndexSource,traficIndexDest)
   shippingCostList$baseCost <- baseCost
+  shippingCostList$automatedCredit <- 1-automatedCredit
   shippingCostList$taxRate <- taxRate
   shippingCostList$price <- price
   shippingCostList
@@ -457,16 +459,16 @@ shippingCost("YUL", "YVR", 30)
 shippingCost("YUL", "YQB", 30)
 
 #### Question 3 ####
-curve(shippingCost("YUL","YQB",x)$price,0.01,50,ylim=c(0,300),main="Shipping Variation with Weight",xlab="weight (Kg)",ylab="price (CND $)")
+curve(shippingCost("YUL","YQB",x)$price,0.01,50,ylim=c(0,200),
+      main="Shipping Variation with Weight",xlab="weight (Kg)",
+      ylab="price (CND $)",lwd = 2)
 curve(shippingCost("YUL","YVR",x)$price,0.01,50,xlab="weight (Kg)",
-      ylab="price (CND $)",add=TRUE, col = "red")
+      ylab="price (CND $)",add=TRUE, col = "red", lwd = 2)
 curve(shippingCost("YUL","YYZ",x)$price,0.01,50,xlab="weight (Kg)",
-      ylab="price (CND $)",add=TRUE, col = "blue")
+      ylab="price (CND $)",add=TRUE, col = "blue", lwd = 2)
 curve(shippingCost("YUL","YYC",x)$price,0.01,50,xlab="weight (Kg)",
-      ylab="price (CND $)",add=TRUE, col = "green")
-legend(0, 300, legend = c("YUL-YQB", "YUL-YVR", "YUL-YYZ", "YUL-YYC"), 
-       title = "Trajet" ,fill = c("black", "red", "blue", "green"), cex = 0.55, ncol = 2)
-
+      ylab="price (CND $)",add=TRUE, col = "purple", lwd = 2)
+text(x=c(45,45,45,45),y=c(50,110,140,175),c("YUL-YYZ","YUL-YQB","YUL-YVR","YUL-YYC"),adj = 0.5,cex = 0.75,font = 2,col = c("blue","black","red","purple"))
 
 #### Question 4 ####
 
