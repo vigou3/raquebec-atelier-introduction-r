@@ -481,15 +481,15 @@ View(compData)
 summary(compData)
 
 # Weight visualisation
-hist(compData$`Poids (Kg)`, freq = TRUE, main = "Répartition data..", xlab = "Poids (Kg)", col = "cadetblue")
-plot(sort(compData$`Poids (Kg)`), (1:length(compData$`Poids (Kg)`)) / 100000, xlab = "Poids (Kg)", ylim = c(0,1), ylab = ".." )
+hist(compData$Poids, freq = TRUE, main = "Répartition data..", xlab = "Poids (Kg)", col = "cadetblue")
+plot(sort(compData$Poids), (1:length(compData$Poids)) / 100000, xlab = "Poids (Kg)", ylim = c(0,1), ylab = ".." )
 
 # Distance visualisation
-hist(compData$`Distance (Km)`, freq = TRUE, main = "Répartition data..", xlab = "Distance (Km)", col = "cadetblue")
-plot(sort(compData$`Distance (Km)`), (1:length(compData$`Poids (Kg)`)) / 100000, xlab = "Distance (Km)", ylim = c(0,1), ylab = ".." )
+hist(compData$Distance, freq = TRUE, main = "Répartition data..", xlab = "Distance (Km)", col = "cadetblue")
+plot(sort(compData$Distance), (1:length(compData$Distance)) / 100000, xlab = "Distance (Km)", ylim = c(0,1), ylab = ".." )
 
 # Linear model without intercet
-modelsComp<- lm(`Prix (CAD $)`~`Poids (Kg)` + `Distance (Km)`, compData)
+modelsComp<- lm(Prix~ Poids + Distance, compData)
 modelsComp
 
 # We plot the model
@@ -503,7 +503,13 @@ aov(modelsComp)
 
 library("actuar")
 
-optim(c(modelsComp$coefficients), )
+
+min.RSS <- function(par) {
+     sum(par[1] + par[2] * compData$poids  + par[3]- log(compData$prix))
+}
+modelsComp$coefficients
+compData$Poids
+optim(c(12.87026884, 0.89780508, 0.03514046), min.RSS)
 
 
 #### Question 6 ####
@@ -522,3 +528,4 @@ is(test,"try-error")
 
 test <- try(f(-2),silent=TRUE)
 is(test,"try-error")
+
