@@ -590,7 +590,6 @@ library("MASS")
 (fit.weibull <- fitdistr(compData$weight, "weibull"))
 
 #### Question 6 ####
-
 theurl <- getURL("https://raw.githubusercontent.com/vigou3/raquebec-intro/master/Statement/CaseStudyStatement.html",.opts = list(ssl.verifypeer = FALSE) )
 tables <- readHTMLTable(theurl)
 lambdaTable <- as.data.frame(tables[1], stringsAsFactors = TRUE)
@@ -668,7 +667,3 @@ is(test,"try-error")
 
 test <- try(f(-2),silent=TRUE)
 is(test,"try-error")
-<<<<<<< HEAD
-=======
-test
->>>>>>> 2432820ca350ff826bd0e3157fdf243799eec2cf
