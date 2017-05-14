@@ -534,30 +534,11 @@ plot(modelsComp)
 # install.packages("actuar")
 library("actuar")
 
-minGamma <- function(par)
-{
-     -sum(dgamma(compData$Prix, par[1], par[2], log = TRUE))
-}
-gamModel <- optim(c(1,1), minGamma)
-
-minLN <- function(par) 
-{
-     -sum(dlnorm(compData$Prix, par[1], par[2], log = TRUE))
-}
-lnModel <- optim(c(1,1), minLN)
-
-minWeibull <- function(par)
-{
-     -sum(dweibull(compData$Prix, par[1], par[2], log = TRUE))
-}
-weibullModel <- optim(c(1,1), minWeibull)
-
-minPareto <- function(par)
-{
-     -sum(dpareto(compData$Prix, par[1], par[2], log = TRUE))
-}
-paretoModel <- optim(c(1,1), minPareto)
-
+(paramNormal <- optim(par = c(1,1), function(par) -sum(dnorm(compData$weight,par[1],par[2],log = TRUE))))
+(paramGamma <- optim(par = c(1,1), function(par) -sum(dgamma(compData$weight,par[1],par[2],log = TRUE))))
+(paramLogNormal <- optim(par = c(1,1), function(par) -sum(dlnorm(compData$weight,par[1],par[2],log = TRUE))))
+(paramWeibull <- optim(par = c(1,1), function(par) -sum(dweibull(compData$weight,par[1],par[2],log = TRUE))))
+(paramPareto <- optim(par = c(1,1), function(par) -sum(dpareto(compData$weight,par[1],par[2],log = TRUE))))
 
 plot(ecdf(compData$Prix), xlim = c(15,80), main = "lois..")
 curve(pgamma(x, gamModel$par[1], gamModel$par[2]), from = 15, to = 80, add = TRUE,
