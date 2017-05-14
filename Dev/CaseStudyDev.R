@@ -499,14 +499,25 @@ aov(modelsComp)
 #### Question 5 ####
 # install.packages("actuar")
 library("actuar")
-optim()
-min.RSS <- function(par) 
+
+minGamma <- function(par)
 {
-  sum(par[1] + par[2] * compData$poids  + par[3]- log(compData$prix))
+     -sum(dgamma(compData$Prix, par[1], par[2], log = TRUE))
 }
-modelsComp$coefficients
-compData$Poids
-optim(c(12.87026884, 0.89780508, 0.03514046), min.RSS)
+optim(c(1,1), minGamma)
+
+
+minLN <- function(par) 
+{
+     -sum(dlnorm(compData$Prix, par[1], par[2], log = TRUE))
+}
+optim(c(1,1), min.RSS)
+
+minWeibull <- function(par)
+{
+     -sum(dweibull(compData$Prix, par[1], par[2], log = TRUE))
+}
+optim(c(1,1), minWeibull)
 
 #### Question 6 ####
 f<-function(x)
