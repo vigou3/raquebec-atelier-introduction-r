@@ -504,20 +504,57 @@ minGamma <- function(par)
 {
      -sum(dgamma(compData$Prix, par[1], par[2], log = TRUE))
 }
-optim(c(1,1), minGamma)
-
+gamModel <- optim(c(1,1), minGamma)
 
 minLN <- function(par) 
 {
      -sum(dlnorm(compData$Prix, par[1], par[2], log = TRUE))
 }
-optim(c(1,1), min.RSS)
+lnModel <- optim(c(1,1), minLN)
 
 minWeibull <- function(par)
 {
      -sum(dweibull(compData$Prix, par[1], par[2], log = TRUE))
 }
-optim(c(1,1), minWeibull)
+weibullModel <- optim(c(1,1), minWeibull)
+
+minPareto <- function(par)
+{
+     -sum(dpareto(compData$Prix, par[1], par[2], log = TRUE))
+}
+paretoModel <- optim(c(1,1), minPareto)
+
+
+plot(ecdf(compData$Prix))
+curve(pgamma(x, gamModel$par[1], gamModel$par[2]), add = TRUE,
+      lwd = 2, col = "darkblue")
+curve(plnorm(x, lnModel$par[1], lnModel$par[2]), add = TRUE,
+      lwd = 2, col = "darkred")
+curve(pweibull(x, weibullModel$par[1], weibullModel$par[2]), add = TRUE, 
+       lwd = 2, col = "darkgreen")
+curve(ppareto(x, paretoModel$par[1], paretoModel$par[2]), add = TRUE, 
+        lwd = 2, col = "gray")
+
+# On peut déjà retirer la loi de Weibull et la loi de Pareto
+# Il nous reste la loi Gamma ou la loi LogNormale
+# On choisi donc la distribution donc le MLE est le plus petit, soit la loi LogNormale.
+min(c(gamModel$value, lnModel$value))
+
+# ?? une fonction pour présenter l'information
+
+
+#
+# Ou avec fitdistr
+#
+
+library("MASS")
+
+fit.ln <- fitdistr(compData$Prix, "lognormal")
+fit.ln
+
+fit.gamma <- fitdistr(compData$Prix, "gamma")
+fit.gamma
+
 
 #### Question 6 ####
 f<-function(x)
