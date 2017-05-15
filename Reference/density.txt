@@ -1,0 +1,3 @@
+Sample from a custom density
+
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/sample.html
