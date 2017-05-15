@@ -99,6 +99,10 @@ Encore une fois pour le bureau de Montréal, qui est inquiet que la nouvelle tar
 |  Juillet  |         1750         |
 |   Août    |         2000         |
 | Septembre |         2300         |
+|  Octobre  |         2425         |
+| Novembre  |         2500         |
+| Décembre  |         3500         |
+
 
 2. Pour chacun des colis, vous devez ensuite générer un poids et une destination
 3. Calculer ensuite les prix chargés par votre compagnie ainsi que la compétition pour chacun des transports
