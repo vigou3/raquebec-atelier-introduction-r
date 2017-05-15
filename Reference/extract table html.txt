@@ -1,4 +1,4 @@
-tax rate canada per province
+tax rate canada per province and lambda from poisson distribution
 http://www.cra-arc.gc.ca/tx/bsnss/tpcs/gst-tps/rts-eng.html#rt
 view-source:http://www.cra-arc.gc.ca/tx/bsnss/tpcs/gst-tps/rts-eng.html#rt
 
