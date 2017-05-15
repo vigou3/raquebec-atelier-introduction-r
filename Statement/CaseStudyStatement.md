@@ -90,7 +90,7 @@ En reprenant les données de la compétition, vous êtes aussi en mesure d'extra
 > Les paramètres initiaux de vos optimisations peuvent impacter le résultat de la fonction.
 
 ### Question 6 - Simulation et analyse de rentabilité
-Encore une fois, pour le bureau de Montréal, qui est inquiet que la nouvelle tarification nous fasse perdre des parts de marché qui sont actuellement de Z%. On vous demande de faire une analyse de rentabilité. Pour ce faire, vous décidez donc d'utiliser des techniques stochastiques afin de simuler un bassin de clients au cours de la prochaine année.
+Encore une fois, pour le bureau de Montréal, qui est inquiet que la nouvelle tarification nous fasse perdre des parts de marché qui sont actuellement de 15%. On vous demande de faire une analyse de rentabilité. Pour ce faire, vous décidez donc d'utiliser des techniques stochastiques afin de simuler un bassin de clients au cours de la prochaine année.
 1. Simuler le nombre de colis envoyés au cours de chacun des prochains mois à l'aide d'une distribution Poisson. En raison de la saisonnalité, le nombre de colis moyens envoyés par mois au cours des trois dernières années était:
 |   Mois    | Nb Colis (Avg. 3yrs) |
 | :-------: | :------------------: |
