@@ -34,10 +34,7 @@ summary(airportsCanada)
 nbAirportCity <- table(as.character(airportsCanada$city))
 (nbAirportCity <- sort(nbAirportCity,decreasing=TRUE))[1:10]
 
-#
 # Filtrer la pertinence des données
-#
-
 # 1.5 - Corriger les modalités des variables et faire une sélection des variables qui vous semble utiles 
 # pour le reste du traitement
 # Nous observons que les variables typeAirport et Source ne sont d'aucune utilité dans la situation présente
@@ -139,12 +136,11 @@ unique(routesCanada$airline)
 unique(routesCanada[,c("airline","airlineID")])
 unique(routesCanada$airlineID)
 summary(airlines)
-x <- sqldf("
+(airlinesCanada <- sqldf("
   select *
   from airlines
   where IATA in (select distinct airline
-                 from routesCanada)")
-x
+                 from routesCanada)"))
 routesCanada[is.na(routesCanada$airlineID),]
 unique(routesCanada$airlineID)
 unique(routesCanada[is.na(routesCanada$airlineID),]$airline)
@@ -166,8 +162,7 @@ map <- get_map(location = 'Canada', zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
 airportsCoord <- as.data.frame(cbind(lon, lat))
-mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5)
-mapPoints
+(mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5))
 
 # 1.7 - Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports
 summary(routesCanada)
@@ -190,52 +185,33 @@ latBeg <- as.numeric(paste(routesCoord$sourceLat))
 lonEnd <- as.numeric(paste(routesCoord$destLon))
 latEnd <- as.numeric(paste(routesCoord$destLat))
 routesCoord <- as.data.frame(cbind(lonBeg,latBeg,lonEnd,latEnd))
-mapRoutes <- mapPoints + geom_segment(data=routesCoord,aes(x=lonBeg,y=latBeg,xend=lonEnd,yend=latEnd),alpha=0.5)
-mapRoutes
+(mapRoutes <- mapPoints + geom_segment(data=routesCoord,aes(x=lonBeg,y=latBeg,xend=lonEnd,yend=latEnd),alpha=0.5))
 
-# 1.8 - Calculer un indice d'achalandage des aéroports en fonction de la quantitée de routes en destination
+# Calculer un indice d'achalandage des aéroports en fonction de la quantitée de routes en destination
 arrivalFlights <- table(routesCanada$destinationAirport)
-max(arrivalFlights)
-mean(arrivalFlights)
-var(arrivalFlights)
-sd(arrivalFlights)
-head(sort(arrivalFlights,decreasing = TRUE),n = 30)
-arrivalCDF <- ecdf(arrivalFlights)
-arrivalIndex <- format(arrivalCDF(arrivalFlights-1), digits = 5)
-arrivalIndex <- arrivalFlights
-IATA <- names(arrivalFlights)
-arrivalIndexTable <- as.data.frame(cbind(IATA,arrivalFlights,arrivalIndex))
-rownames(arrivalIndexTable) <- NULL
-arrivalIndexTable
-
-# 1.9 - Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en provenance
 departureFlights <- table(routesCanada$sourceAirport)
-max(departureFlights)
-mu <- mean(departureFlights)
-var(departureFlights)
-sigma <- sd(departureFlights)
-head(sort(departureFlights,decreasing = TRUE),n = 30)
-departureCDF <- ecdf(departureFlights)
-departureIndex <- format(departureCDF(departureFlights-1), digits = 5)
-departureIndex <- departureFlights
-IATA <- names(departureFlights)
-departureIndexTable <- as.data.frame(cbind(IATA,departureFlights,departureIndex))
-rownames(departureIndexTable) <- NULL
-departureIndexTable
+totalFlights <- arrivalFlights + departureFlights
+max(totalFlights)
+mean(totalFlights)
+var(totalFlights)
+sd(totalFlights)
+head(sort(totalFlights,decreasing = TRUE),n = 30)
+totalFlightsCDF <- ecdf(totalFlights)
+IATA <- names(totalFlights)
 
-# Tracer les index 
-par(mfrow=c(1,2))
-curve(arrivalCDF(x-1), from = 0,to = 60, n = 100)
-curve(departureCDF(x-1), from = 0,to = 60, n = 100)
+# Tracer l'index
+curve(totalFlightsCDF(x-1),from = 0,to = 60,n = 100,
+      xlab = "Nombre de routes par aéroport", 
+      ylab = "CDF")
 
-# 1.10 - Calculer un indice combiné des deux derniers indices
-combinedIndex <- (as.numeric(arrivalIndex)+as.numeric(departureIndex))/(2*as.numeric(max(cbind(arrivalIndex,departureIndex))))
-combinedIndexTable <- data.frame(arrivalIndexTable$IATA,
-                                 arrivalIndexTable$arrivalIndex,
-                                 departureIndexTable$departureIndex,
-                                 combinedIndex,stringsAsFactors = TRUE)
+# Calculer un indice combiné des deux derniers indices
+combinedIndex <- round(totalFlights/max(totalFlights),3)
+combinedIndexTable <- data.frame(IATA,
+                                 as.numeric(paste(totalFlights)),
+                                 as.numeric(paste(combinedIndex)),
+                                 stringsAsFactors = TRUE)
 rownames(combinedIndexTable) <- NULL
-colnames(combinedIndexTable) <- c("IATA","arrivalIndex","departureIndex","combinedIndex")
+colnames(combinedIndexTable) <- c("IATA","totalFlights","combinedIndex")
 combinedIndexTable
 airportsCanada <- sqldf("
   select 
@@ -247,7 +223,6 @@ airportsCanada <- sqldf("
 airportsCanada <- data.frame(as.matrix(airportsCanada ),stringsAsFactors = TRUE)
 
 #1.11 - Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles
-par(mfrow=c(1,1))
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
 size <- as.numeric(paste(airportsCanada$combinedIndex))
@@ -255,10 +230,9 @@ airportsCoord <- as.data.frame(cbind(lon, lat, size))
 mapPoints <- 
   ggmap(map) + 
   geom_point(data=airportsCoord,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
-mapTraffic <-  
+(mapTraffic <-  
   mapPoints + 
-  scale_size_continuous(range = c(0, 20),name = "Traffic Index")
-mapTraffic
+  scale_size_continuous(range = c(0, 20),name = "Traffic Index"))
 
 #### Question 2 #####
 
