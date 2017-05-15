@@ -307,8 +307,8 @@ arrivalTime <- function(sourceIATA,destIATA)
 {
   topSpeed <- 850
   adjustFactor <- list()
-  adjustFactor$a <- 0.0001007194 #by regression
-  adjustFactor$b <- 0.4273381 #by regression
+  adjustFactor$a <- 0.0001007194
+  adjustFactor$b <- 0.4273381
   arrivalTimeList <- list()
   arrivalTimeList$source <- sourceIATA
   arrivalTimeList$dest <- destIATA

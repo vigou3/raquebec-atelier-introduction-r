@@ -9,6 +9,3 @@ https://www.fedex.com/ratefinder/standalone?method=goToResultSummaryPage
 
 QBC -> Vancouver 30 KG 10/12/4	
 https://www.fedex.com/ratefinder/standalone?method=goToResultSummaryPage
-
-Exemple poids colis
-https://www.laposte.fr/particulier/courriers-colis/conseils-pratiques/les-exemples-de-poids-courants
