@@ -1,8 +1,9 @@
-\documentclass{article}
+\documentclass{report}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
+\usepackage{graphicx}
 
 %https://www.latextemplates.com/template/vertical-line-title-page
 %https://www.overleaf.com/9592806ftzgznxtqjhx#/34847227/
@@ -43,11 +44,19 @@
 	\end{figure}}
 
 \begin{document}
-	\begin{titlepage}
-		\clearpage\thispagestyle{empty}
-		\titleGM
-	\end{titlepage}
-\setcounter{page}{1}
-\newpage
-
+\begin{titlepage}
+	\clearpage\thispagestyle{empty}
+	\titleGM
+\end{titlepage}
+\tableofcontents
+\chapter*{Préface}
+\chapter*{Introduction}
+\chapter*{Étude de cas}
+\section{Extraction, traitement, visualisation et analyse des données}
+\section{Création de fonctions utilitaires}
+\section{Communication des résultats}
+\section{Analyse de la compétition}
+\section{Ajustement de distribution statistiques sur données empiriques}
+\section{Simulation et analyse de rentabilité}
+\chapter*{Conclusion}
 \end{document}
