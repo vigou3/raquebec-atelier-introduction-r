@@ -48,7 +48,7 @@ head(independencyTest$stdres)
 independencyTest
 cor.test(compData$weight,compData$distance,method = "pearson")
 
-# Linear model without intercept
+# Linear model
 profitMargin <- 1.12
 avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
 compModel <- lm(price/(profitMargin*avgTaxRate) ~ distance + weight, compData)

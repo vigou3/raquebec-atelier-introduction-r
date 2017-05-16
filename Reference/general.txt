@@ -26,14 +26,15 @@ https://stat.ethz.ch/R-manual/R-devel/library/base/html/factor.html
 ecdf R
 https://stat.ethz.ch/R-manual/R-devel/library/stats/html/ecdf.html
 
+all values are true R
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/all.html
+
+
 error generation R
 http://www.dummies.com/programming/r/how-to-generate-your-own-error-messages-in-r/
 
 error checking R
 http://stackoverflow.com/questions/3903157/how-can-i-check-whether-a-function-call-results-in-a-warning/4947528
-
-all values are true R
-https://stat.ethz.ch/R-manual/R-devel/library/base/html/all.html
 
 split into groups
 http://stackoverflow.com/questions/6104836/splitting-a-continuous-variable-into-equal-sized-groups
@@ -50,3 +51,4 @@ http://stackoverflow.com/questions/12984991/stop-lapply-from-printing-to-console
 
 color palette
 http://stackoverflow.com/questions/15282580/how-to-generate-a-number-of-most-distinctive-colors-in-r
+http://stackoverflow.com/questions/12984991/stop-lapply-from-printing-to-console
