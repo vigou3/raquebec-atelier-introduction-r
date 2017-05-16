@@ -47,3 +47,6 @@ http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
 
 invisible
 http://stackoverflow.com/questions/12984991/stop-lapply-from-printing-to-console
+
+color palette
+http://stackoverflow.com/questions/15282580/how-to-generate-a-number-of-most-distinctive-colors-in-r
