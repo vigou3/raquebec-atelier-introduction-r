@@ -32,6 +32,16 @@
 				\vspace{0.425\textheight}}}
 	\endgroup}
 
+%Default Addition of Pictures
+\graphicspath{{./fig/}}
+\newcommand{\AddPicture}[4]{
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=#1\textwidth, height=#2\textheight,keepaspectratio]{#3}
+			\caption{#4}
+		\end{center}
+	\end{figure}}
+
 \begin{document}
 	\begin{titlepage}
 		\clearpage\thispagestyle{empty}
