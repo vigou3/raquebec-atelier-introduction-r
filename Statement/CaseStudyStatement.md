@@ -103,6 +103,10 @@ Encore une fois, pour le bureau de Montréal, qui est inquiet que la nouvelle ta
 |  Juillet  |         1750         |
 |   Août    |         2000         |
 | Septembre |         2300         |
+|  Octobre  |         2425         |
+| Novembre  |         2500         |
+| Décembre  |         3500         |
+
 
 2. Pour chacun des colis, vous devez ensuite générer un poids à l'aide de la distribution retenue précédemment  ainsi que la destination à l'aide de la distribution empirique des ...intrants....
 3. Calculer ensuite les prix chargés par votre compagnie ainsi que la compétition pour chacun des transports.
