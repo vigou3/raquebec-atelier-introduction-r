@@ -2,7 +2,7 @@
 
 # Parameters of the simulation
 n <- 100000
-x <- matrix(runif(4*n),ncol = 4,byrow = TRUE)
+x <- matrix(c(runif(2*n)),ncol = 2,byrow = TRUE)
 
 # Generate weights with a LogNormal distribution
 mu1 <- log(3000)
@@ -16,10 +16,13 @@ max(weights)
 
 # Generate the errors on the weights
 weightsTarifParam <- 0.7
-weightsPrice <- weightsTarifParam*weights
-weightsError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(weights)*weightsTarifParam
-weightsFinalPrice <- weightsPrice + weightsError
+weightsCost <- weights*weightsTarifParam
+weightsError <- rnorm(n,mean(weightsCost),sd(weightsCost))
+max(weightsError)
+min(weightsError)
+weightsFinalPrice <- weightsCost+weightsError
 mean(weightsFinalPrice)
+min(weightsFinalPrice)
 var(weightsFinalPrice)
 
 # Generate the distance with a LogNormal distribution
@@ -37,14 +40,16 @@ max(distances)
 
 # Generate the errors on the distances
 distancesTarifParam <- 0.0275
-distancesPrice <- distancesTarifParam*distances
-distancesError <- pnorm((x[,3]-0.5)*sqrt(12))*sd(distances)*distancesTarifParam
-distancesFinalPrice <- distancesPrice + distancesError
+distancesCost <- distances*distancesTarifParam
+distancesError <- rnorm(n,mean(distancesCost),sd(distancesCost))
+distancesFinalPrice <- distancesCost+distancesError
 mean(distancesFinalPrice)
 var(distancesFinalPrice)
+max(distancesFinalPrice)
+min(distancesFinalPrice)
 
 # Generate total price
-baseCost <- 5
+baseCost <- 10
 #taxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
 taxRate <- 1.082408
 profitMargin <- 1.15

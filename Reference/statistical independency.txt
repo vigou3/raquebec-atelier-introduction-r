@@ -8,3 +8,6 @@ http://stats.seandolinar.com/making-a-covariance-matrix-in-r/
 
 correlation
 https://stat.ethz.ch/R-manual/R-devel/library/stats/html/cor.html
+
+correlation test
+https://www.r-bloggers.com/correlation-and-linear-regression/
