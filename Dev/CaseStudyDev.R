@@ -360,8 +360,8 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   }
   
   # Pricing variables
-  distanceFactor <- 0.025
-  weightFactor <- 0.5
+  distanceFactor <- 0.03
+  weightFactor <- 0.8
   fixedCost <- 3.75
   profitMargin <- 1.12
   
@@ -375,7 +375,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   # Additional automated credits
   automatedCredit <- 1
   # Lightweight
-  automatedCredit <-  automatedCredit * ifelse(weight < 1, 0.9, 1)
+  automatedCredit <-  automatedCredit * ifelse(weight < 2, 0.5, 1)
   # Gold Member
   automatedCredit <-  automatedCredit * ifelse(baseCost > 100, 0.9, 1)
   # Partnership
@@ -509,6 +509,11 @@ plot(compModel)
 library("actuar")
 
 distName <- c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian")
+empCDF <- ecdf(compData$weight)
+empPDF <- function(x,delta=0.01)
+{
+  (empCDF(x)-empCDF(x-delta))/delta
+}
 
 distFit <- function(dist,...)
 {
@@ -560,11 +565,6 @@ distFit <- function(dist,...)
   
   # Treament
   param <- optim(par = args, function(par) -sum(do.call(eval(parse(text = paste("d",law,sep=''))),c(list(compData$weight),par,log = TRUE))))
-  empCDF <- ecdf(compData$weight)
-  empPDF <- function(x,delta=0.01)
-  {
-    (empCDF(x)-empCDF(x-delta))/delta
-  }
   devValue <- sum((empPDF(x <- seq(0,30,0.1))-do.call(eval(parse(text = paste("d",law,sep=''))),c(list(x),param$par)))**2)
   
   # Return List
@@ -575,30 +575,24 @@ distFit <- function(dist,...)
   distFitList
 }
 
+
 (resultDistFitting <- sapply(distName,function(x) unlist(distFit(x,1,1))))
 
-(resultDistFitting <- as.data.frame(cbind(distName,errorValue,devValue)))
+law <- c("norm","gamma","lnorm","weibull","pareto","invgauss")
+col <- c("red", "yellow", "purple", "green", "cyan", "blue")
+x <- seq(0,30,0.1)
 
 par(mfrow = c(1,2),font = 2)
 plot(function(x) empCDF(x), xlim = c(0,15), main = "", xlab = "weight (Kg)", ylab = "CDF(x)")
-curve(pnorm(x, paramNormal$par[1],paramNormal$par[2]), add = TRUE, lwd = 2, col = "darkgreen")
-curve(pgamma(x, paramGamma$par[1],paramGamma$par[2]), add = TRUE, lwd = 2, col = "darkblue")
-curve(plnorm(x, paramLogNormal$par[1], paramLogNormal$par[2]), add = TRUE, lwd = 2, col = "darkred")
-curve(pweibull(x, paramWeibull$par[1], paramWeibull$par[2]), add = TRUE, lwd = 2, col = "yellow")
-curve(ppareto(x, paramPareto$par[1], paramPareto$par[2]), add = TRUE, lwd = 2, col = "gray")
-curve(pinvgauss(x, paramInvGaussian$par[1], paramInvGaussian$par[2]), add = TRUE, lwd = 2, col = "purple")
-legend(x=7.5,y=0.6,distName, fill = c("darkgreen","darkblue","darkred","yellow","gray","purple"), cex = 0.75, ncol = 2, title = "Distribution")
-
-hist(compData$weight, xlim = c(0,15), main = "", xlab = "weight (Kg)", breaks = 500,freq = FALSE)
-curve(dnorm(x, paramNormal$par[1],paramNormal$par[2]), add = TRUE, lwd = 2, col = "darkgreen")
-curve(dgamma(x, paramGamma$par[1],paramGamma$par[2]), add = TRUE, lwd = 2, col = "darkblue")
-curve(dlnorm(x, paramLogNormal$par[1], paramLogNormal$par[2]), add = TRUE, lwd = 2, col = "darkred")
-curve(dweibull(x, paramWeibull$par[1], paramWeibull$par[2]), add = TRUE, lwd = 2, col = "yellow")
-curve(dpareto(x, paramPareto$par[1], paramPareto$par[2]), add = TRUE, lwd = 2, col = "gray")
-curve(dinvgauss(x, paramInvGaussian$par[1], paramInvGaussian$par[2]), add = TRUE, lwd = 2, col = "purple")
-legend(x=7.5,y=0.2,distName, fill = c("darkgreen","darkblue","darkred","yellow","gray","purple"), cex = 0.75, ncol = 2, title = "Distribution")
-
+invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("p",law[i],sep = ''))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
+hist(compData$weight, xlim = c(0,15), main = "", xlab = "weight (Kg)", breaks = 300,freq = FALSE)
+invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("d",law[i],sep = ''))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
+legend(x="right",distName, inset = 0.1, col = col, pch = 20, pt.cex = 2, cex = 1, ncol = 1, bty = "n", text.width = 2, title = "Distribution")
 mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE)
+
+# On choisi donc la loi LogNormal qui possède la plus petite déviance et le meilleur ajustement
+distChoice <- "LogNormal"
+(paramAdjust <- resultDistFitting[c(1:2),match(distChoice,distName)])
 
 # Il est aussi possible de faire l'équivalent avec fitdistr de la library MASS, 
 # mais nous sommes toutefois restrient sur la sélection des distributions
@@ -618,90 +612,29 @@ lambdaTable
 # On filtre les routes possibles à partir de 'YUL' et 
 # on crée une distribution en fonction de l'indice de destination
 simAirportsDests <- as.character(paste(routesCanada[routesCanada$sourceAirport == 'YUL',"destinationAirport"]))
-simArrivalIndex <- arrivalIndex[names(arrivalIndex) %in% simAirportsDests]
-airportsDensity <- simArrivalIndex/sum(simArrivalIndex)
-
-# Simplification of shippingCost function to be more efficient
-shippingCostSimplified <- function(destIATA, weight)
-{
-  sourceIATA <- 'YUL'
-  if(weight < 0 || weight > 30) 
-  {
-    stop("The weight must be between 0 and 30 Kg")
-  }
-  minimalDist = 100
-  distance <- airportsDist(sourceIATA, destIATA)
-  if (distance$value < minimalDist)
-  {
-    # We verify if the distance of shipping is further than the minimal requierement
-    stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
-  }
-  
-  # Pricing variables
-  distanceFactor <- 0.025
-  weightFactor <- 0.5
-  fixedCost <- 3.75
-  profitMargin <- 1.12
-  percentCredit <- 0
-  dollarCredit <- 0
-  
-  # Trafic Index
-  traficIndexSource <- 0.69841270
-  traficIndexDest <- as.numeric(paste(airportsCanada[distance$destIndex,"combinedIndex"]))
-  
-  # Calculation of the base cost
-  baseCost <-  fixedCost + (distance$value*distanceFactor + weight*weightFactor)/(traficIndexSource*traficIndexDest)
-  
-  # Additional automated credits
-  automatedCredit <- 1
-  # Lightweight
-  automatedCredit <-  automatedCredit * ifelse(weight < 1, 0.9, 1)
-  # Gold Member
-  automatedCredit <-  automatedCredit * ifelse(baseCost > 100, 0.9, 1)
-  # Partnership
-  automatedCredit <- automatedCredit * 0.85
-  # The Migrator
-  if(distance$value > 3500)
-  {
-    automatedCredit <- automatedCredit * 0.8125
-  }
-  else if(distance$value >= 3000)
-  {
-    automatedCredit <- automatedCredit * 0.825
-  }
-  else if(distance$value >= 2500)
-  {
-    automatedCredit <- automatedCredit * 0.85
-  }
-  else if(distance$value >= 2000)
-  {
-    automatedCredit <- automatedCredit * 0.9
-  }
-  
-  # Calculation of taxe rate and control of text
-  taxRate <- 1.14975
-  (price <- pmax(fixedCost*profitMargin*automatedCredit*taxRate,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate))
-}
+simCombinedIndex <- combinedIndex[names(combinedIndex) %in% simAirportsDests]
+airportsDensity <- simCombinedIndex/sum(simCombinedIndex)
 
 # Function for the simulation of the shipment prices
 simulShipmentPrice <- function(Arrival,Weight)
 {
   ownPrice <- ifelse(is(testSim <- try(shippingCost('YUL',Arrival,Weight)$price,silent = TRUE),"try-error"),NA,testSim)
   distance <- airportsDist('YUL',Arrival)$value
-  weight <- Weight
-  compPrice <- predict(compModel,newdata = as.data.frame(cbind(distance,weight)))
+  nd <- as.data.frame(cbind(distance,Weight))
+  colnames(nd) <- c("distance","weight")
+  compPrice <- predict(compModel,newdata = nd)
   customerChoice <- ifelse(is.na(ownPrice),0,ifelse(ownPrice < compPrice,1,0))
-  rbind(Arrival,Weight,ownPrice,compPrice,customerChoice)
+  rbind(Arrival,distance,Weight,ownPrice,compPrice,customerChoice)
 }
 
 # Function for the simulation of the shipment parameters
 simulShipment <- function(simNbShipments)
 {
   # On génère ensuite des poids pour chacun des colis
-  simWeights <- rlnorm(simNbShipments,paramLogNormal$par[1],paramLogNormal$par[2])
+  simWeights <- eval(parse(text = paste("r",law[match(distChoice,distName)],sep = '')))(simNbShipments,paramAdjust[1],paramAdjust[2])
   # On génère finalement une destination pour chacun des colis (le départ se fera toujours à partir de 'YUL')
   simArrivals <- sample(size = simNbShipments,names(airportsDensity),prob = airportsDensity,replace = TRUE)
-  sapply(seq(1,simNbShipments[1]),function(x) simulShipmentPrice(simArrivals[x],simWeights[x]))
+  sapply(seq(1,simNbShipments),function(x) simulShipmentPrice(simArrivals[x],simWeights[x]))
 }
 
 # Function for overall simulation
@@ -716,16 +649,28 @@ simulOverall <-function()
 
 nsim <- 1
 simulResults <- replicate(nsim, simulOverall(),simplify = FALSE)
-(marketShareSales <- sapply(1:nsim,function(x) sum(as.numeric(simulResults[[x]][5,]))/length(simulResults[[x]][5,])))
-(ownRevenus <- sum(as.numeric(simulResults[[1]][3,])*as.numeric(simulResults[[1]][5,]),na.rm = TRUE))
-(compRevenus <- sum(as.numeric(simulResults[[1]][4,])*(1-as.numeric(simulResults[[1]][5,])),na.rm = TRUE))
+(marketShareSales <- sapply(1:nsim,function(x) sum(as.numeric(simulResults[[x]][6,]))/length(simulResults[[x]][6,])))
+(ownRevenus <- sum(as.numeric(simulResults[[1]][4,])*as.numeric(simulResults[[1]][6,]),na.rm = TRUE))
+(compRevenus <- sum(as.numeric(simulResults[[1]][5,])*(1-as.numeric(simulResults[[1]][6,])),na.rm = TRUE))
 (marketShareRevenus <- ownRevenus/(ownRevenus+compRevenus))
 
-arrivalSales <- as.character(simulResults[[1]][1,simulResults[[1]][5,]==1]) 
-weightSales <- as.numeric(simulResults[[1]][2,simulResults[[1]][5,]==1])
+arrivalSales <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==1]) 
+distanceSales <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==1])
+weightSales <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==1])
+
+arrivalComp <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==0]) 
+distanceComp <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==0])
+weightComp <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==0])
+
 table(arrivalSales)
+mean(distanceSales)
+table(arrivalComp)
+mean(distanceComp)
 par(mfrow = c(1,1))
-hist(weightSales,freq = FALSE,breaks = 100, main = "Sales's weights vs Theoretical weights", xlab = "weight (Kg)")
-curve(dlnorm(x,paramLogNormal$par[1],paramLogNormal$par[2]),0,15,add = TRUE, lwd = 2)
-abline(v = exp(paramLogNormal$par[1]+paramLogNormal$par[2]**2/2))
-abline(v = mean(weightSales),col = "red", lwd = 2)
+hist(weightSales,freq = FALSE,breaks = 100, xlim = c(0,15), main = "Sales vs Theoretical Weights Distribution", xlab = "weight (Kg)")
+curve(do.call(eval(parse(text = paste("d",law[match(distChoice,distName)],sep = ''))),c(list(x),as.vector(paramAdjust))),add = TRUE, lwd = 2)
+abline(v = v <- exp(paramAdjust[1]+paramAdjust[2]**2/2), lwd = 2)
+text(v+0.75,0.3,as.character(round(v,2)))
+abline(v = v <- mean(weightSales),col = "red", lwd = 2)
+text(v - 0.75,0.3,round(v,2),col = "red")
+
