@@ -508,31 +508,75 @@ plot(compModel)
 # install.packages("actuar")
 library("actuar")
 
-(paramNormal <- optim(par = c(1,1), function(par) -sum(dnorm(compData$weight,par[1],par[2],log = TRUE))))
-(paramGamma <- optim(par = c(1,1), function(par) -sum(dgamma(compData$weight,par[1],par[2],log = TRUE))))
-(paramLogNormal <- optim(par = c(1,1), function(par) -sum(dlnorm(compData$weight,par[1],par[2],log = TRUE))))
-(paramWeibull <- optim(par = c(1,1), function(par) -sum(dweibull(compData$weight,par[1],par[2],log = TRUE))))
-(paramPareto <- optim(par = c(1,1), function(par) -sum(dpareto(compData$weight,par[1],par[2],log = TRUE))))
-(paramInvGaussian <- optim(par = c(1,1), function(par) -sum(dinvgauss(compData$weight,par[1],par[2],log = TRUE))))
-
 distName <- c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian")
-errorValue <- round(c(paramNormal$value,
-                      paramGamma$value,
-                      paramLogNormal$value,
-                      paramWeibull$value,
-                      paramPareto$value,
-                      paramInvGaussian$value))
-empCDF <- ecdf(compData$weight)
-empPDF <- function(x,delta=0.01)
+
+distFit <- function(dist,...)
 {
-  (empCDF(x)-empCDF(x-delta))/delta
+  dist = tolower(dist)
+  args = list(...)
+  if(dist == "normal")
+  {
+    law = "norm"
+    nbparam = 2
+  }
+  else if(dist == "gamma")
+  {
+    law = "gamma"
+    nbparam = 2
+  }
+  else if(dist == "lognormal")
+  {
+    law = "lnorm"
+    nbparam = 2
+  }
+  else if(dist == "weibull")
+  {
+    law = "weibull"
+    nbparam = 2
+  }
+  else if(dist == "pareto")
+  {
+    law = "pareto"
+    nbparam = 2
+  }
+  else if(dist == "invgaussian")
+  {
+    law = "invgauss"
+    nbparam = 2
+  }
+  else
+  {
+    message <- "The only distribution available are: 
+    Nnormal, Gamma, LogNormal, Weibull, Pareto and InvGaussian.
+    (The case is ignored)"
+    stop(message)
+  }
+  if(nbparam != length(args))
+  {
+    message <- paste("There is a mismatch between the number of arguments passed to the function and the number of arguments needed to the distribution.",
+                     "The",dist,"distribution is taking",nbparam,"parameters and",length(args),"parameters were given.")
+    stop(message)
+  }
+  
+  # Treament
+  param <- optim(par = args, function(par) -sum(do.call(eval(parse(text = paste("d",law,sep=''))),c(list(compData$weight),par,log = TRUE))))
+  empCDF <- ecdf(compData$weight)
+  empPDF <- function(x,delta=0.01)
+  {
+    (empCDF(x)-empCDF(x-delta))/delta
+  }
+  devValue <- sum((empPDF(x <- seq(0,30,0.1))-do.call(eval(parse(text = paste("d",law,sep=''))),c(list(x),param$par)))**2)
+  
+  # Return List
+  distFitList <- list() 
+  distFitList$param <- param$par
+  distFitList$errorValue <- param$value
+  distFitList$devValue <- devValue
+  distFitList
 }
-devValue <- round(c(sum((empPDF(x <- seq(0,30,0.1))-dnorm(x,paramNormal$par[1],paramNormal$par[2]))**2),
-                    sum((empPDF(x <- seq(0,30,0.1))-dgamma(x,paramGamma$par[1],paramGamma$par[2]))**2),
-                    sum((empPDF(x <- seq(0,30,0.1))-dlnorm(x,paramLogNormal$par[1],paramLogNormal$par[2]))**2),
-                    sum((empPDF(x <- seq(0,30,0.1))-dweibull(x,paramWeibull$par[1],paramWeibull$par[2]))**2),
-                    sum((empPDF(x <- seq(0,30,0.1))-dpareto(x,paramPareto$par[1],paramPareto$par[2]))**2),
-                    sum((empPDF(x <- seq(0,30,0.1))-dinvgauss(x,paramInvGaussian$par[1],paramInvGaussian$par[2]))**2)),3)
+
+(resultDistFitting <- sapply(distName,function(x) unlist(distFit(x,1,1))))
+
 (resultDistFitting <- as.data.frame(cbind(distName,errorValue,devValue)))
 
 par(mfrow = c(1,2),font = 2)

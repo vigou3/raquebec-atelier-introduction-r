@@ -38,3 +38,9 @@ https://stat.ethz.ch/R-manual/R-devel/library/base/html/all.html
 split into groups
 http://stackoverflow.com/questions/6104836/splitting-a-continuous-variable-into-equal-sized-groups
 https://stat.ethz.ch/R-manual/R-devel/library/base/html/split.html
+
+UDF and ...
+http://stackoverflow.com/questions/25794692/how-do-you-pass-unknown-number-of-arguments-to-r-function-via-opencpu
+http://stackoverflow.com/questions/6496811/how-to-pass-a-list-to-a-function-in-r
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/parse.html
+http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
