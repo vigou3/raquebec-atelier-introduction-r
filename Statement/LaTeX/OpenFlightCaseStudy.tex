@@ -1,0 +1,46 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+%https://www.latextemplates.com/template/vertical-line-title-page
+%https://www.overleaf.com/9592806ftzgznxtqjhx#/34847227/
+%https://tex.stackexchange.com/questions/1736/removing-page-number-for-title-page
+
+% Create the command for including the title page in the document
+\newcommand*{\titleGM}{\begingroup 
+% Horizontal box
+\hbox{
+% Whitespace to the left of the title page
+\hspace*{0.2\textwidth}
+% Vertical line
+\rule{1pt}{\textheight}
+% Whitespace between the vertical line and title page text
+\hspace*{0.05\textwidth}
+% Paragraph box which restricts text to less than the width of the page
+\parbox[b]{0.75\textwidth}{
+{\noindent\Huge\bfseries Open Flights}\\[2\baselineskip]
+% Title
+{\large \textit{R à Québec}}\\[4\baselineskip] 
+% Tagline or further description
+% Author name
+{\Large \textsc{Beauchemin, David}} \\
+{\Large \textsc{Cabral Cruz, Samuel}} 
+
+
+% Whitespace between the title block and the publisher
+\vspace{0.5\textheight} 
+% Publisher and logo
+%{\noindent The Publisher \plogo}\\[\baselineskip]
+}
+}
+\endgroup}
+
+\begin{document}
+	\begin{titlepage}
+		\clearpage\thispagestyle{empty}
+		\titleGM
+	\end{titlepage}
+\setcounter{page}{1}
+\end{document}
