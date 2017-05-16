@@ -42,6 +42,9 @@
 			\caption{#4}
 		\end{center}
 	\end{figure}}
+	
+%Creation of an environment for more abouts...
+%\newenvironment{}{•}{•}
 
 \begin{document}
 \begin{titlepage}
@@ -52,7 +55,9 @@
 \chapter*{Préface}
 \chapter*{Introduction}
 \chapter*{Étude de cas}
+\setcounter{chapter}{1}
 \section{Extraction, traitement, visualisation et analyse des données}
+	\input{dev/Q1}
 \section{Création de fonctions utilitaires}
 \section{Communication des résultats}
 \section{Analyse de la compétition}
