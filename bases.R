@@ -277,4 +277,25 @@ f(2, 3,
   function(x, y) 1 - y)
 
 
-## argument '...'
+### Argument '...'
+
+## Plusieurs définitions de fonctions dans R contiennent la
+## mention '...' dans la liste d'arguments. Ce n'est pas un
+## signe de paresse de la part des rédacteurs des rubriques
+## d'aide! Il existe bel et bien un argument formel nommé
+## '...' que l'on peut utiliser dans n'importe quelle fonction.
+##
+## L'argument signifie qu'une fonction peut accepter un ou
+## plusieurs arguments autres que ceux faisant partie de sa
+## définition. Autrement dit, un nombre variable d'arguments.
+##
+## Le contenu de '...' n'est ni pris en compte, ni modifié par
+## la fonction. Il est généralement simplement passé tel quel
+## à une autre fonction qui, elle, saura traiter les arguments
+## qui lui sont ainsi passés.
+
+## \item Pour des exemples, voir les définitions des fonctions
+##   \fonction{apply}, \fonction{lapply} et \fonction{sapply},
+##   ci-dessous.
+## \end{itemize}
+##
