@@ -12,19 +12,20 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
 
 % Creation of a command to generate the title page
 \newcommand*{\titlePage}{
 	\begingroup 
 		\hbox{
-			\hspace*{0.05\textwidth}
+			\hspace*{0.1\textwidth}
 			\rule{1.5pt}{\textheight}
 			\hspace*{0.05\textwidth}
 			\parbox[b]{0.75\textwidth}{
 				{\noindent\LARGE\bfseries Étude de cas:} \\[\baselineskip]
-				{\noindent\huge\bfseries Analyse de marché du} \\
-				{\noindent\huge\bfseries transport aérien canadien} \\
-				{\noindent\huge\bfseries avec R} \\[2\baselineskip]
+				{\noindent\Huge\bfseries Analyse de marché du} \\
+				{\noindent\Huge\bfseries transport aérien} \\
+				{\noindent\Huge\bfseries canadien avec R} \\[2\baselineskip]
 				% Title
 				{\large\textit{Atelier d'introduction à R}}\\[4\baselineskip]
 				% Author name
@@ -34,11 +35,11 @@
 				% Association
 				{\large {Dans le cadre du colloque R à Québec}} \\[\baselineskip]
 				{\large {25 mai 2017}} 
-				\vspace{0.425\textheight}}}\endgroup}
+				\vspace{0.4\textheight}}}\endgroup}
 
 % Default Addition of Pictures
 \graphicspath{{./fig/}}
-\newcommand{\AddPicture}[4]{
+\newcommand{\addPicture}[4]{
 	\begin{figure}[h]
 		\begin{center}
 			\includegraphics[width=#1\textwidth, height=#2\textheight,keepaspectratio]{#3}
@@ -88,10 +89,16 @@
 	commentstyle=\color{dkgreen},   
 	stringstyle=\ttfamily\color{mauve},
 	%identifierstyle=\color{magenta},
-	escapeinside={\%*}{*)},   
-	morekeywords={*,...}} 
+	escapeinside={\%*}{*)},
+	morekeywords={*,...,seed}} 
 
 \begin{document}
+
+\renewcommand{\labelitemi}{\tiny $\blacktriangleright$}
+\renewcommand{\labelitemii}{\footnotesize $\bullet$}
+\renewcommand{\labelitemiii}{\tiny \ding{117}}
+\renewcommand{\labelitemiv}{\small $\star$}
+
 \begin{titlepage}
 	\clearpage\thispagestyle{empty}
 	\titlePage
@@ -103,11 +110,12 @@
 
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
+	\input{tex/intro}
 
 \chapter*{Étude de cas}
 \addcontentsline{toc}{chapter}{Étude de cas}
 \setcounter{chapter}{1}
-
+	
 \section{Extraction, traitement, visualisation et analyse des données}
 	\input{tex/Q1}
 
@@ -126,21 +134,5 @@
 
 \bibliography{bib/Reference}
 \bibliographystyle{plain}
-
-% Examples
-\begin{moreInfo}{setwd()}
-	La fonction setwd permet de redéfinir la valeur du working directory
-\end{moreInfo}
-\begin{lstlisting}
-#### Setting working directory properly ####
-setwd('..')
-(path <- getwd())
-set.seed(31459)
-#### Question 1 - Extraction, traitement, visualisation et analyse des donnees ####
-# 1.1 - Extraire les bases de donnees airports.dat et routes.dat
-airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
-routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
-airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE,  stringsAsFactors = TRUE, na.strings=c('\\N',''))
-\end{lstlisting}
 
 \end{document}
