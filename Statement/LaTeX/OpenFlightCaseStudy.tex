@@ -2,15 +2,19 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{listings}
+\lstloadlanguages{R}
 \usepackage[french]{babel}
 \usepackage{graphicx}
+\usepackage{fontawesome}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
 
-%https://www.latextemplates.com/template/vertical-line-title-page
-%https://www.overleaf.com/9592806ftzgznxtqjhx#/34847227/
-%https://tex.stackexchange.com/questions/1736/removing-page-number-for-title-page
-
-%Creation of a command to generate the title page
-\newcommand*{\titleGM}{
+% Creation of a command to generate the title page
+\newcommand*{\titlePage}{
 	\begingroup 
 		\hbox{
 			\hspace*{0.05\textwidth}
@@ -30,10 +34,9 @@
 				% Association
 				{\large {Dans le cadre du colloque R à Québec}} \\[\baselineskip]
 				{\large {25 mai 2017}} 
-				\vspace{0.425\textheight}}}
-	\endgroup}
+				\vspace{0.425\textheight}}}\endgroup}
 
-%Default Addition of Pictures
+% Default Addition of Pictures
 \graphicspath{{./fig/}}
 \newcommand{\AddPicture}[4]{
 	\begin{figure}[h]
@@ -43,25 +46,97 @@
 		\end{center}
 	\end{figure}}
 	
-%Creation of an environment for more abouts...
-%\newenvironment{}{•}{•}
+% Creation of environment to add additional informations
+\mdfsetup{
+	linecolor=NavyBlue,
+	linewidth=2pt,
+	backgroundcolor=NavyBlue!10,
+	roundcorner=10pt}	
+\newenvironment{moreInfo}[1]
+	{\begin{mdframed}
+	\textcolor{NavyBlue}{\huge \raisebox{-3.5pt}{\faInfo} 
+	\hspace{0.5cm} \large\bfseries #1}\\[5pt]
+	\normalsize
+	\makebox[0.1\textwidth][l]{}	
+	\begin{minipage}{10cm}}
+	{	\end{minipage}
+	\end{mdframed}}
+
+% Lstlisting configurations
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{
+	language=R,                     
+	basicstyle=\footnotesize,       
+	numbers=left,                   
+	numberstyle=\tiny\color{gray},  
+	stepnumber=1,                   
+	numbersep=5pt,                  
+	backgroundcolor=\color{white},  
+	showspaces=false,               
+	showstringspaces=false,         
+	showtabs=false,                 
+	frame=single,                   
+	rulecolor=\color{black},        
+	tabsize=2,                      
+	captionpos=b,                   
+	breaklines=true,                
+	breakatwhitespace=false,        
+	title=\lstname,                 
+	keywordstyle=\color{blue},      
+	commentstyle=\color{dkgreen},   
+	stringstyle=\ttfamily\color{mauve},
+	%identifierstyle=\color{magenta},
+	escapeinside={\%*}{*)},   
+	morekeywords={*,...}} 
 
 \begin{document}
 \begin{titlepage}
 	\clearpage\thispagestyle{empty}
-	\titleGM
+	\titlePage
 \end{titlepage}
 \tableofcontents
 \chapter*{Préface}
+\addcontentsline{toc}{chapter}{Préface}
+
 \chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+
 \chapter*{Étude de cas}
+\addcontentsline{toc}{chapter}{Étude de cas}
 \setcounter{chapter}{1}
+
 \section{Extraction, traitement, visualisation et analyse des données}
 	\input{tex/Q1}
+
 \section{Création de fonctions utilitaires}
+
 \section{Communication des résultats}
+
 \section{Analyse de la compétition}
+
 \section{Ajustement de distribution statistiques sur données empiriques}
+
 \section{Simulation et analyse de rentabilité}
+
 \chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+
+% Examples
+\begin{moreInfo}{setwd()}
+	La fonction setwd permet de redéfinir la valeur du working directory
+\end{moreInfo}
+\begin{lstlisting}
+#### Setting working directory properly ####
+setwd('..')
+(path <- getwd())
+set.seed(31459)
+#### Question 1 - Extraction, traitement, visualisation et analyse des donnees ####
+# 1.1 - Extraire les bases de donnees airports.dat et routes.dat
+airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
+airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE,  stringsAsFactors = TRUE, na.strings=c('\\N',''))
+\end{lstlisting}
+
 \end{document}
