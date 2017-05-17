@@ -279,23 +279,29 @@ f(2, 3,
 
 ### Argument '...'
 
-## Plusieurs définitions de fonctions dans R contiennent la
-## mention '...' dans la liste d'arguments. Ce n'est pas un
-## signe de paresse de la part des rédacteurs des rubriques
-## d'aide! Il existe bel et bien un argument formel nommé
-## '...' que l'on peut utiliser dans n'importe quelle fonction.
+## Il existe dans R un argument formel nommé '...' que l'on
+## peut utiliser dans n'importe quelle fonction. Il a pour
+## effet de rendre variable le nombre d'arguments d'une
+## fonction.
 ##
-## L'argument signifie qu'une fonction peut accepter un ou
-## plusieurs arguments autres que ceux faisant partie de sa
-## définition. Autrement dit, un nombre variable d'arguments.
+## Le contenu de '...' peut être traité de deux grandes
+## façons:
 ##
-## Le contenu de '...' n'est ni pris en compte, ni modifié par
-## la fonction. Il est généralement simplement passé tel quel
-## à une autre fonction qui, elle, saura traiter les arguments
-## qui lui sont ainsi passés.
+## 1. en le capturant dans une liste avec 'list(...)';
+## 2. en le passant tel quel à une autre fonction qui, elle,
+##    saura traiter les arguments qui lui sont ainsi passés.
+##
+## Voici un exemple illustrant la seconde approche. La
+## fonction 'curve' prend une expression R en argument et en
+## trace le graphique sur un intervalle donné.
+curve(x^2, from = 0, to = 2)
 
-## \item Pour des exemples, voir les définitions des fonctions
-##   \fonction{apply}, \fonction{lapply} et \fonction{sapply},
-##   ci-dessous.
-## \end{itemize}
-##
+## Nous voulons que les graphiques de 'curve' (et seulement
+## ceux-là) soient toujours en orange.
+curve(x^2, from = 0, to = 2, col = "orange")
+
+## Au lieu de complètement redéfinir 'curve', nous pouvons
+## simplement définir une petite fonction qui, grâce à '...'
+## accepte d'office tous les arguments de 'curve'.
+ocurve <- function(...) curve(..., col = "orange")
+ocurve(x^2, from = 0, to = 2)
