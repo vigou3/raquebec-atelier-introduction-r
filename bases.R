@@ -127,29 +127,45 @@ c(-2, 3, -1, 4)^(1:4)      # quatre puissances différentes
 ### FONCTIONS
 ###
 
-## une fonction est un objet normal
+## Les fonctions sont des objets comme les autres.
 seq                        # contenu est le code source
-mode(seq)                  # mode d'une fonction
+mode(seq)                  # mode est "function"
+rep(seq(5), 3)             # fonction argument d'une fonction
+lapply(1:5, seq)           # idem
+mode(ecdf(rpois(100, 1)))  # résultat est une fonction
+ecdf(rpois(100, 1))(5)     # évaluation en un point
 c(seq, rep)                # vecteur de fonctions!
 
-## exemple de syntaxe
+### Règles d'appel d'une fonction
 
-## règles d'appel d'une fonction
+## L'interprète R reconnait un appel de fonction au fait que
+## le nom de l'objet est suivi de parenthèses ( ).
+##
+## Une fonction peut n'avoir aucun argument ou plusieurs. Il
+## n'y a pas de limite pratique au nombre d'arguments.
+##
+## Les arguments d'une fonction peuvent être spécifiés selon
+## l'ordre établi dans la définition de la fonction.
+##
+## Cependant, il est beaucoup plus prudent et *fortement
+## recommandé* de spécifier les arguments par leur nom avec
+## une construction de la forme 'nom = valeur', surtout après
+## les deux ou trois premiers arguments.
+##
+## L'ordre des arguments est important; il est donc nécessaire
+## de les nommer s'ils ne sont pas appelés dans l'ordre.
+##
+## Certains arguments ont une valeur par défaut qui sera
+## utilisée si l'argument n'est pas spécifié dans l'appel de
+## la fonction.
+##
+## Examinons la définition de la fonction 'matrix', qui sert à
+## créer une matrice à partir d'un vecteur de valeurs.
+args(matrix)
 
-## \begin{itemize}
-## \item Il n'y a pas de limite pratique quant au nombre d'arguments que
-##   peut avoir une fonction.
-## \item Les arguments d'une fonction peuvent être spécifiés selon
-##   l'ordre établi dans la définition de la fonction. Cependant, il est
-##   beaucoup plus prudent et \emph{fortement recommandé} de spécifier
-##   les arguments par leur nom, avec une construction de la forme
-##   \code{nom = valeur}, surtout après les deux ou trois premiers
-##   arguments.
-## \item L'ordre des arguments est important; il est donc nécessaire de
-##   les nommer s'ils ne sont pas appelés dans l'ordre.
-## \item Certains arguments ont une valeur par défaut qui sera utilisée
-##   si l'argument n'est pas spécifié dans l'appel de la fonction.
-## \end{itemize}
+## La fonction compte cinq arguments et chacun a une valeur
+## par défaut (ce n'est pas toujours le cas). Quel sera le
+## résultat de l'appel ci-dessous?
 matrix()
 
 ## Les invocations de la fonction 'matrix' ci-dessous sont
@@ -161,51 +177,104 @@ matrix(nrow = 3, ncol = 4, data = 1:12)
 matrix(nrow = 3, ncol = 4, byrow = FALSE, 1:12)
 matrix(nrow = 3, ncol = 4, 1:12, FALSE)
 
+### Définition de fonctions
 
-## syntaxe de base pour créer une fonction
 ## On définit une nouvelle fonction avec la syntaxe suivante:
-## \begin{quote}
-##   \Indexfonction{function}
-##   \code{fun <- function(\emph{arguments}) \emph{expression}}
-## \end{quote}
+##
+##   <fun> <- function(<arguments>) <expression>
+##
 ## où
-## \begin{itemize}
-## \item \code{fun} est le nom de la fonction (les règles pour les noms
-##   de fonctions étant les mêmes que celles présentées à la
-##   \autoref{bases:noms} pour tout autre objet);
-## \item \code{\itshape arguments} est la liste des arguments, séparés
-##   par des virgules;
-## \item \code{\itshape expression} constitue le corps de la fonction,
-##   soit une expression ou un groupe d'expressions réunies par des
-##   accolades.
-## \end{itemize}
+##
+## - 'fun' est le nom de la fonction;
+## - 'arguments' est la liste des arguments, séparés par des
+##    virgules;
+## - 'expression' constitue le corps de la fonction, soit une
+##   expression ou un groupe d'expressions réunies par des
+##   accolades { }.
+##
+## Une fonction retourne toujours la valeur de la *dernière*
+## expression de celle-ci.
+##
+## Voici un exemple trivial.
+square <- function(x) x * x
 
-## lexical scope
-x <- 5
-f <- function(x)
-    x * x
-f(10)
-x
-f(x)
-f(x = x)
+## Appel de cette fonction.
+square(10)
 
-f <- function(x)
+### Portée des variables
+
+## La portée (domaine où un objet existe et comporte une
+## valeur) des arguments d'une fonction et de tout objet
+## défini à l'intérieur de celle-ci se limite à la fonction.
+##
+## Ceci signifie que l'interprète R fait bien la distinction
+## entre un objet dans l'espace de travail et un objet utilisé
+## dans une fonction (fort heureusement!).
+x <- 5                     # objet dans l'espace de travail
+square(10)                 # dans 'square' x vaut 10
+x                          # valeur inchangée
+square(x)                  # passer valeur de 'x' à 'square'
+square(x = x)              # colle... signification?
+
+## Le concept de portée va plus loin dans R.
+##
+## Tout appel de fonction crée un *environnement* dans lequel
+## sont définis les objets.
+##
+## Un environnement hérite des objets définis dans
+## l'environnement qui le contient.
+##
+## Par conséquent, si un objet n'existe pas dans un
+## environnement, R va chercher dans les environnements parents
+## pour en trouver la définition.
+##
+## En pratique, cela signifie qu'il n'est pas toujours
+## nécessaire de passer des objets en argument. Il suffit de
+## compter sur le concept de portée lexicale ("lexical scope").
+##
+## Supposons que l'on veut écrire une fonction pour calculer
+##
+##   f(x, y) = x (1 + xy)^2 + y (1 - y) + (1 + xy)(1 - y)
+##
+## Deux termes sont répétés dans cette expression. On a donc
+##
+##   a = 1 + xy
+##   b = 1 - y
+##
+## et f(x, y) = x a^2 + y b + a b.
+##
+## Voici une manière élégante de procéder qui repose sur la
+## portée lexicale.
+f <- function(x, y)
 {
-    g <- function(y)
-        x + y
-    g(x^2)
+    g <- function(a, b)
+        x * a^2 + y * b + a * b
+    g(1 + x * y, 1 - y)
 }
+f(2, 3)
 
+### Fonctions anonymes
 
+## Comme le nom du concept l'indique, une fonction anonyme est
+## une fonction qui n'a pas de nom. C'est parfois utile pour
+## des fonctions courtes utilisées dans une autre fonction.
+##
+## Reprenons l'exemple précédent en généralisant les
+## expressions des termes 'a' et 'b'. La fonction 'f'
+## pourrait maintenant prendre en arguments 'x', 'y' et des
+## fonctions pour calculer 'a' et 'b'.
+##
+## On peut ensuite directement passer des fonctions anonymes
+## en argument.
+f <- function(x, y, fa, fb)
+{
+    g <- function(a, b)
+        x * a^2 + y * b + a * b
+    g(fa(x, y), fb(x, y))
+}
+f(2, 3,
+  function(x, y) 1 + x * y,
+  function(x, y) 1 - y)
 
-## fonction anonyme
-dist <- function(x, y)
-    sum((x - y)^2)
-
-dist <- function(x, y = 0)
-    sum((x - y)^2)
-
-dist <- function(x, y = 0, FUN)
-    sum((x - y))
 
 ## argument '...'
