@@ -14,9 +14,9 @@ TABLE DES MATIÈRES
    - types de données de base: nombres, `TRUE`/`FALSE`, `NA`, `NaN`,
      vecteur simple
    - indiçage des vecteurs
-   - appel de fonctions internes (exemples avec `seq`, `rep`)
    - approche vectorielle: opérations implicites, réduction,
      accumulation
+   - appel de fonctions internes (exemples avec `seq`, `rep`)
    - définition d'une fonction
    - portée d'une variable (lexical scope)
    - argument `...`
