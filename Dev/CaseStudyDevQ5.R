@@ -1,4 +1,9 @@
 #### Question 5 ####
+#
+# Need the dataset from question 1
+#
+
+
 # install.packages("actuar")
 library("actuar")
 
@@ -9,10 +14,11 @@ empPDF <- function(x,delta=0.01)
   (empCDF(x)-empCDF(x-delta))/delta
 }
 
+# We built a general function for all kind of distribution. 
 distFit <- function(dist,...)
 {
   dist = tolower(dist)
-  args = list(...)
+  args = list(...) # Using of kargs since we are not sure the number of parameters
   if(dist == "normal")
   {
     law = "norm"
@@ -59,6 +65,7 @@ distFit <- function(dist,...)
   
   # Treament
   param <- optim(par = args, function(par) -sum(do.call(eval(parse(text = paste("d",law,sep=''))),c(list(compData$weight),par,log = TRUE))))
+  # Deviance value of the fitting
   devValue <- sum((empPDF(x <- seq(0,30,0.1))-do.call(eval(parse(text = paste("d",law,sep=''))),c(list(x),param$par)))**2)
   
   # Return List
@@ -76,6 +83,7 @@ law <- c("norm","gamma","lnorm","weibull","pareto","invgauss")
 col <- c("red", "yellow", "purple", "green", "cyan", "blue")
 x <- seq(0,30,0.1)
 
+# Visulization of the fitting distribution
 par(mfrow = c(1,2),font = 2)
 plot(function(x) empCDF(x), xlim = c(0,15), main = "", xlab = "weight (Kg)", ylab = "CDF(x)")
 invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("p",law[i],sep = ''))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
@@ -84,12 +92,12 @@ invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste
 legend(x="right",distName, inset = 0.1, col = col, pch = 20, pt.cex = 2, cex = 1, ncol = 1, bty = "n", text.width = 2, title = "Distribution")
 mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE)
 
-# On choisi donc la loi LogNormal qui possède la plus petite déviance et le meilleur ajustement
+# We thus choose the LogNormal distribution which possesses the smallest deviance and the best fit.
 distChoice <- "LogNormal"
 (paramAdjust <- resultDistFitting[c(1:2),match(distChoice,distName)])
 
-# Il est aussi possible de faire l'équivalent avec fitdistr de la library MASS, 
-# mais nous sommes toutefois restrient sur la sélection des distributions
+# It is also possible to do the equivalent with fitdistr of the library MASS, 
+# but with less option for the distribution.
 library("MASS")
 (fit.normal <- fitdistr(compData$weight,"normal"))
 (fit.gamma <- fitdistr(compData$weight, "gamma"))
