@@ -62,4 +62,4 @@ min(totalCost)
 # Export to csv format
 (dataExport <- cbind(weights,distances,totalCost))
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
-write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE)
+write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=""),row.names = FALSE)
