@@ -149,7 +149,7 @@ list(seq,
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]
+\begin{frame}[fragile]
   \frametitle{\emph{Data frame}}
 
   Type de stockage le plus fréquemment employé en analyse de données.
@@ -163,6 +163,9 @@ head(USArrests)
   \item Manipulation comme liste ou comme matrice
   \item Fonction pour créer des \emph{data frame}: \texttt{data.frame}
   \end{itemize}
+
+  \pause
+  \gotoR{donnees.R}
 \end{frame}
 
 %%% Local Variables:
