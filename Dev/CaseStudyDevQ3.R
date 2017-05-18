@@ -1,4 +1,13 @@
 #### Question 3 ####
+#
+# Need the dataset from question 1
+#
+
+#
+# Need the function from question 2
+#
+
+# We visualize the impact of a changes of distance and the weight starting from the YUL airport.
 curve(shippingCost("YUL","YQB",x)$price,0.01,50,ylim=c(0,200),
       main="Shipping Price Variation with Weight",xlab="weight (Kg)",
       ylab="price (CND $)",lwd = 2)
