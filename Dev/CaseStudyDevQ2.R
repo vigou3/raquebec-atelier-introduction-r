@@ -5,6 +5,7 @@
 
 
 # Distance calculation function between two airports.
+# install.packages("geosphere")
 library(geosphere)
 
 airportsDist <- function(sourceIATA,destIATA)
@@ -91,11 +92,6 @@ taxRates
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-  # sourceIATA as a string
-  # destIATA as a string
-  # weight as an integer ; in KG
-  # percentCredit as a default float
-  # dollarCredit as a default float
   
   # Verification of the existance of the route between sourceIATA and destIATA
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
