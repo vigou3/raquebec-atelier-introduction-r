@@ -6,16 +6,16 @@
 
 #### Setting working directory properly ####
 getwd()
-setwd('..')
+setwd("..")
 (path <- getwd())
 set.seed(31459)
 
 #### Question 1 - Data extraction, processing, visualization and analysis ####
 
 # 1.1 - Database extraction of airports.dat, routes.dat and airlines.dat.
-airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
-routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c('\\N',''))
-airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c('\\N',''))
+airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c("\\N",""))
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c("\\N",""))
+airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c("\\N",""))
 
 # 1.2 - Coloumns names assignation  base on the information available on the website.
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
@@ -27,7 +27,7 @@ colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
 colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Country","Active")
 
 # 1.3 - Keeping the Canada information of the dataset
-airportsCanada <- airports[airports$country=='Canada',]
+airportsCanada <- airports[airports$country=="Canada",]
 
 # 1.4 - Extraction of the genreral information about the distributions of the variables in the dataset and 
 # understanding of the signification of those variables and the different modalities they can take.
@@ -75,7 +75,7 @@ missingTZ <- airportsCanada[is.na(airportsCanada$timezone),]
 # install.packages("rgdal")
 library(sp)
 library(rgdal)
-tz_world.shape <- readOGR(dsn=paste(path,"/Reference/tz_world",sep=''),layer="tz_world")
+tz_world.shape <- readOGR(dsn=paste(path,"/Reference/tz_world",sep=""),layer="tz_world")
 unknown_tz <- airportsCanada[is.na(airportsCanada$tzFormat),c("airportID","name","longitude","latitude")]
 sppts <- SpatialPoints(unknown_tz[,c("longitude","latitude")])
 proj4string(sppts) <- CRS("+proj=longlat")
@@ -85,7 +85,7 @@ merged_tz <- cbind(unknown_tz,over(sppts,tz_world.shape))
 # We can also note that we only have information derived from the province in which each airport is located with the city.
 # Since we want to apply taxes by province in our situation, we will need a better data to access this informaiton. 
 # We will again use mapping techniques to extract the province as a function of the x and y coordinates.
-prov_terr.shape <- readOGR(dsn=paste(path,"/Reference/prov_terr",sep=''),layer="gpr_000b11a_e")
+prov_terr.shape <- readOGR(dsn=paste(path,"/Reference/prov_terr",sep=""),layer="gpr_000b11a_e")
 unknown_prov <- airportsCanada[,c("airportID","city","longitude","latitude")]
 sppts <- SpatialPoints(unknown_prov[,c("longitude","latitude")])
 proj4string(sppts) <- CRS("+proj=longlat")
@@ -157,7 +157,7 @@ summary(routesCanada)
 # 1.6 - Create a map showing the different airports on a map of Canada.
 # install.packages("ggmap")
 library(ggmap)
-map <- get_map(location = 'Canada', zoom = 3)
+map <- get_map(location = "Canada", zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
 airportsCoord <- as.data.frame(cbind(lon, lat))
