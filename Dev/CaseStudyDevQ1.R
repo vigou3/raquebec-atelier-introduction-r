@@ -55,7 +55,7 @@ airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 # Since 82% of the IACA is the last three caracters of the ICAO, we will simply use the derivate IATA from the ICAO.
 sum(airportsCanada$IATA==substr(airportsCanada$ICAO,2,4),na.rm = TRUE)/sum(!is.na(airportsCanada$IATA))
 
-# We are now able to fill the missing IATA and we delete the IACO since it's now useless
+# We are now able to fill the missing IATA and we delete the ICAO since it's now useless
 airportsCanada$IATA <- as.character(airportsCanada$IATA) 
 # We fill the NA with the substring ICAO
 airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
