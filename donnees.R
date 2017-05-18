@@ -158,17 +158,33 @@ x$level <- 1               # aussi pour l'affectation
 ## même longueur. Il comporte un attribut 'dim', ce qui fait
 ## qu'il est représenté comme une matrice. Cependant, les
 ## colonnes peuvent être de modes différents.
-(DF <- data.frame(Noms = c("Pierre", "Jean", "Jacques"),
-                  Age = c(42, 34, 19),
-                  Fumeur = c(TRUE, TRUE, FALSE),
-                  stringsAsFactors = FALSE))
-mode(DF)                   # un data frame est une liste...
-length(DF)                 # ... de trois éléments...
-class(DF)                  # ... de classe 'data.frame'
-dim(DF)                    # dimensions implicites
-names(DF)                  # titres des colonnes
-row.names(DF)              # titres des lignes (implicites)
-DF[, 1]                    # première colonne
-DF$Noms                    # idem, plus simple
-DF[1, ]                    # première ligne
+data.frame(Noms = c("Pierre", "Jean", "Jacques"),
+           Age = c(42, 34, 19),
+           Fumeur = c(TRUE, TRUE, FALSE),
+           stringsAsFactors = FALSE)
 
+## R est livré avec plusieurs jeux de données.
+data()                     # liste complète
+
+## Création d'une copie du jeu de données 'USArrests' dans
+## l'espace de travail.
+data(USArrests)
+
+## Analyse succincte de l'objet.
+mode(USArrests)            # un data frame est une liste...
+length(USArrests)          # ... de quatre éléments...
+class(USArrests)           # ... de classe 'data.frame'
+dim(USArrests)             # dimensions implicites
+names(USArrests)           # titres des colonnes
+row.names(USArrests)       # titres des lignes
+USArrests[, 1]             # première colonne
+USArrests$Murder           # idem, plus simple
+USArrests[1, ]             # première ligne
+
+## La fonction 'subset' permet d'extraire des lignes et des
+## colonnes d'un data frame de manière très intuitive.
+##
+## Par exemple, nous pouvons extraire ainsi le nombre
+## d'assauts dans les états comptant un taux de meurtre
+## supérieur à 10.
+subset(USArrests, Murder > 10, select = Assault)
