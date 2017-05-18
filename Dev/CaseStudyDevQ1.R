@@ -1,17 +1,19 @@
 # Code source Case Study R à Québec 2017
 
 #### Setting working directory properly ####
+getwd()
 setwd('..')
 (path <- getwd())
 set.seed(31459)
 
-#### Question 1 - Extraction, traitement, visualisation et analyse des données ####
-# 1.1 - Extraire les bases de données airports.dat et routes.dat
-airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
-routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, stringsAsFactors = TRUE, na.strings=c('\\N',''))
-airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE,  stringsAsFactors = TRUE, na.strings=c('\\N',''))
+#### Question 1 - Data extraction, processing, visualization and analysis ####
 
-# 1.2 - Attribuer des noms aux colonnes du jeu de données en vous fiant à l'information disponible sur le site
+# 1.1 - Database extraction of airports.dat, routes.dat and airlines.dat
+airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c('\\N',''))
+airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c('\\N',''))
+
+# 1.2 - Coloumns names assignation  base on the information available on the website
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "latitude", "longitude", "altitude", "timezone", "DST",
                         "tzFormat","typeAirport","Source")
@@ -20,7 +22,7 @@ colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
                       "stops","equipment")
 colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Country","Active")
 
-# 1.3 - Nettoyer le jeu de données en ne conservant que les données relatives au Canada
+# 1.3 - Keeping the Canada information of the dataset
 airportsCanada <- airports[airports$country=='Canada',]
 
 # 1.4 - Extraire des informations générales sur la distribution des variables présentent dans le jeu de données 
@@ -31,7 +33,8 @@ airportsCanada <- airports[airports$country=='Canada',]
 View(airportsCanada)
 head(airportsCanada)
 summary(airportsCanada)
-nbAirportCity <- table(as.character(airportsCanada$city))
+
+nbAirportCity <- table(as.character(airportsCanada$city))   #We use as.character to convert the factor into a fixed caractor
 (nbAirportCity <- sort(nbAirportCity,decreasing=TRUE))[1:10]
 
 # Filtrer la pertinence des données
@@ -40,9 +43,10 @@ nbAirportCity <- table(as.character(airportsCanada$city))
 # Nous observons que les variables typeAirport et Source ne sont d'aucune utilité dans la situation présente
 # compte tenu que nous n'utilisons que l'information sur le transport par voies aériennes.
 # Un raisonnement similaire est applicable pour la variable country qui ne possèdera que la modalité Canada
-airportsCanada <- airportsCanada[,-match(c("country","typeAirport","Source"), colnames(airportsCanada))]
+airportsCanada <- subset(airportsCanada, select = -c(country, typeAirport, Source ))
 
-# Nous pouvons aussi constater que 27 aéroports ne possèdent aucun code IATA.
+
+# As seen in the sumary, we dont have the IATA for 27 airports
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 
 # Cependant, toutes ces aéroports possèdent un code ICAO bien défini ce qui permettra d'attribuer une valeur
@@ -51,22 +55,21 @@ airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 # du code ICAO correspondent au code IATA dans 82% des cas.
 sum(airportsCanada$IATA==substr(airportsCanada$ICAO,2,4),na.rm = TRUE)/sum(!is.na(airportsCanada$IATA))
 
-# Nous modifions donc la variable IATA et nous nous débarasserons de la variable ICAO
-airportsCanada$IATA <- as.character(airportsCanada$IATA)
-airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4)
+# We are now able to fill the missing IATA and we delete the IACO since it's now useless
+airportsCanada$IATA <- as.character(airportsCanada$IATA) 
+# We fill the NA with the substring ICAO
+airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
 airportsCanada$IATA <- as.factor(airportsCanada$IATA)
-airportsCanada <- airportsCanada[,-match("ICAO",colnames(airportsCanada))]
+airportsCanada <- subset(airportsCanada, select = - ICAO)
 View(airportsCanada)
 
-# Finalement, nous voyons qu'il semble y avoir une quarantaine d'aéroport pour lesquels nous n'avons pas
-# d'information sur le fuseau horaire
+# Finaly, we are missing more than fifty time zone
 missingTZ <- airportsCanada[is.na(airportsCanada$timezone),]
 
-# Puisque les fuseaux horaires ne dépendent que de la position géographique, plusieurs options s'offrent à nous:
-# 1) Trouver des aéroports proches de c'est derniers pour en déduire les informations
-# 2) Utiliser des outils de cartographie pour retrouver les vrais fuseaux horaires
-# Nous utiliserons ici la deuxième option qui peut sembler plus complquée de prime abord, mais qui se révèle
-# très simple et beaucoup plus précise lorsque nous avons accès à l'information et aux outils nécessaires
+# Since the TZ depend only on the geographical position, two options are available to us : 
+# 1) Deduce the information from other close airport
+# 2) Locate the real time zone by mapping tools
+# We will use the second option which may seem more complex but with the proper tools become more easy and accurate
 
 # install.packages("sp")
 # install.packages("rgdal")
@@ -103,12 +106,12 @@ airportsCanada <- sqldf("
   left join merged_prov c
   on a.airportID = c.airportID
   order by a.airportID")
-airportsCanada <- data.frame(as.matrix(airportsCanada),stringsAsFactors = TRUE)
+airportsCanada <- data.frame(as.matrix(airportsCanada))
 
 # On retire timezone et DST car les données sont inutiles
 # On retire tzFormat car il s'Agit des données incomplet et on le remplace plus tard par tzMerged
 # On retire city qui ne sera plus utile puisque nous avons maintenant la province
-airportsCanada <- airportsCanada[,-match(c("timezone","DST","tzFormat","city"),colnames(airportsCanada))]
+airportsCanada <- subset(airportsCanada, select = -c(timezone, DST, tzFormat, city ))
 summary(airportsCanada)
 
 # install.packages("plyr")
@@ -123,7 +126,7 @@ routesCanada <- sqldf("
                             from airportsCanada)
     and destinationAirportID in (select distinct airportID
                                  from airportsCanada)")
-routesCanada  <- data.frame(as.matrix(routesCanada ),stringsAsFactors = TRUE)
+routesCanada  <- data.frame(as.matrix(routesCanada ))
 
 # Produira le même résultat
 # x <- routesCanada[!is.na(match(routesCanada$sourceAirportID,airportsCanada$airportID)) &
@@ -152,7 +155,7 @@ summary(routesCanada$stops)
 # de marchandise peut autant se faire par l'intermédiaire d'agence aérienne que par 
 # vol privé.
 # Nous pouvons ainsi nous débarasser de ces variables
-routesCanada <- routesCanada[,-match(c("codeshare","stops"),colnames(routesCanada))]
+routesCanada <- subset(routesCanada, select = -c(codeshare, stops))
 summary(routesCanada)
 
 # 1.6 - Créer une carte affichant les différents aéroports sur une carte du Canada
@@ -204,12 +207,11 @@ curve(totalFlightsCDF(x-1),from = 0,to = 60,n = 100,
       xlab = "Nombre de routes par aéroport", 
       ylab = "CDF")
 
-# Calculer un indice combiné des deux derniers indices
+# Calculer un indice combiné des deux derniers indices 
 combinedIndex <- round(totalFlights/max(totalFlights),3)
 combinedIndexTable <- data.frame(IATA,
                                  as.numeric(paste(totalFlights)),
-                                 as.numeric(paste(combinedIndex)),
-                                 stringsAsFactors = TRUE)
+                                 as.numeric(paste(combinedIndex)))
 rownames(combinedIndexTable) <- NULL
 colnames(combinedIndexTable) <- c("IATA","totalFlights","combinedIndex")
 combinedIndexTable
@@ -220,7 +222,7 @@ airportsCanada <- sqldf("
   from airportsCanada a
   left join combinedIndexTable b
   on a.IATA = b.IATA")
-airportsCanada <- data.frame(as.matrix(airportsCanada ),stringsAsFactors = TRUE)
+airportsCanada <- data.frame(as.matrix(airportsCanada ))
 
 #1.11 - Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles
 lon <- as.numeric(paste(airportsCanada$longitude))

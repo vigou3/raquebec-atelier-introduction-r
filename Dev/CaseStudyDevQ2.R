@@ -79,7 +79,7 @@ library(rlist)
 theurl <- getURL("http://www.calculconversion.com/sales-tax-calculator-hst-gst.html",.opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
 provinceName <- as.character(sort(unique(airportsCanada$province)))
-taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`[-13,5]))/100+1),stringsAsFactors = TRUE)
+taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`[-13,5]))/100+1))
 colnames(taxRates) <- c("province","taxRate")
 taxRates
 
