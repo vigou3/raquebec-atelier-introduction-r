@@ -4,7 +4,7 @@
 #
 
 # Import data of the competition
-compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=''))
+compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=""))
 View(compData)
 colnames(compData) <- c("weight","distance","price")
 summary(compData)
