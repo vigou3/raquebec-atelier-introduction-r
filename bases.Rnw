@@ -77,8 +77,8 @@ v["c"]
     \item possible qu'une fonction retourne une fonction
     \item possible de définir de nouvelles fonctions
     \end{itemize}
-  \item Nombre variable d'arguments avec \texttt{'...'}
   \item Définition de fonctions \alert{anonymes}
+  \item Nombre variable d'arguments avec \texttt{'...'}
   \end{itemize}
 
   \gotoR{bases.R}

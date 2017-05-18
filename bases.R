@@ -301,7 +301,7 @@ curve(x^2, from = 0, to = 2)
 curve(x^2, from = 0, to = 2, col = "orange")
 
 ## Au lieu de complètement redéfinir 'curve', nous pouvons
-## simplement définir une petite fonction qui, grâce à '...'
+## simplement définir une petite fonction qui, grâce à '...',
 ## accepte d'office tous les arguments de 'curve'.
 ocurve <- function(...) curve(..., col = "orange")
 ocurve(x^2, from = 0, to = 2)
