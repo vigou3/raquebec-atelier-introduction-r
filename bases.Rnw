@@ -51,9 +51,6 @@
   \item Possible de nommer les éléments
 <<echo=TRUE>>=
 (v <- c(a = 1, b = 2, c = 5))
-v <- c(1, 2, 5)
-names(v) <- c("a", "b", "c")
-v
 @
   \item Indiçage avec les crochets \verb=[ ]=
 <<echo=TRUE>>=
@@ -78,7 +75,7 @@ v["c"]
     \item possible de définir de nouvelles fonctions
     \end{itemize}
   \item Définition de fonctions \alert{anonymes}
-  \item Nombre variable d'arguments avec \texttt{'...'}
+  \item Nombre variable d'arguments avec \texttt{'\alert{...}'}
   \end{itemize}
 
   \gotoR{bases.R}

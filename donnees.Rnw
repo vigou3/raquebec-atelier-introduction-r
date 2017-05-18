@@ -11,7 +11,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]
+\begin{frame}[fragile]
   \frametitle{Matrice et tableau}
   \begin{itemize}
   \item Matrice est un \alert{vecteur} muni d'un attribut de dimension
@@ -29,13 +29,7 @@ array(1:24, dim = c(3, 4, 2))
   \end{itemize}
 
   \pause
-  \begin{center}
-    \setlength{\fboxrule}{0.5pt}%
-    \href{https://youtu.be/cQUjdwgTyz4}{%
-      \framebox[80mm][c]{%
-        \makebox[5mm]{\raisebox{-1pt}{\Large\faYoutubePlay}}\;%
-        {Création et indiçage des matrices et tableaux}}}
-  \end{center}
+  \video{https://youtu.be/cQUjdwgTyz4}{Création et indiçage des matrices et tableaux}
 \end{frame}
 
 % \begin{frame}
