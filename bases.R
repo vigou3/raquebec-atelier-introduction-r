@@ -88,9 +88,6 @@ y                          # ... ne change pas celle de 'y'
 x <- c(a = -1, b = 2, c = 8, d = 10) # création d'un vecteur
 names(x)                             # extraire les noms
 names(x) <- letters[1:length(x)]     # changer les noms
-x[1]                       # extraction par position
-x["c"]                     # extraction par étiquette
-x[-2]                      # élimination d'un élément
 
 ## Les fonctions 'numeric', 'logical', 'complex' et
 ## 'character' servent à créer des vecteurs initialisés avec
@@ -99,6 +96,24 @@ numeric(5)                 # vecteur initialisé avec des 0
 logical(5)                 # initialisé avec FALSE
 complex(5)                 # initialisé avec 0 + 0i
 character(5)               # initialisé avec chaines vides
+
+## L'indiçage sert principalement à deux choses: extraire des
+## éléments d'un vecteur avec la construction 'x[i]' ou les
+## remplacer avec la construction 'x[i] <- y'.
+##
+## Il existe cinq façons d'indicer un vecteur dans R.
+##
+## 1. avec des entiers positifs (extraction par position);
+## 2. avec des entiers négatifs (suppression par position);
+## 3. avec un vecteur booléen (extraction par critère);
+## 4. avec des chaines de caractères (extraction par nom);
+## 5. avec un vecteur vide (extraction de tous les éléments).
+## 5. avec un vecteur vide (extraction de tous les éléments).
+x[1]                       # extraction par position
+x[-2]                      # élimination d'un élément
+x[x > 5]                   # extraction par vecteur booléen
+x["c"]                     # extraction par nom
+x[]                        # tous les éléments
 
 ## L'unité de base de l'arithmétique en R est le vecteur. Cela
 ## rend très simple et intuitif de faire des opérations
