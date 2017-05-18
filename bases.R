@@ -113,7 +113,7 @@ x[1]                       # extraction par position
 x[-2]                      # élimination d'un élément
 x[x > 5]                   # extraction par vecteur booléen
 x["c"]                     # extraction par nom
-x[]                        # tous les éléments
+x[]                        # tous les éléments (peu utile ici)
 
 ## L'unité de base de l'arithmétique en R est le vecteur. Cela
 ## rend très simple et intuitif de faire des opérations
