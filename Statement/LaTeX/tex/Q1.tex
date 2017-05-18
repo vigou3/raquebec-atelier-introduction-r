@@ -26,19 +26,9 @@
 \begin{document}
 
 
-Dans le but de faciliter le travail d'extraction, on utilise les fonctions R \textit{setwd} et \textit{getwd} qui permettent respectivement de pointer sur un répertoire et de définir un répertoire. L'utilisation du double point ('..') dans l'argument de la fonction setwd permet de pointer un répertoire au-dessus du répertoire actuel. Ce nouveau répertoire est ainsi affecté à la variable path, qui seras réutilisé plus tard.
-
-%
-%> getwd()
-%[1] "C:/Users/David/Documents/GitHub/raquebec-intro/Dev"
-%> setwd('..')
-%> (path <- getwd())
-%[1] "C:/Users/David/Documents/GitHub/raquebec-intro"
-
-
 Cette section est certainement la plus importante de tous, elle vise à faire un traitement adéquat et pertinent des données afin de pouvoir les réutiliser facilement dans les sections suivantes. Une mauvaise application des concepts d’extraction, traitement et visualisation des données peut entrainer une interprétation inadéquate de la situation.
 
-Le fichier source des données étant disponible en ligne on effectue l'extraction directement via leurs adresses à l'aide de la fonction R \textit{read.csv}.On utilise trois bases de données, la première sur les aéroports mondiaux \cite{Data:AirportWorlwide}, la seconde sur les trajets aériens mondiaux \cite{Data:RouteWorlwide} et la dernière sur les compagnies aériennes mondiales \cite{Data:AirlineWorldwide}. La présentation des données ne comporte pas de titre, l'argument \textbf{header} a donc été mis à FALSE, et l'attribuons manuellement des titres des colonnes est effectuées plus loin. 
+Le fichier source des données étant disponible en ligne on effectue l'extraction directement via leurs adresses à l'aide de la fonction R \textit{read.csv}. On utilise trois bases de données, la première sur les aéroports mondiaux \cite{Data:AirportWorlwide}, la seconde sur les trajets aériens mondiaux \cite{Data:RouteWorlwide} et la dernière sur les compagnies aériennes mondiales \cite{Data:AirlineWorldwide}.
 
 Afin de facilité l'analyse des données qualitatives, il est beaucoup plus facile de représentées celle-ci à l'aide de variable \textit{factors} \cite{Rfunction:as.factor}. La transformation des données en factors permet l'association d'une chaîne de caractères à un nombre entier. Autrement dit, chaque valeur qualitative est \emph{entreposé} à l'aide d'un entier.
 
@@ -59,8 +49,7 @@ Par la suite, il devient possible de sortir différentes informations spécifiqu
 %
 % nbAirportCity <- table(as.character(airportsCanada$city)) #We use as.character to convert the factor into a fixed caractor
 %
-L'utilisation de la fonction R \textit{as.character}\cite{Rfunction:as.character} permet de convertir les \textit{factors} en chaîne de caractères. 
-\\
+
 
 La prochaine étape consiste à nettoyer la pertinence des données ainsi que le remplissage des données absentes. On observe que les relations (colonne) \textit{typeAirport}, \textit{country} et \textit{Source} ne sont pas pertinentes à notre situation puisque nous observons uniquement les aéroports canadiens. Elles seront retirées à l'aide du code suivant,
 
@@ -110,8 +99,9 @@ On constate qu'il y a absence de la province de chacun des aéroports, alors pou
 
 Ainsi, on obtient des données complètes pour l'ensemble des aéroports canadiens. Certaines informations sont toutefois devenues obsolètes pour la suite de l'étude de cas, en effet les relations (colonnes) \textit{ timezone}, \textit{DST} et \textit{city} ne sont plus pertinentes. De plus, la relation \textit{ tzformat} doit être retirée car elle sera remplacé par la relation \textit{tzmerge} créée par la requête \textit{sql} précédente. Afin de renommer les nouvelles colonnes ajouter par la requête, on utilise la fonction R \textit{rename} \cite{Rfunction:rename,} du paquetage \textit{plyr} \cite{Rpackage:plyr}.
 
-On s'intéresse maintenant aux deux dernières bases données pertinentes pour l'étude de cas, les voies aériennes et les compagnies aériennes. Tout d'abord, on sélectionne à l'aide d'une requête \textit{sql} les voies aériennes canadiennes. On analyse les informations présentes pour les voies aériennes et on observe que seulement 2 trajets ne sont pas des vols directs. Pour des fins de simplifications, tous les vols seront considérés comme des vols directs. Ainsi, les colonnes \textit{codeshare} et \textit{stops} sont inutiles et elles sont retirées.
+On s'intéresse maintenant aux deux dernières bases données pertinentes pour l'étude de cas, les voies aériennes et les compagnies aériennes. Tout d'abord, on sélectionne à l'aide d'une requête \textit{sql} les voies aériennes canadiennes. On analyse les informations présentes pour les voies aériennes et on observe que seulement 2 trajets ne sont pas des vols directs. Pour des fins de simplifications, tous les vols seront considérés comme des vols directs. Ainsi, les colonnes \textit{codeshare} et \textit{stops} sont inutiles.
 
+On s'intéresse maintenant à créer un indice d'achalandage des aéroports en fonction des routes. Cet indice nous sera utile plus tard dans la simulation des aéroports d'arrivée. On observe d'abord les faits marquants des voies aériennes, valeurs maximum, moyenne et variance. On représente graphiquement la répartition de l'index qui correspond au nombre de voies aériennes de l'aéroport diviser par le maximum de nombre de voies aériennes. Cet index nous permet ainsi de représenter sur un graphique à bulles  la densité des réseaux aériens pour chacun des aéroports.
 
 
 
