@@ -14,12 +14,12 @@ airportsDist <- function(sourceIATA,destIATA)
   sourceFindIndex <- match(sourceIATA,airportsCanada$IATA)
   if(is.na(sourceFindIndex))
   {
-    stop(paste('sourceIATA :',sourceIATA,'is not a valid IATA code'))
+    stop(paste("sourceIATA :",sourceIATA,"is not a valid IATA code"))
   }
   destFindIndex <- match(destIATA,airportsCanada$IATA)
   if(is.na(destFindIndex))
   {
-    stop(paste('destIATA :',destIATA,'is not a valid IATA code'))
+    stop(paste("destIATA :",destIATA,"is not a valid IATA code"))
   }
   sourceLon <- as.numeric(paste(airportsCanada$longitude))[sourceFindIndex]
   sourceLat <- as.numeric(paste(airportsCanada$latitude))[sourceFindIndex]
@@ -37,11 +37,11 @@ airportsDist <- function(sourceIATA,destIATA)
   airportDistList$destIndex <- destFindIndex
   airportDistList
 }
-airportsDist('AAA','YQB')
-airportsDist('YUL','AAA')
-airportsDist('YPA','YQB')
-airportsDist('YUL','YQB')
-airportsDist('YUL','YQB')$value
+airportsDist("AAA","YQB")
+airportsDist("YUL","AAA")
+airportsDist("YPA","YQB")
+airportsDist("YUL","YQB")
+airportsDist("YUL","YQB")$value
 
 # Function to establish the estimated time of arrival
 # install.packages("lubridate")
@@ -97,7 +97,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
   if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
   {
-    stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
+    stop(paste("the combination of sourceIATA and destIATA (",sourceIATA,"-",destIATA,") do not corresponds to existing route"))
   }
   
   if(weight < 0 || weight > 30) 
