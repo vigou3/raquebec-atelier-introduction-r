@@ -37,9 +37,9 @@
   \item Fonctions de base pour créer des vecteurs
     \begin{itemize}
     \item \verb|c| (concaténation);
-    \item \verb|numeric| (vecteur de mode \texttt{numeric})
-    \item \verb|logical| (vecteur de mode \texttt{logical})
-    \item \verb|character| (vecteur de mode \texttt{character})
+    \item \verb|numeric| (vecteur numérique)
+    \item \verb|logical| (vecteur booléen)
+    \item \verb|character| (vecteur de chaines de caractères)
     \end{itemize}
   \end{itemize}
 \end{frame}
