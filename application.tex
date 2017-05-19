@@ -5,9 +5,9 @@
 
   \texttt{apply} applique une fonction sur une partie d'une
   \alert{matrice} ou d'un \alert{tableau}.
-  \begin{center}
+  \begin{Schunk}
     \verb=apply(X, MARGIN, FUN, ...)=
-  \end{center}
+  \end{Schunk}
   \begin{itemize}
   \item \texttt{X} matrice ou tableau
   \item \texttt{MARGIN} dimensions sur lesquelles la fonction doit
@@ -25,9 +25,9 @@
 
   \texttt{tapply} applique une fonction sur les \alert{groupes de données}
   définis par les catégories de \alert{facteurs}.
-  \begin{center}
+  \begin{Schunk}
     \verb=tapply(X, INDEX, FUN, ...)=
-  \end{center}
+  \end{Schunk}
   \begin{itemize}
   \item \texttt{X} vecteur simple
   \item \texttt{INDEX} facteur (ou liste de facteurs) de la même longueur que \texttt{X}
@@ -48,16 +48,17 @@
 
   \texttt{sapply} retourne le résultat sous forme de vecteur simple ou
   de matrice, lorsque c'est possible.
-  \begin{center}
+  \begin{Schunk}
     \verb=lapply(X, FUN, ...)= \\
     \verb=sapply(X, FUN, ...)=
-  \end{center}
+  \end{Schunk}
   \begin{itemize}
   \item \texttt{X} vecteur simple ou liste
   \item \texttt{FUN} fonction à appliquer
   \item `\texttt{...}' arguments additionnels à passer à \texttt{FUN}
   \end{itemize}
 
+  Autre fonction de la même famille: \texttt{mapply}.
 \end{frame}
 
 %%% Local Variables:
