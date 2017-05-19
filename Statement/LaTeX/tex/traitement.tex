@@ -1,30 +1,3 @@
-Cette section est certainement la plus importante de toutes, elle vise à faire un traitement adéquat et pertinent des données afin de pouvoir les réutiliser facilement dans les sections suivantes. Une mauvaise application des concepts d’extraction, de traitement et de visualisation des données peut entraîner des interprétations abérantes des phénomènes que nous cherchons à analyser.
-
-\subsection{Extraction}
-Les données d'OpenFlights possèdent l'avantage d'être téléchargeables directement via le web pour les rendre disponibles à notre environnement de travail. Pour ce faire, nous mettons à profit la fonction \emph{read.csv}. Bien que le nom de la fontion indique qu'elle permet de lire un fichier présenté dans un format \emph{.csv}, nous pouvons tout aussi bien utiliser cette fonction pour extraire des fichiers \emph{.dat}. La différence principale entre ces deux types de fichiers et que les fichiers \emph{.csv} utilisent un caractère d'encadrement des informations qui se trouve à être les doubles guillemets dans la majorité des cas. De plus, les fichiers \emph{.csv} utiliseront comme leur nom l'indique la virgule à titre de séparateur bien que celui-ci puisse être modifié pour un symbol différent.\cite{CSVDAT} Lorsque nous jetons un coup d'oeil à la structure des fichiers \emph{.dat} disponibles à la \autoref{fig:rawAirports}, nous constatons que ceux-ci respectent à la fois les deux caractéristiques que nous venons de mentionner rendant ainsi l'utilisation de la fonction \emph{read.csv} si naturelle. 
-
-\addPicture{1}{1}{rawAirports}{Extrait du fichier airports.dat}{rawAirports} 
-
-\noindent
-Dans la même figure, on constate aussi l'absence d'une ligne servant à présenter les en-têtes de colonnes. Ceci pourra dans certains cas vous jouer de mauvais tours en ignorant la première ligne de données ou encore de considérer les titres comme étant des entrées en soi. \footnote{La deuxième situation étant bien moins dramatique et plus facilement identifiable.}  Bien qu'il serait possible de travailler avec des données sans nom, il s'agit ici d'une trèes mauvaise pratique à proscrire. Pour remédier à la situation, nous assignerons donc des noms aux colonnes grâce à l'attribut \emph{colnames} d'un objet \emph{data.frame} en lui passant un vecteur de noms.\\
-
-\noindent
-Par défaut, lors de l'importation, la fonction \emph{read.csv} retournera un \emph{data.frame} en transformant les chaînes de caractères sous la forme de facteurs (\emph{factors}). Cette action sera complètement transparente à l'utilisateur puisque l'affichage des variables ne sera pas impacté étant donné que R aura créer des formats d'affichage qui associe à chaque facteur la valeur unique corrspondante. Le seul impact réel réside dans la possibilité d'utiliser des fonctions à caractères mathématiques sur les données peu importe si ces dernières sont numériques ou non. Parmi ce genre de fonctions, nous pouvons penser à des fonctions d'agrégation (\emph{clustering}) ou tout simplement à l'utilisation de la fonction \emph{summary} permettant d'afficher des informations génériques sur le contenu d'un objet. Il est important de comprendre que les données ne sont toutefois plus représentées comme des chaînes de caractères, mais bien pas un indice référant à la valeur textuelle correspondante. \\
-
-\noindent
-La manière de représenter des valeurs manquantes varira souvent d'une base de données à une autre. Une fonctionnalité très intéressante de la fonction \emph{read.csv} est de pouvoir automatiquement convertir ces chaînes de caractères symboliques en \emph{NA} ayant une signification particulaire dans R. Dans le cas présent, les valeurs manquantes sont représentées par \text{\textbackslash \textbackslash n} ou \text{" "} correspondant à un simple retour de chariot et un espace vide respectivement. Il suffit donc de passer cette liste de valeurs à l'argument \emph{na.strings}. \\
-
-\begin{moreInfo}{\emph{read.csv}}
-	La fonction \emph{read.csv} possède plusieurs autres arguments très intéressants dans des situations plus pointue. Pour en savoir plus, nous vous invitons à consulter la documentation officielle. \\
-	\url{https://stat.ethz.ch/R-manual/R-devel/library/utils/html/read.table.html}
-\end{moreInfo}
-
-\noindent
-Comme nous venons de le démontrer, l'extraction des données peut facilement devenir une tâche ingrate si nous n'avons aucune connaissance sur la manière dont l'information y a été entreposée. La rèegle d'or est donc de toujours avoir une idée globale de ce que nous cherchons à importer afin de bien paramétriser les fonctions. Si nous assemblons les différents aspects que nous venons d'aborder, nous aboutissons donc au code suivant:
-\begin{lstlisting}[caption = Extraction des données,label=src:Extraction]
-	airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
-\end{lstlisting}
-
 \subsection{Traitement}
 Une fois en possession du jeu de données, il fut nécessaire de nettoyer ce dernier pour en rendre son utilisation plus simple selon nos besoins. Parmi les différentes modifications apportées nous retrouvons: \\
 \begin{itemize}
@@ -63,12 +36,12 @@ Nous ne devons pas être surpris qu'il y ait autant de possibilités différente
 Après avoir fait une présélection des données qui nous seront utiles dans le reste de l'analyse, nous avons constater que certaines variables n'étaient pas toujours totalement alimentées. Tout d'abord, la variable IATA n'était pas toujours définie pour tous les aéroports canadiens contrairement à ICAO. Étant donné la faible proportion des valeurs manquantes et du fait qu'une valeur fictive n'aurait qu'un impact minimal dans le cas de l'analyse, nous avons décider de remplacer les valeurs manquantes par les 3 dernières lettres du code ICAO. En regardant les aéroports canadiens possèdant les deux codes, nous observons que cette relation est respectée dans plus de 80\% des cas. Une autre alternative aurait été de simplement prendre le code ICAO, mais le code IATA semblait beaucoup plus facile d'approche puisqu'il s'agit du code communément utiliser pour le transport des particuliers. \\
 
 \noindent
-Les vrais problèmes au niveau des données résidaient davantage dans l'absence d'informations sur les zones temporelles de certains aéroports ainsi qu'un accès indirect à la province de correspondance de tous les aéroports. Heureusement, ce genre d'information ne dépend que de l'emplacement de l'entité dans le monde, ce qui rend la tâche beaucoup plus simple lorsque nous avons accès aux coordonnées géospatiales. \\
+Les vrais problèmes au niveau des données résidaient davantage dans l'absence d'informations sur les fuseaux horaires de certains aéroports ainsi qu'un accès indirect à la province de correspondance de tous les aéroports. Heureusement, ce genre d'information ne dépend que de l'emplacement de l'entité dans le monde, ce qui rend la tâche beaucoup plus simple lorsque nous avons accès aux coordonnées géospatiales. \\
 
 \begin{moreInfo}{Adresses et coordonnées géospatiales}
 	Dans la situation où seule l'adresse de l'entité aurait été disponible, nous aurions été contraint d'utiliser des techniques de géocodage qui permettent de transfomer une adresse en coordonnées longitude/latitude et parfois même altitude. Ce genre de transformation est devenu beaucoup plus accessible avec l'avancement de la technologie et plusieurs APIs sont disponibles gratuitement sur le web pour procéder à ce genre de transformation. Encore une fois, il vaut mieux bien se renseigner pour identifier l'interface qui répondra le mieux à nos besoins en considérant notamment:
 	\begin{itemize}
-		\item Format de l'entrant
+		\item Format de l'intrant
 		\item Format de retour
 		\item Limitation du nombre de requêtes sur une période de temps donnée
 		\item Efficacité de l'outil
@@ -79,8 +52,46 @@ Les vrais problèmes au niveau des données résidaient davantage dans l'absence
 \end{moreInfo}
 
 \noindent
-Bien que nous savons qu'il est possible de populer les valeurs manquantes à l'aide de données géographiques encore faut-il disposer de ses dites données. Encore une fois, grâce à de bonnes recherches vous parviendrez à trouver une source qui contiendra ce dont vous cherchez ou du moins un élément de réponse qui vous permettra d'en extrapoler la valeur ce qui sera déjà préférable à des données manquantes. Statistiques Canada possède une bibliothèque géographique très garnie et c'est notamment sur leur site que nous avons pris le fichier \emph{.shp} qui définit les provinces et territoires du Canada.
+Bien que nous savons qu'il est possible de populer les valeurs manquantes à l'aide de données géographiques encore faut-il disposer de ses dites données. Encore une fois, grâce à de bonnes recherches vous parviendrez à trouver une source qui contiendra ce dont vous cherchez ou du moins un élément de réponse qui vous permettra d'en extrapoler la valeur ce qui sera déjà préférable à des données manquantes. Statistiques Canada possède une bibliothèque géographique très garnie et c'est notamment sur leur site que nous avons pris le fichier \emph{.shp} qui définit les provinces et territoires du Canada. \cite{Data:BoundaryFiles} En ce qui concerne les fuseaux horaires, nous avons trouvé ceux-ci sur un site dédié à cette fin qui mentionne ne plus être maintenu à jour, mais dont la dernière mise-à-jour a été fait le 28 mai 2016. Étant donné que les fuseaux horaires n'ont pas tendance à changer souvent dans les pays industrialisés comme le Canada, ceci ne consistait pas en un enjeu majeur. \cite{Data:tzWorlwide} \\
 
+\begin{moreInfo}{ArcGIS et les fichiers \emph{.shp}}
+	Le premier fichier ayant l'extension \emph{.shp} fut créé dans le but d'être utilisé conjointement avec la suite de logiciel ArcGIS. Il s'agit de la première suite logiciel commercialisable visant le traitement des données géospatiales. Étant des pionners dans le domaine, plusieurs aspects des outils visant à faire des traitements géospatiaux proviendront directement de leur travaux. Les fichiers \emph{.shp} sont aujourd'hui vu comme un standard pour transporter ce type de donnés. \\
+\url{https://www.arcgis.com/features/index.html}
+\end{moreInfo}
+
+\noindent
+Pour être en mesure de bien travailler avec ce genre de fichier nous devons en comprendre leur fonctionnement. Tout d'abord, lorsque vous téléchargerez un \emph{.zip} de données géospatiales, vous devirez toujours obtenir la structure suivante de fichiers: \\
+
+\addPicture{1}{1}{structureDataGeo}{Structure des fichiers de données géospatiales}{structDataGeo} 
+
+\noindent
+Tel qu'illustré à la \autoref{fig:structDataGeo}, un dossier de données géospatiales se divisera minimalement sous la forme de quatre fichiers:
+\begin{description}[style=multiline,leftmargin=1.5cm]
+	\item[\emph{.shp}] Contient l'information géographique représentée sous la forme de points, segments et/ou polygones
+	\item[\emph{.dbf}] Contient l'information ratachée à tous les entités définies dans le \emph{.shp}
+	\item[\emph{.prj}] Contient les informations sur la projection associée (le modèle mathétique permettant d'interpréter les informations du \emph{.shp} \cite{projectionSIG})
+	\item[{.shx}] Contient les index des enregistrements du \emph{.shp}
+\end{description}
+Cette structure peut donner l'impression que leur utilisation conjointement avec R sera compliqué, mais c'est loin d'être le cas grâce aux paquetages \emph{rgdal} et \emph{sp}. Pour conclure sur ce point, notons que la désignation \emph{ShapeFile} au sens large désigne l'ensemble de la structure de fichier et non pas seulement le \emph{.shp} lui-même. \cite{portailSIG} \\
+
+\noindent
+Le paquetage \emph{rgdal} n'aura qu'une utilité bien précise, soit celle d'aller extraire les informations contenues dans le \emph{ShapeFile}. Cepenant, il possède des dépendances directement dans le paquetage \emph{sp} ce qui explique pourquoi le seul appel de \emph{rgdal} entraîne du même coup l'appel de \emph{sp}. Les rôles de \emph{sp} sont plutôt de transformer les informations des objets R sous une forme compatible au \emph{ShapeFile} que nous aurons lu. Notez bien la transformation de la projection sous une base commune en passant ainsi de \emph{NA} vers \begin{verbatim} "+proj=longlat" \end{verbatim} (projection choisie en fonction des données contenues) à \begin{verbatim} "+proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0" \end{verbatim} soit la projection du \emph{ShapeFile}. La nécessité que nos points soit sous la même projection que celle du \emph{ShapeFile} provient du fait que nous voulons superposer ces derniers pour ensuite en extraire l'information correspondante. Les deux fonctions indispensables ici sont \emph{CRS} qui retourne un objet de classe \emph{Coordinate Reference System} à partir d'une chaîne de caractère passée en argument et \emph{over} qui se chargera de faire la superposition de points géométriques sur un couche (correspondant ici au \emph{ShapeFile} vu selon une certaine projection) qui contient les attributs envers lesquels nous avons un intérêt. Le retour de la fonction \emph{over} sera finalement un \emph{data.frame} de même longueur que le nombre de points donnés en argument que nous pourrons facilement combiner le jeu de données initial. Cette recette ne risque pas de varier beaucoup d'un ShapeFile à un autre vous pourrez donc litéralement reprendre le code ci-dessous. \\
+
+\begin{lstlisting}[caption = Filtrer les données,label=src:Filter]
+	# Step 1 - Import the Packages	
+	library(sp)
+	library(rgdal)
+	# Step 2 - Read the ShapeFile
+	prov_terr.shape <- readOGR(dsn=paste(path,"/Reference/prov_terr",sep=""),layer="gpr_000b11a_e")
+	# Step 3 - Create the Spatial Points to be overlaid
+	unknown_prov <- airportsCanada[,c("airportID","city","longitude","latitude")]
+	sppts <- SpatialPoints(unknown_prov[,c("longitude","latitude")])
+	# Step 4 - Set the Spatial Points on the same projection as the ShapeFile
+	proj4string(sppts) <- CRS("+proj=longlat")
+	sppts <- spTransform(sppts, proj4string(prov_terr.shape))
+	# Step 5 - Extract the Desired Information by overlaying the Spatial Points on the ShapeFile
+	merged_prov <- cbind(airportsCanada,over(sppts,prov_terr.shape))
+\end{lstlisting}
 
 La visualisation des données est une étape cruciale dans l’interprétation de celle-ci. De nombreuses fonctions R permettent de sortir plusieurs informations pertinentes sur les données. Tel que
 \begin{itemize}

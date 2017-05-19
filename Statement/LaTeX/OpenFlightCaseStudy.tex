@@ -7,6 +7,7 @@
 \usepackage[french]{babel}
 \usepackage{graphicx}
 \usepackage{fontawesome}
+\usepackage{enumitem}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[framemethod=TikZ]{mdframed}
 \usepackage{amsmath}
@@ -126,7 +127,7 @@
 \setcounter{chapter}{1}
 	
 \section{Extraction, traitement, visualisation et analyse des données}
-	\input{tex/Q1}
+	\input{tex/part1}
 
 \section{Création de fonctions utilitaires}
 
@@ -142,11 +143,14 @@
 \addcontentsline{toc}{chapter}{Conclusion}
 
 \bibliographystyle{plain}
-\bibliography{bib/Reference}
+\bibliography{bib/Reference,bib/data}
+%,bib/help,bib/links,bib/packages
 
 \appendix
 \chapter{Code Source}
 Cette annexe présente l'ensemble des codes sources constituant l'ensemble du projet. Ceux-ci se divisent sous la forme de 6 parties correspondantes aux différents thèmes abordés dans le présent document. \\
 \lstinputlisting[caption=Benchmark.R]{../../dev/Benchmark.R}
 \label{src:Benchmark}
+%\lstinputlisting[caption=CaseStudyDevQ1.R]{../../dev/CaseStudyDevQ1.R}
+%\label{src:CaseStudyDevQ1}
 \end{document}
