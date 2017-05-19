@@ -60,19 +60,30 @@
   %%  Nouveaux environnements
   %% =========================
 
-  %% Environnements de Sweave. Les environnements Sinput et Soutput
-  %% utilisent Verbatim (de fancyvrb). On les réinitialise pour
-  %% enlever la configuration par défaut de Sweave, puis on réduit
-  %% l'écart entre les blocs Sinput et Soutput. L'environnement Schunk
-  %% est complètement redéfini à partir de leftbar (de framed) pour
-  %% insérer un fond de couleur derrière les blocs de code source.
+  %% Environnements de Sweave.
+  %%
+  %% Les environnements Sinput et Soutput utilisent Verbatim (de
+  %% fancyvrb). On les réinitialise pour enlever la configuration par
+  %% défaut de Sweave, puis on réduit l'écart entre les blocs Sinput
+  %% et Soutput.
   \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
   \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
   \fvset{fontsize=\small,listparameters={\setlength{\topsep}{0pt}}}
+
+  %% L'environnement Schunk est complètement redéfini en un hybride
+  %% des environnements snugshade* et leftbar de framed.
+  \makeatletter
   \renewenvironment{Schunk}{%
-    \def\FrameCommand{\vrule width 3pt \colorbox{codebg}}%
-    \MakeFramed {\advance\hsize-\width \FrameRestore}}%
-    {\endMakeFramed}
+    \def\FrameCommand##1{\hskip\@totalleftmargin
+      \vrule width 3pt\colorbox{codebg}{\hspace{5pt}##1}%
+      % There is no \@totalrightmargin, so:
+      \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+    \MakeFramed {\advance\hsize-\width
+      \@totalleftmargin\z@ \linewidth\hsize
+      \advance\labelsep\fboxsep
+      \@setminipage}%
+  }{\par\unskip\@minipagefalse\endMakeFramed}
+  \makeatother
 
   %% =====================
   %%  Nouvelles commandes
@@ -126,6 +137,7 @@
 \include{presentation}
 \include{bases}
 \include{donnees}
+\include{application}
 
 \end{document}
 
