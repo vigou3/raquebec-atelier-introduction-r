@@ -2,6 +2,7 @@
 
 #### Setting working directory properly ####
 getwd()
+#setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
 setwd('..')
 (path <- getwd())
 set.seed(31459)
@@ -24,6 +25,8 @@ colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Cou
 
 # 1.3 - Keeping the Canada information of the dataset
 airportsCanada <- airports[airports$country=='Canada',]
+airportsCanada2 <- subset(airports,country == 'Canada')
+all.equal(airportsCanada,airportsCanada2)
 
 # 1.4 - Extraire des informations générales sur la distribution des variables présentent dans le jeu de données 
 # et vous informer sur la signification de ces dernières ainsi que sur les différentes modalités quelles peuvent 
@@ -48,6 +51,7 @@ airportsCanada <- subset(airportsCanada, select = -c(country, typeAirport, Sourc
 
 # As seen in the sumary, we dont have the IATA for 27 airports
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
+subset(airportsCanada, is.na(IATA), select = c("airportID","name","IATA","ICAO"))
 
 # Cependant, toutes ces aéroports possèdent un code ICAO bien défini ce qui permettra d'attribuer une valeur
 # par défaut. Une autre possibilité aurait été de simplement ignorer ces aéroports dans le reste de l'analyse.

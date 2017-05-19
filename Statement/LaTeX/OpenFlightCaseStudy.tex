@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage[hyphens]{url}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 
 % Creation of a command to generate the title page
@@ -39,11 +40,12 @@
 
 % Default Addition of Pictures
 \graphicspath{{./fig/}}
-\newcommand{\addPicture}[4]{
+\newcommand{\addPicture}[5]{
 	\begin{figure}[h]
 		\begin{center}
 			\includegraphics[width=#1\textwidth, height=#2\textheight,keepaspectratio]{#3}
 			\caption{#4}
+			\label{fig:#5}
 		\end{center}
 	\end{figure}}
 	
@@ -51,6 +53,7 @@
 \mdfsetup{
 	linecolor=NavyBlue,
 	linewidth=2pt,
+	nobreak=true,
 	backgroundcolor=NavyBlue!10,
 	roundcorner=10pt}	
 \newenvironment{moreInfo}[1]
@@ -64,6 +67,12 @@
 	\end{mdframed}}
 
 % Lstlisting configurations
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\renewcommand\lstlistingname{Code Source}
+\renewcommand\lstlistlistingname{Code Source}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -78,10 +87,10 @@
 	showspaces=false,               
 	showstringspaces=false,         
 	showtabs=false,                 
-	frame=single,                   
+	frame=b,                   
 	rulecolor=\color{black},        
 	tabsize=2,                      
-	captionpos=b,                   
+	captionpos=t,                   
 	breaklines=true,                
 	breakatwhitespace=false,        
 	title=\lstname,                 
@@ -90,7 +99,7 @@
 	stringstyle=\ttfamily\color{mauve},
 	%identifierstyle=\color{magenta},
 	escapeinside={\%*}{*)},
-	morekeywords={*,...,seed}} 
+	morekeywords={*,...,seed,strings,header,select}} 
 
 \begin{document}
 
@@ -132,7 +141,12 @@
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 
-\bibliography{bib/Reference}
 \bibliographystyle{plain}
+\bibliography{bib/Reference}
 
+\appendix
+\chapter{Code Source}
+Cette annexe présente l'ensemble des codes sources constituant l'ensemble du projet. Ceux-ci se divisent sous la forme de 6 parties correspondantes aux différents thèmes abordés dans le présent document. \\
+\lstinputlisting[caption=Benchmark.R]{../../dev/Benchmark.R}
+\label{src:Benchmark}
 \end{document}
