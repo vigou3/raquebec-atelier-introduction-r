@@ -1,3 +1,9 @@
+#
+# This is the main code for the Case Study R à Québec 2017
+#
+# Author : David Beauchemin & Samuel Cabral Cruz
+#
+
 #### Question 4 ####
 #
 # Need the dataset from question 1

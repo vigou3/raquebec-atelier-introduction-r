@@ -1,3 +1,9 @@
+#
+# This is the main code for the Case Study R à Québec 2017
+#
+# Author : David Beauchemin & Samuel Cabral Cruz
+#
+
 #### Question 2 #####
 #
 # Need the dataset from question 1
@@ -50,8 +56,8 @@ arrivalTime <- function(sourceIATA,destIATA)
 {
   topSpeed <- 850
   adjustFactor <- list()
-  adjustFactor$a <- 0.0001007194 # found by regression
-  adjustFactor$b <- 0.4273381 # found by regression
+  adjustFactor$a <- 0.0001007194 # found by regression (not included)
+  adjustFactor$b <- 0.4273381 # found by regression (not included)
   arrivalTimeList <- list()
   arrivalTimeList$source <- sourceIATA
   arrivalTimeList$dest <- destIATA
