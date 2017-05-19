@@ -2,19 +2,19 @@
 
 #### Setting working directory properly ####
 getwd()
-setwd('..')
+setwd("..")
 (path <- getwd())
 set.seed(31459)
 
-#### Question 1 - Data extraction, processing, visualization and analysis ####
+#### Question 1 - Extraction, traitement, visualisation et analyse des données ####
 
-# 1.1 - Database extraction of airports.dat, routes.dat and airlines.dat
-airports <- read.csv("", na.strings=c('\\N',''))
-routes <- read.csv("",  na.strings=c('\\N',''))
-airlines <- read.csv(" ", na.strings=c('\\N',''))
+# 1.1 - Extraction des bases de données Airports.dat, routes.dat et airlines.dat
+airports <- read.csv("", na.strings=c("\\N",""))
+routes <- read.csv("",  na.strings=c("\\N",""))
+airlines <- read.csv(" ", na.strings=c("\\N",""))
 
-# 1.2 - Keeping the Canada information of the dataset
-airportsCanada <- airports[airports$country=='Canada',]
+# 1.2 - On garde l'informations pour la Canada seulement
+airportsCanada <- airports[airports$country=="Canada",]
 
 # 1.3 - Extraire des informations générales sur la distribution des variables présentent dans le jeu de données 
 # et vous informer sur la signification de ces dernières ainsi que sur les différentes modalités quelles peuvent 
@@ -37,7 +37,7 @@ nbAirportCity <- table(airportsCanada$city)
 airportsCanada <- subset(airportsCanada, select = -c(country, timezone, DST, tzFormat, typeAirport, Source ))
 
 
-# As seen in the sumary, we dont have the IATA for 27 airports
+# Comme on l'a vu dans le sumary(), nous n'avons pas l'IATA pour 27 aéroports
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 
 # Cependant, toutes ces aéroports possèdent un code ICAO bien défini ce qui permettra d'attribuer une valeur
@@ -46,7 +46,7 @@ airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 # du code ICAO correspondent au code IATA dans 82% des cas.
 sum(airportsCanada$IATA==substr(airportsCanada$ICAO,2,4),na.rm = TRUE)/sum(!is.na(airportsCanada$IATA))
 
-# We are now able to fill the missing IATA and we delete the IACO since it's now useless
+# Nous sommes maintenant en mesure de combler les IATA manquante et nous supprimons l'ICAO car il est maintenant inutile
 airportsCanada$IATA <- as.character(airportsCanada$IATA) 
 airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
 airportsCanada$IATA <- as.factor(airportsCanada$IATA)
@@ -102,7 +102,7 @@ summary(routesCanada)
 # 1.6 - Créer une carte affichant les différents aéroports sur une carte du Canada
 # install.packages("ggmap")
 library(ggmap)
-map <- get_map(location = 'Canada', zoom = 3)
+map <- get_map(location = " Canada" , zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
 airportsCoord <- as.data.frame(cbind(lon, lat))
@@ -184,20 +184,20 @@ mapPoints <-
 #### Question 2 #####
 
 # Fonction de calcul de distance entre deux aéroports
+# install.packages("geosphere")
 library(geosphere)
-# PRE nécessite l'existence de la base de donnée 
 airportsDist <- function(sourceIATA,destIATA)
 {
      # vérifions que sourceIATA et destIATA sont des IATA valides
      sourceFindIndex <- match(sourceIATA,airportsCanada$IATA)
      if(is.na(sourceFindIndex))
      {
-          stop(paste('sourceIATA :',sourceIATA,'is not a valid IATA code'))
+          stop(paste(" sourceIATA :" ,sourceIATA," is not a valid IATA code" ))
      }
      destFindIndex <- match(destIATA,airportsCanada$IATA)
      if(is.na(destFindIndex))
      {
-          stop(paste('destIATA :',destIATA,'is not a valid IATA code'))
+          stop(paste(" destIATA :" ,destIATA," is not a valid IATA code" ))
      }
      sourceLon <- as.numeric(paste(airportsCanada$longitude))[sourceFindIndex]
      sourceLat <- as.numeric(paste(airportsCanada$latitude))[sourceFindIndex]
@@ -215,17 +215,17 @@ airportsDist <- function(sourceIATA,destIATA)
      airportDistList$destIndex <- destFindIndex
      airportDistList
 }
-airportsDist('AAA','YQB')
-airportsDist('YUL','AAA')
-airportsDist('YPA','YQB')
-airportsDist('YUL','YQB')
-airportsDist('YUL','YQB')$value
+airportsDist(" AAA" ," YQB" )
+airportsDist(" YUL" ," AAA" )
+airportsDist(" YPA" ," YQB" )
+airportsDist(" YUL" ," YQB" )
+airportsDist(" YUL" ," YQB" )$value
 
 
-#Importer les taux de taxation par province directement du web
-#install.packages("XML")
-#install.packages("RCurl")
-#install.packages("rlist")
+# Importer les taux de taxation par province directement du web
+# install.packages("XML")
+# install.packages("RCurl")
+# install.packages("rlist")
 library(XML)
 library(RCurl)
 library(rlist)
@@ -241,17 +241,11 @@ taxRates
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-     # sourceIATA as a string
-     # destIATA as a string
-     # weight as an integer ; in KG
-     # percentCredit as a default float
-     # dollarCredit as a default float
-     
      # vérifions qu'il existe une route entre sourceIATA et destIATA 
      routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
      if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
      {
-          stop(paste('the combination of sourceIATA and destIATA (',sourceIATA,'-',destIATA,') do not corresponds to existing route'))
+          stop(paste(" the combination of sourceIATA and destIATA (" ,sourceIATA," -" ,destIATA," ) do not corresponds to existing route" ))
      }
      
      if(weight < 0 || weight > 30) 
@@ -273,24 +267,24 @@ shippingCost <- function(sourceIATA, destIATA, weight,
      distance <- airportsDist(sourceIATA, destIATA)
      if (distance$value < minimalDist)
      {
-          # We verify if the distance of shipping is further than the minimal requierement
+          # Nous vérifions si la distance de livraison est supérieure à l'exigence minimale
           stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
      }
      
-     # Pricing variables
+     # Variables de tarification
      distanceFactor <- 0.03
      weightFactor <- 0.8
      fixedCost <- 3.75
      profitMargin <- 1.12
      
-     # Trafic Index
+     # Indice de trafic de l'aéroport
      traficIndexSource <- as.numeric(paste(airportsCanada[distance$sourceIndex,"combinedIndex"]))
      traficIndexDest <- as.numeric(paste(airportsCanada[distance$destIndex,"combinedIndex"]))
      
-     # Calculation of the base cost
+     # Calcul du coût de base
      baseCost <-  fixedCost + (distance$value*distanceFactor + weight*weightFactor)/(traficIndexSource*traficIndexDest)
      
-     # Additional automated credits
+     # Crédits automatisés supplémentaires
      automatedCredit <- 1
      # Lightweight
      automatedCredit <-  automatedCredit * ifelse(weight < 2, 0.5, 1)
@@ -323,11 +317,11 @@ shippingCost <- function(sourceIATA, destIATA, weight,
           automatedCredit <- automatedCredit * 0.9
      }
      
-     # Calculation of taxe rate and control of text
+     # Calcul du taux de taxes et du contrôle de texte
      taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
      price <- round(pmax(fixedCost*profitMargin*automatedCredit*taxRate,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate),2)
      
-     # Return List
+     # Liste retourné par la fonction
      shippingCostList <- list()
      shippingCostList$distance <- distance
      shippingCostList$weight <- weight
@@ -366,7 +360,7 @@ text(x=c(45,45,45,45),y=c(50,110,140,175),c("YUL-YYZ","YUL-YQB","YUL-YVR","YUL-Y
 
 #### Question 4 ####
 # Import data
-compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=''))
+compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=" " ))
 View(compData)
 colnames(compData) <- c("weight","distance","price")
 summary(compData)
@@ -475,8 +469,8 @@ distFit <- function(dist,...)
      }
      
      # Treament
-     param <- optim(par = args, function(par) -sum(do.call(eval(parse(text = paste("d",law,sep=''))),c(list(compData$weight),par,log = TRUE))))
-     devValue <- sum((empPDF(x <- seq(0,30,0.1))-do.call(eval(parse(text = paste("d",law,sep=''))),c(list(x),param$par)))**2)
+     param <- optim(par = args, function(par) -sum(do.call(eval(parse(text = paste("d",law,sep="" ))),c(list(compData$weight),par,log = TRUE))))
+     devValue <- sum((empPDF(x <- seq(0,30,0.1))-do.call(eval(parse(text = paste("d",law,sep="" ))),c(list(x),param$par)))**2)
      
      # Return List
      distFitList <- list() 
@@ -495,9 +489,9 @@ x <- seq(0,30,0.1)
 
 par(mfrow = c(1,2),font = 2)
 plot(function(x) empCDF(x), xlim = c(0,15), main = "", xlab = "weight (Kg)", ylab = "CDF(x)")
-invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("p",law[i],sep = ''))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
+invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("p",law[i],sep = "" ))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
 hist(compData$weight, xlim = c(0,15), main = "", xlab = "weight (Kg)", breaks = 300,freq = FALSE)
-invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("d",law[i],sep = ''))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
+invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("d",law[i],sep = " "))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
 legend(x="right",distName, inset = 0.1, col = col, pch = 20, pt.cex = 2, cex = 1, ncol = 1, bty = "n", text.width = 2, title = "Distribution")
 mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE)
 
@@ -514,23 +508,23 @@ library("MASS")
 
 
 #### Question 6 ####
-theurl <- getURL(paste("file:///",path,"/Statement/CaseStudyStatement.html",sep=''),.opts = list(ssl.verifypeer = FALSE))
+theurl <- getURL(paste("file:///",path,"/Statement/CaseStudyStatement.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
-lambdaTable <- as.data.frame(tables$'NULL')
+lambdaTable <- as.data.frame(tables$"NULL")
 colnames(lambdaTable) <- c("Month","Avg3yrs")
 lambdaTable
 
 # On filtre les routes possibles à partir de 'YUL' et 
 # on crée une distribution en fonction de l'indice de destination
-simAirportsDests <- as.character(paste(routesCanada[routesCanada$sourceAirport == 'YUL',"destinationAirport"]))
+simAirportsDests <- as.character(paste(routesCanada[routesCanada$sourceAirport == "YUL","destinationAirport"]))
 simCombinedIndex <- combinedIndex[names(combinedIndex) %in% simAirportsDests]
 airportsDensity <- simCombinedIndex/sum(simCombinedIndex)
 
-# Function for the simulation of the shipment prices
+# Fonction pour la simulation des prix de l'expédition de colis
 simulShipmentPrice <- function(Arrival,Weight)
 {
-     ownPrice <- ifelse(is(testSim <- try(shippingCost('YUL',Arrival,Weight)$price,silent = TRUE),"try-error"),NA,testSim)
-     distance <- airportsDist('YUL',Arrival)$value
+     ownPrice <- ifelse(is(testSim <- try(shippingCost("YUL",Arrival,Weight)$price,silent = TRUE),"try-error"),NA,testSim)
+     distance <- airportsDist("YUL",Arrival)$value
      nd <- as.data.frame(cbind(distance,Weight))
      colnames(nd) <- c("distance","weight")
      compPrice <- predict(compModel,newdata = nd)
@@ -538,20 +532,20 @@ simulShipmentPrice <- function(Arrival,Weight)
      rbind(Arrival,distance,Weight,ownPrice,compPrice,customerChoice)
 }
 
-# Function for the simulation of the shipment parameters
+# Fonction pour la simulation des paramètres d'expédition de colis
 simulShipment <- function(simNbShipments)
 {
      # On génère ensuite des poids pour chacun des colis
-     simWeights <- eval(parse(text = paste("r",law[match(distChoice,distName)],sep = '')))(simNbShipments,paramAdjust[1],paramAdjust[2])
+     simWeights <- eval(parse(text = paste("r",law[match(distChoice,distName)],sep = "")))(simNbShipments,paramAdjust[1],paramAdjust[2])
      # On génère finalement une destination pour chacun des colis (le départ se fera toujours à partir de 'YUL')
      simArrivals <- sample(size = simNbShipments,names(airportsDensity),prob = airportsDensity,replace = TRUE)
      sapply(seq(1,simNbShipments),function(x) simulShipmentPrice(simArrivals[x],simWeights[x]))
 }
 
-# Function for overall simulation
+# Fonction pour la simulation globale
 simulOverall <-function()
 {
-     # On génère n observation de la distribution Poisson avec param = sum(lambda)
+     # On génère n observations de la distribution Poisson avec param = sum(lambda)
      # La somme de distribution poisson indépendantes suit une distribution poisson avec param = sum(lambda)
      simNbShipments <- rpois(1 ,lambda = sum(as.numeric(paste(lambdaTable$Avg3yrs))))
      # On génère les simulations de chaque colis
@@ -579,7 +573,7 @@ table(arrivalComp)
 mean(distanceComp)
 par(mfrow = c(1,1))
 hist(weightSales,freq = FALSE,breaks = 100, xlim = c(0,15), main = "Sales vs Theoretical Weights Distribution", xlab = "weight (Kg)")
-curve(do.call(eval(parse(text = paste("d",law[match(distChoice,distName)],sep = ''))),c(list(x),as.vector(paramAdjust))),add = TRUE, lwd = 2)
+curve(do.call(eval(parse(text = paste("d",law[match(distChoice,distName)],sep = ""))),c(list(x),as.vector(paramAdjust))),add = TRUE, lwd = 2)
 abline(v = v <- exp(paramAdjust[1]+paramAdjust[2]**2/2), lwd = 2)
 text(v+0.75,0.3,as.character(round(v,2)))
 abline(v = v <- mean(weightSales),col = "red", lwd = 2)

@@ -1,6 +1,16 @@
+#
+# This is the main code for the Case Study R à Québec 2017
+#
+# Author : David Beauchemin & Samuel Cabral Cruz
+#
+
 #### Question 4 ####
-# Import data
-compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=''))
+#
+# Need the dataset from question 1
+#
+
+# Import data of the competition
+compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=""))
 View(compData)
 colnames(compData) <- c("weight","distance","price")
 summary(compData)
@@ -34,8 +44,7 @@ plot(compData$distance,compData$price,main = "Price according to the distance",
 library(rgl)
 plot3d(compData$weight,compData$distance,compData$price)
 
-#Tester l'indépendance entre weight et distance
-# Chi's Square Test of Independency
+# Chi's Square Test of Independency between the two variables
 weightsBinded <- as.numeric(cut(compData$weight,25))
 distancesBinded <- as.numeric(cut(compData$distance,25))
 (contingencyTable <- table(weightsBinded,distancesBinded))
@@ -48,7 +57,10 @@ head(independencyTest$stdres)
 independencyTest
 cor.test(compData$weight,compData$distance,method = "pearson")
 
-# Linear model
+# Linear model 
+# we assume the same profit margin to simplify the situation
+# We keep an intercept since we have a fixe cost
+
 profitMargin <- 1.12
 avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
 compModel <- lm(price/(profitMargin*avgTaxRate) ~ distance + weight, compData)

@@ -1,4 +1,6 @@
+#
 # Source code for the creation of the benchmark.csv file
+#
 
 # Parameters of the simulation
 n <- 100000
@@ -50,7 +52,7 @@ min(distancesFinalPrice)
 
 # Generate total price
 baseCost <- 10
-#taxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
+# taxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
 taxRate <- 1.082408
 profitMargin <- 1.15
 (totalCost <- round((baseCost + weightsFinalPrice + distancesFinalPrice)*profitMargin*taxRate,2))
@@ -62,4 +64,4 @@ min(totalCost)
 # Export to csv format
 (dataExport <- cbind(weights,distances,totalCost))
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
-write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE)
+write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=""),row.names = FALSE)
