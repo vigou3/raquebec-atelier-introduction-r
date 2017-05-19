@@ -14,8 +14,8 @@ set.seed(31459)
 
 # 1.1 - Database extraction of airports.dat, routes.dat and airlines.dat.
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c("\\N",""), fileEncoding = "UTF-8")
-routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c("\\N",""), fileEncoding = "UTF-8")
-airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c("\\N",""), fileEncoding = "UTF-8")
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c("\\N",""))
+airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c("\\N",""))
 
 # 1.2 - Coloumns names assignation  base on the information available on the website.
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
