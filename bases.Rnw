@@ -41,6 +41,8 @@
     \item \verb|logical| (vecteur booléen)
     \item \verb|character| (vecteur de chaines de caractères)
     \end{itemize}
+  \item \alert{Recyclage} automatique des éléments dans les opérations
+    sur des vecteurs
   \end{itemize}
 \end{frame}
 
@@ -74,8 +76,6 @@ v["c"]
     \item possible qu'une fonction retourne une fonction
     \item possible de définir de nouvelles fonctions
     \end{itemize}
-  \item Définition de fonctions \alert{anonymes}
-  \item Nombre variable d'arguments avec \texttt{'\alert{...}'}
   \end{itemize}
 
   \gotoR{bases.R}

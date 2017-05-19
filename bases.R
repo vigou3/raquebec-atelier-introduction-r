@@ -127,13 +127,16 @@ c(2, 6, 8) + c(1, 4, 9)    # addition de deux vecteurs
 c(0, 3, -1, 4)^2           # élévation à une puissance
 
 ## Dans les règles de l'arithmétique vectorielle, les
-## longueurs des vecteurs doivent toujours concorder. R permet
-## plus de flexibilité en recyclant les vecteurs les plus
-## courts dans une opération. Il n'y a donc à peu près jamais
-## d'erreurs de longueur en R! C'est une arme à deux
-## tranchants: le recyclage des vecteurs facilite le codage,
-## mais peut aussi résulter en des réponses complètement
-## erronées sans que le système ne détecte d'erreur.
+## longueurs des vecteurs doivent toujours concorder.
+##
+## R permet plus de flexibilité en recyclant les vecteurs les
+## plus courts dans une opération.
+##
+## Il n'y a donc à peu près jamais d'erreurs de longueur en R!
+## C'est une arme à deux tranchants: le recyclage des vecteurs
+## facilite le codage, mais peut aussi résulter en des
+## réponses complètement erronées sans que le système ne
+## détecte d'erreur.
 8 + 1:10                   # 8 est recyclé 10 fois
 c(2, 5) * 1:10             # c(2, 5) est recyclé 5 fois
 c(-2, 3, -1, 4)^(1:4)      # quatre puissances différentes
@@ -240,8 +243,8 @@ square(x = x)              # colle... signification?
 ## l'environnement qui le contient.
 ##
 ## Par conséquent, si un objet n'existe pas dans un
-## environnement, R va chercher dans les environnements parents
-## pour en trouver la définition.
+## environnement, R va chercher dans les environnements
+## parents pour en trouver la définition.
 ##
 ## En pratique, cela signifie qu'il n'est pas toujours
 ## nécessaire de passer des objets en argument. Il suffit de
@@ -267,6 +270,19 @@ f <- function(x, y)
     g(1 + x * y, 1 - y)
 }
 f(2, 3)
+f(2, 4)
+
+### Pense vectoriel, Paula
+
+## Veiller à concevoir, autant que faire se peut, des
+## fonctions pouvant accepter en argument l'unité de base en
+## R: le vecteur!
+##
+## C'est parfois, voire souvent, implicite. Les fonctions
+## 'square' et 'f' ci-dessus sont toutes deux automatiquement
+## vectorielles.
+square(c(7, 2, 4, 9))
+f(2, c(3, 4))
 
 ### Fonctions anonymes
 
