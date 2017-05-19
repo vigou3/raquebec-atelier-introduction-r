@@ -45,7 +45,7 @@ airports <- data.frame(as.matrix(airports))
 
 # Since the timezone, DST and city are now useless, we remove them from the dataset.
 # Plus, we withdraw tzFormat because it's incomplet and we will use the tzmerge data to replace will a complete data. 
-airports <- subset(airports, select = -c(tzFormat ))
+airports <- subset(airports, select = -tzFormat )
 summary(airports)
 
 # install.packages("plyr")
