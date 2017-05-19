@@ -35,8 +35,7 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 5. Créer une carte du Canada affichant les différents aéroports.
 6. Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports.
 7. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en destination.
-8. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en provenance.
-9. Créer une carte permettant de visualiser l'indice grâce à un graphique à bulles.
+8. Créer une carte permettant de visualiser l'indice grâce à un graphique à bulles.
 
 ### Question 2 - Création des fonctions utilitaires
 1. Écrivez le code source de la fonction **airportsDist(sourceIATA, destIATA)** qui permettra de calculer la distance par vol d'oiseau entre deux aéroports.
