@@ -29,15 +29,14 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 
 ### Question 1 - Extraction, traitement, visualisation et analyse des données
 1. Extraire les bases de données [**airports.dat**](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat) et [**routes.dat**](https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat).
-2. Attribuer des noms aux colonnes des jeux de données en vous fiant à l'information disponible sur le site.
-3. Nettoyer le jeu de données en ne conservant que les données relatives au Canada.
-4. Extraire des informations générales sur la distribution des variables présente dans le jeu de données et vous informer sur la signification de ces dernières. Ainsi que sur les différentes modalités qu'elles peuvent prendre. Identifier les données manquantes.
-5. Corriger les modalités des variables absentes et faire une sélection des variables qui vous semble utile pour le reste du traitement. 
-6. Créer une carte du Canada affichant les différents aéroports.
-7. Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports.
-8. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en destination.
-9. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en provenance.
-10. Créer une carte permettant de visualiser l'indice grâce à un graphique à bulles.
+2. Nettoyer le jeu de données en ne conservant que les données relatives au Canada.
+3. Extraire des informations générales sur la distribution des variables présente dans le jeu de données et vous informer sur la signification de ces dernières. Ainsi que sur les différentes modalités qu'elles peuvent prendre. Identifier les données manquantes.
+4. Corriger les modalités des variables absentes et faire une sélection des variables qui vous semble utile pour le reste du traitement. 
+5. Créer une carte du Canada affichant les différents aéroports.
+6. Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports.
+7. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en destination.
+8. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en provenance.
+9. Créer une carte permettant de visualiser l'indice grâce à un graphique à bulles.
 
 ### Question 2 - Création des fonctions utilitaires
 1. Écrivez le code source de la fonction **airportsDist(sourceIATA, destIATA)** qui permettra de calculer la distance par vol d'oiseau entre deux aéroports.
