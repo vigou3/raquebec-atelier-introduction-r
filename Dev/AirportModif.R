@@ -1,5 +1,5 @@
 #
-# Source code for the modification of the airport data set
+# Source code for the modification of the airport dataset
 #
 
 #
