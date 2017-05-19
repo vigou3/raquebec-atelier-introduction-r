@@ -54,6 +54,6 @@ airports <- rename(airports, c("tzMerged"="tzFormat"))
 summary(airports)
 
 # We have fill all the missing tzFormat for the CaseStudyStudent document
-write.csv(airports, paste(path,"/Reference/AirportModif.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(airports, paste(path,"/Reference/AirportModif.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8", na = c("\\N",""))
 
 # In case of a student without Internet we have import the other data
