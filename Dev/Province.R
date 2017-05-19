@@ -38,7 +38,7 @@ airportsCanada <- sqldf("
 airportsCanada <- data.frame(as.matrix(airportsCanada))
 # Since the timezone, DST and city are now useless, we remove them from the dataset.
 # Plus, we withdraw tzFormat because it's incomplet and we will use the tzmerge data to replace will a complete data. 
-provinceData <- subset(airportsCanada, select = c(city, IATA, provMerged ))
+provinceData <- subset(airportsCanada, select = c(city, provMerged ))
 summary(provinceData)
 
 # install.packages("plyr")
@@ -47,6 +47,6 @@ provinceData <- rename(provinceData, c("provMerged"="province"))
 summary(provinceData)
 
 # We have created a dataset of the province of each airport
-write.csv(provinceData, paste(path,"/Reference/province.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(provinceData, paste(path,"/Reference/province.csv",sep=""),row.names = FALSE, na = c("\\N",""),  fileEncoding = "UTF-8")
 
-# In case of a student without Internet we have import the other data
+
