@@ -1,11 +1,22 @@
-#### Question 2 #####
+#
+# This is the main code for the Case Study R à Québec 2017
+#
+# Author : David Beauchemin & Samuel Cabral Cruz
+#
 
-# Fonction de calcul de distance entre deux aéroports
+#### Question 2 #####
+#
+# Need the dataset from question 1
+#
+
+
+# Distance calculation function between two airports.
+# install.packages("geosphere")
 library(geosphere)
-# PRE nécessite l'existence de la base de donnée 
+
 airportsDist <- function(sourceIATA,destIATA)
 {
-  # vérifions que sourceIATA et destIATA sont des IATA valides
+  # Verification of the sourceIATA and destIATA
   sourceFindIndex <- match(sourceIATA,airportsCanada$IATA)
   if(is.na(sourceFindIndex))
   {
@@ -38,15 +49,15 @@ airportsDist('YPA','YQB')
 airportsDist('YUL','YQB')
 airportsDist('YUL','YQB')$value
 
-# Fonction pour déterminer l'heure d'arriver
+# Function to establish the estimated time of arrival
 # install.packages("lubridate")
 library(lubridate)
 arrivalTime <- function(sourceIATA,destIATA)
 {
   topSpeed <- 850
   adjustFactor <- list()
-  adjustFactor$a <- 0.0001007194 #by regression
-  adjustFactor$b <- 0.4273381 #by regression
+  adjustFactor$a <- 0.0001007194 # found by regression (not included)
+  adjustFactor$b <- 0.4273381 # found by regression (not included)
   arrivalTimeList <- list()
   arrivalTimeList$source <- sourceIATA
   arrivalTimeList$dest <- destIATA
@@ -69,7 +80,7 @@ arrivalTime("YUL", "YYZ")$value
 difftime(arrivalTime("YUL", "YVR")$value,Sys.time())
 difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
-#Importer les taux de taxation par province directement du web
+# Import tax rates by province directly from the web
 #install.packages("XML")
 #install.packages("RCurl")
 #install.packages("rlist")
@@ -83,17 +94,12 @@ taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`
 colnames(taxRates) <- c("province","taxRate")
 taxRates
 
-# Fonction de calcul des coûts
+# Shipping cost calculation function
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-  # sourceIATA as a string
-  # destIATA as a string
-  # weight as an integer ; in KG
-  # percentCredit as a default float
-  # dollarCredit as a default float
   
-  # vérifions qu'il existe une route entre sourceIATA et destIATA 
+  # Verification of the existance of the route between sourceIATA and destIATA
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
   if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
   {

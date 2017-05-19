@@ -6,14 +6,14 @@ setwd('..')
 (path <- getwd())
 set.seed(31459)
 
-#### Question 1 - Data extraction, processing, visualization and analysis ####
+#### Question 1 - Extraction, traitement, visualisation et analyse des données ####
 
-# 1.1 - Database extraction of airports.dat, routes.dat and airlines.dat
+# 1.1 - Extraction des bases de données Airports.dat, routes.dat et airlines.dat
 airports <- read.csv("", na.strings=c('\\N',''))
 routes <- read.csv("",  na.strings=c('\\N',''))
 airlines <- read.csv(" ", na.strings=c('\\N',''))
 
-# 1.2 - Keeping the Canada information of the dataset
+# 1.2 - On garde l'informations pour la Canada seulement
 airportsCanada <- airports[airports$country=='Canada',]
 
 # 1.3 - Extraire des informations générales sur la distribution des variables présentent dans le jeu de données 
@@ -37,7 +37,7 @@ nbAirportCity <- table(airportsCanada$city)
 airportsCanada <- subset(airportsCanada, select = -c(country, timezone, DST, tzFormat, typeAirport, Source ))
 
 
-# As seen in the sumary, we dont have the IATA for 27 airports
+# Comme on l'a vu dans le sumary(), nous n'avons pas l'IATA pour 27 aéroports
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 
 # Cependant, toutes ces aéroports possèdent un code ICAO bien défini ce qui permettra d'attribuer une valeur
@@ -46,7 +46,7 @@ airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 # du code ICAO correspondent au code IATA dans 82% des cas.
 sum(airportsCanada$IATA==substr(airportsCanada$ICAO,2,4),na.rm = TRUE)/sum(!is.na(airportsCanada$IATA))
 
-# We are now able to fill the missing IATA and we delete the IACO since it's now useless
+# Nous sommes maintenant en mesure de combler les IATA manquante et nous supprimons l'ICAO car il est maintenant inutile
 airportsCanada$IATA <- as.character(airportsCanada$IATA) 
 airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
 airportsCanada$IATA <- as.factor(airportsCanada$IATA)
@@ -184,8 +184,8 @@ mapPoints <-
 #### Question 2 #####
 
 # Fonction de calcul de distance entre deux aéroports
+# install.packages("geosphere")
 library(geosphere)
-# PRE nécessite l'existence de la base de donnée 
 airportsDist <- function(sourceIATA,destIATA)
 {
      # vérifions que sourceIATA et destIATA sont des IATA valides
@@ -222,10 +222,10 @@ airportsDist('YUL','YQB')
 airportsDist('YUL','YQB')$value
 
 
-#Importer les taux de taxation par province directement du web
-#install.packages("XML")
-#install.packages("RCurl")
-#install.packages("rlist")
+# Importer les taux de taxation par province directement du web
+# install.packages("XML")
+# install.packages("RCurl")
+# install.packages("rlist")
 library(XML)
 library(RCurl)
 library(rlist)
@@ -241,12 +241,6 @@ taxRates
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-     # sourceIATA as a string
-     # destIATA as a string
-     # weight as an integer ; in KG
-     # percentCredit as a default float
-     # dollarCredit as a default float
-     
      # vérifions qu'il existe une route entre sourceIATA et destIATA 
      routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
      if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
@@ -273,24 +267,24 @@ shippingCost <- function(sourceIATA, destIATA, weight,
      distance <- airportsDist(sourceIATA, destIATA)
      if (distance$value < minimalDist)
      {
-          # We verify if the distance of shipping is further than the minimal requierement
+          # Nous vérifions si la distance de livraison est supérieure à l'exigence minimale
           stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
      }
      
-     # Pricing variables
+     # Variables de tarification
      distanceFactor <- 0.03
      weightFactor <- 0.8
      fixedCost <- 3.75
      profitMargin <- 1.12
      
-     # Trafic Index
+     # Indice de trafic de l'aéroport
      traficIndexSource <- as.numeric(paste(airportsCanada[distance$sourceIndex,"combinedIndex"]))
      traficIndexDest <- as.numeric(paste(airportsCanada[distance$destIndex,"combinedIndex"]))
      
-     # Calculation of the base cost
+     # Calcul du coût de base
      baseCost <-  fixedCost + (distance$value*distanceFactor + weight*weightFactor)/(traficIndexSource*traficIndexDest)
      
-     # Additional automated credits
+     # Crédits automatisés supplémentaires
      automatedCredit <- 1
      # Lightweight
      automatedCredit <-  automatedCredit * ifelse(weight < 2, 0.5, 1)
@@ -323,11 +317,11 @@ shippingCost <- function(sourceIATA, destIATA, weight,
           automatedCredit <- automatedCredit * 0.9
      }
      
-     # Calculation of taxe rate and control of text
+     # Calcul du taux de taxes et du contrôle de texte
      taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
      price <- round(pmax(fixedCost*profitMargin*automatedCredit*taxRate,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate),2)
      
-     # Return List
+     # Liste retourné par la fonction
      shippingCostList <- list()
      shippingCostList$distance <- distance
      shippingCostList$weight <- weight
@@ -526,7 +520,7 @@ simAirportsDests <- as.character(paste(routesCanada[routesCanada$sourceAirport =
 simCombinedIndex <- combinedIndex[names(combinedIndex) %in% simAirportsDests]
 airportsDensity <- simCombinedIndex/sum(simCombinedIndex)
 
-# Function for the simulation of the shipment prices
+# Fonction pour la simulation des prix de l'expédition de colis
 simulShipmentPrice <- function(Arrival,Weight)
 {
      ownPrice <- ifelse(is(testSim <- try(shippingCost('YUL',Arrival,Weight)$price,silent = TRUE),"try-error"),NA,testSim)
@@ -538,7 +532,7 @@ simulShipmentPrice <- function(Arrival,Weight)
      rbind(Arrival,distance,Weight,ownPrice,compPrice,customerChoice)
 }
 
-# Function for the simulation of the shipment parameters
+# Fonction pour la simulation des paramètres d'expédition de colis
 simulShipment <- function(simNbShipments)
 {
      # On génère ensuite des poids pour chacun des colis
@@ -548,10 +542,10 @@ simulShipment <- function(simNbShipments)
      sapply(seq(1,simNbShipments),function(x) simulShipmentPrice(simArrivals[x],simWeights[x]))
 }
 
-# Function for overall simulation
+# Fonction pour la simulation globale
 simulOverall <-function()
 {
-     # On génère n observation de la distribution Poisson avec param = sum(lambda)
+     # On génère n observations de la distribution Poisson avec param = sum(lambda)
      # La somme de distribution poisson indépendantes suit une distribution poisson avec param = sum(lambda)
      simNbShipments <- rpois(1 ,lambda = sum(as.numeric(paste(lambdaTable$Avg3yrs))))
      # On génère les simulations de chaque colis
