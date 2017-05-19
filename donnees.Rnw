@@ -164,7 +164,6 @@ head(USArrests)
   \item Fonction pour créer des \emph{data frame}: \texttt{data.frame}
   \end{itemize}
 
-  \pause
   \gotoR{donnees.R}
 \end{frame}
 
