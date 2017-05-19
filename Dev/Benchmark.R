@@ -2,6 +2,11 @@
 # Source code for the creation of the benchmark.csv file
 #
 
+# Setting working directory properly 
+getwd()
+setwd("..")
+(path <- getwd())
+
 # Parameters of the simulation
 n <- 100000
 x <- matrix(c(runif(2*n)),ncol = 2,byrow = TRUE)
@@ -64,4 +69,4 @@ min(totalCost)
 # Export to csv format
 (dataExport <- cbind(weights,distances,totalCost))
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
-write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=""),row.names = FALSE)
+write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE)
