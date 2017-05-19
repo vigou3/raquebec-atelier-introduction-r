@@ -1,3 +1,9 @@
+#
+# This is the main code for the Case Study R à Québec 2017
+#
+# Author : David Beauchemin & Samuel Cabral Cruz
+#
+
 #### Question 6 ####
 
 #
@@ -34,7 +40,7 @@ simulShipmentPrice <- function(Arrival,Weight)
   rbind(Arrival,distance,Weight,ownPrice,compPrice,customerChoice)
 }
 
-# Function for the simulation of the shipment parameters.
+# Function for the simulation of the shipment parameters, weights and destinations.
 simulShipment <- function(simNbShipments)
 {
   # Weights are then generated for each of the packages.
@@ -48,10 +54,10 @@ simulShipment <- function(simNbShipments)
 simulOverall <-function()
 {
   # We generate n observations of the Poisson distribution with param = sum (lambda). 
-  # We know for probability notion that the sum of independent Poisson distribution follows 
+  # We know from probability notion that the sum of independent Poisson distribution follows 
   # a Poisson distribution with param = sum (lambda).
   simNbShipments <- rpois(1 ,lambda = sum(as.numeric(paste(lambdaTable$Avg3yrs))))
-  # On génère les simulations de chaque colis
+  # We simulate each shipment
   simulShipment(simNbShipments)
 }
 
@@ -70,6 +76,7 @@ arrivalComp <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==0])
 distanceComp <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==0])
 weightComp <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==0])
 
+# Representation of the result
 table(arrivalSales)
 mean(distanceSales)
 table(arrivalComp)

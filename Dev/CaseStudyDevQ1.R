@@ -26,7 +26,7 @@ colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
                       "stops","equipment")
 colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Country","Active")
 
-# 1.3 - Keeping the Canada information of the dataset
+# 1.3 - Keeping the Canada information of the dataset.
 airportsCanada <- airports[airports$country=='Canada',]
 
 # 1.4 - Extraction of the genreral information about the distributions of the variables in the dataset and 
@@ -47,7 +47,7 @@ nbAirportCity <- table(airportsCanada$city)
 airportsCanada <- subset(airportsCanada, select = -c(country, typeAirport, Source ))
 
 
-# As seen in the sumary, we dont have the IATA for 27 airports
+# As seen in the sumary, we dont have the IATA for 27 airports.
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 
 # The first option, is to simply ignore these airports in the rest of the analysis.
@@ -55,15 +55,15 @@ airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
 # Since 82% of the IACA is the last three caracters of the ICAO, we will simply use the derivate IATA from the ICAO.
 sum(airportsCanada$IATA==substr(airportsCanada$ICAO,2,4),na.rm = TRUE)/sum(!is.na(airportsCanada$IATA))
 
-# We are now able to fill the missing IATA and we delete the ICAO since it's now useless
+# We are now able to fill the missing IATA and we will delete the ICAO since it will be useless.
 airportsCanada$IATA <- as.character(airportsCanada$IATA) 
-# We fill the NA with the substring ICAO
+# We fill the NA with the substring ICAO.
 airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
 airportsCanada$IATA <- as.factor(airportsCanada$IATA)
 airportsCanada <- subset(airportsCanada, select = - ICAO)
 View(airportsCanada)
 
-# Finaly, we are missing more than fifty time zone
+# Finaly, we are missing more than fifty time zone.
 missingTZ <- airportsCanada[is.na(airportsCanada$timezone),]
 
 # Since the TZ depend only on the geographical position, two options are available to us : 
@@ -150,7 +150,7 @@ summary(routesCanada$stops)
 # For the sake of simplicity, we will consider all flights as direct flights.
 # Moreover, the notion of codeshare will not be useful since the delivery of 
 # merchandise can be done as much through an air agency as by private flight.
-# Then we get rid of these variables.
+# In conclusion, we get rid of these variables.
 routesCanada <- subset(routesCanada, select = -c(codeshare, stops))
 summary(routesCanada)
 
@@ -203,7 +203,7 @@ curve(totalFlightsCDF(x-1),from = 0,to = 60,n = 100,
       xlab = "Nombre de routes par aéroport", 
       ylab = "CDF")
 
-# Calculate a combined index from the index
+# Calculate a combined index from the index.
 combinedIndex <- round(totalFlights/max(totalFlights),3)
 combinedIndexTable <- data.frame(IATA,
                                  as.numeric(paste(totalFlights)),
@@ -220,7 +220,7 @@ airportsCanada <- sqldf("
   on a.IATA = b.IATA")
 airportsCanada <- data.frame(as.matrix(airportsCanada ))
 
-#1.11 - Create maps to visualize these indices using a bubble graph
+#1.11 - Create maps to visualize these indices using a bubble graph.
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
 size <- as.numeric(paste(airportsCanada$combinedIndex))
