@@ -1,0 +1,127 @@
+\documentclass[aspectratio=54,10pt,xcolor=x11names]{beamer}
+  \usepackage[french]{babel}
+  \usepackage[autolanguage]{numprint}
+  \usepackage[noae]{Sweave}
+  \usepackage{fontawesome}
+  \usepackage{listings}
+  \usepackage{framed}           % env. leftbar
+  \usepackage[overlay,absolute]{textpos}
+
+  %% =============================
+  %%  Informations de publication
+  %% =============================
+  \renewcommand{\year}{2017}
+  \renewcommand{\month}{5}
+
+  %% =======================
+  %%  Apparence du document
+  %% =======================
+
+  %% Thème de beamer
+  \usetheme{metropolis}
+
+  %% Couleurs additionnelles
+  \definecolor{comments}{rgb}{0.7,0,0}      % commentaires
+  \definecolor{link}{rgb}{0,0.4,0.6}        % liens internes
+  \definecolor{url}{rgb}{0.6,0,0}           % liens externes
+  \definecolor{codebg}{named}{LightYellow1} % fond code R
+  \definecolor{rouge}{rgb}{0.85,0,0.07}     % rouge bandeau identitaire
+  \definecolor{or}{rgb}{1,0.8,0}            % or bandeau identitaire
+
+  %% Hyperliens
+  \hypersetup{%
+    pdfauthor = {David Beauchemin, Samuel Cabral Cruz, Vincent Goulet},
+    pdftitle = {Atelier Introduction à R du colloque R à Québec},
+    colorlinks = {true},
+    linktocpage = {true},
+    allcolors = {link},
+    urlcolor = {url},
+    pdfpagemode = {UseOutlines},
+    pdfstartview = {Fit},
+    bookmarksopen = {true},
+    bookmarksnumbered = {true},
+    bookmarksdepth = {subsection}}
+
+  %% Paramétrage de babel pour les guillemets
+  \frenchbsetup{og=«, fg=»}
+
+  %% Sections de code source
+  \lstloadlanguages{R}
+  \lstset{language=R,
+    extendedchars=true,
+    basicstyle=\small\ttfamily\NoAutoSpacing,
+    commentstyle=\color{comments}\slshape,
+    keywordstyle=\mdseries,
+    showstringspaces=false,
+    backgroundcolor=\color{codebg},
+    frame=leftline,framerule=3pt}
+
+  %% =========================
+  %%  Nouveaux environnements
+  %% =========================
+
+  %% Environnements de Sweave. Les environnements Sinput et Soutput
+  %% utilisent Verbatim (de fancyvrb). On les réinitialise pour
+  %% enlever la configuration par défaut de Sweave, puis on réduit
+  %% l'écart entre les blocs Sinput et Soutput. L'environnement Schunk
+  %% est complètement redéfini à partir de leftbar (de framed) pour
+  %% insérer un fond de couleur derrière les blocs de code source.
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{fontsize=\small,listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \def\FrameCommand{\vrule width 3pt \colorbox{codebg}}%
+    \MakeFramed {\advance\hsize-\width \FrameRestore}}%
+    {\endMakeFramed}
+
+  %% =====================
+  %%  Nouvelles commandes
+  %% =====================
+
+  %% Noms de fonctions, code, environnement, etc.
+  \newcommand{\fichier}[1]{\fbox{\texttt{#1}}}
+  \newcommand{\class}[1]{\textbf{#1}}
+  \newcommand{\pkg}[1]{\textbf{#1}}
+  \newcommand{\link}[2]{\href{#1}{#2~\raisebox{-0.2ex}{\faExternalLink}}}
+  \newcommand{\capsule}[2]{\href{#1}{\faYoutubePlay~#2}}
+
+  %% «Bouton» de la page de copyright
+  \newcommand{\browsebutton}{%
+    \setlength{\fboxrule}{0.5pt}%
+    \framebox[20mm][c]{%
+      \makebox[2.5mm]{\raisebox{-1pt}{\footnotesize\faGithub}}\;%
+      {\sffamily Voir sur GitHub}}}
+
+  %% Renvois vers les scripts R
+  \newcommand{\gotoR}[1]{%
+    \begin{center}
+      \setlength{\fboxrule}{0.5pt}%
+      \framebox[40mm][c]{%
+        \makebox[5mm]{\raisebox{-1pt}{\large\faChevronCircleDown}}\;%
+        {\ttfamily #1}}
+    \end{center}}
+
+  %%% =======
+  %%%  Varia
+  %%% =======
+
+  %% Longueurs pour la composition des pages couvertures avant et
+  %% arrière.
+  \newlength{\banderougewidth} \newlength{\banderougeheight}
+  \newlength{\bandeorwidth}    \newlength{\bandeorheight}
+  \newlength{\imageheight}
+  \newlength{\logoheight}
+  \newlength{\gapwidth}
+
+\begin{document}
+
+\include{presentation}
+\include{bases}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-engine: xetex
+%%% TeX-master: t
+%%% End:

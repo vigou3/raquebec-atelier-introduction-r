@@ -1,0 +1,91 @@
+\section{Bases du langage R}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Données et opérateurs de base}
+
+  La programmation, c'est la manipulation de \alert{données} à l'aide
+  de \alert{procédures}.
+
+  \begin{itemize}
+  \item Types de données de base
+    \begin{itemize}
+    \item nombres: \verb|0 1 2 3 4 5 6 7 8 9|
+    \item valeurs booléennes: \verb|TRUE|, \verb|FALSE|
+    \item donnée manquante: \verb|NA|
+    \item valeurs infinies et indéterminée: \verb|Inf|, \verb|-Inf|, \verb|NaN|
+    \item valeur «néant»: \verb|NULL|
+    \item nombres complexes: \verb|1 + 2i|
+    \item chaines de caractères: \verb|"a"|, \verb|"abc"|
+    \end{itemize}
+  \item Procédures de base
+    \begin{itemize}
+    \item arithmétique: \verb| +  -  *  /  ^  <  >=  ==|, etc.
+    \item logique: \verb= &  |  !=
+    \item affectation: \verb| <-|
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Vecteurs}
+
+  Dans R \alert{tout} est un vecteur.
+
+  \begin{itemize}
+  \item Opérateurs de base définis pour les vecteurs
+  \item Vecteur simple: tous les éléments du même \alert{mode}
+  \item Fonctions de base pour créer des vecteurs
+    \begin{itemize}
+    \item \verb|c| (concaténation);
+    \item \verb|numeric| (vecteur de mode \texttt{numeric})
+    \item \verb|logical| (vecteur de mode \texttt{logical})
+    \item \verb|character| (vecteur de mode \texttt{character})
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Vecteurs (suite)}
+
+  \begin{itemize}
+  \item Possible de nommer les éléments
+<<echo=TRUE>>=
+(v <- c(a = 1, b = 2, c = 5))
+v <- c(1, 2, 5)
+names(v) <- c("a", "b", "c")
+v
+@
+  \item Indiçage avec les crochets \verb=[ ]=
+<<echo=TRUE>>=
+v[3]
+v["c"]
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fonctions}
+
+  On adopte dans R le paradigme de programmation \alert{fonctionnelle}.
+
+  \begin{itemize}
+  \item Programme $=$ suite d'appels de fonctions
+  \item Fonction est un \alert{objet} comme un autre
+    \begin{itemize}
+    \item contenu (code source) accessible
+    \item définition de nouvelles fonctions
+    \item fonction comme argument d'une fonction
+    \item fonction comme valeur retournée par une fonction
+    \end{itemize}
+  \item Nombre variable d'arguments avec \texttt{'...'}
+  \item Définition de fonctions \alert{anonymes}
+  \end{itemize}
+
+  \gotoR{bases.R}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-engine: xetex
+%%% TeX-master: "raquebec-atelier-introduction-r"
+%%% End:
