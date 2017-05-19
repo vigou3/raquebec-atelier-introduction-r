@@ -6,7 +6,8 @@
 
 #### Setting working directory properly ####
 getwd()
-setwd("..")
+#setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
+setwd('..')
 (path <- getwd())
 set.seed(31459)
 
@@ -28,8 +29,9 @@ colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Cou
 
 
 # 1.3 - Keeping the Canada information of the dataset
-airportsCanada <- airports[airports$country=="Canada",]
-
+airportsCanada <- airports[airports$country=='Canada',]
+airportsCanada2 <- subset(airports,country == 'Canada')
+all.equal(airportsCanada,airportsCanada2)
 
 # 1.4 - Extraction of the genreral information about the distributions of the variables in the dataset and 
 # understanding of the signification of those variables and the different modalities they can take.
@@ -51,6 +53,7 @@ airportsCanada <- subset(airportsCanada, select = -c(country, typeAirport, Sourc
 
 # As seen in the sumary, we dont have the IATA for 27 airports.
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
+subset(airportsCanada, is.na(IATA), select = c("airportID","name","IATA","ICAO"))
 
 # The first option, is to simply ignore these airports in the rest of the analysis.
 # However, all these airports have a well-defined ICAO code which will allow a default value to be assigned.

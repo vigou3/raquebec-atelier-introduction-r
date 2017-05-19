@@ -1,43 +1,86 @@
-%
-% LaTeX file for Q1 section
-%
+Cette section est certainement la plus importante de toutes, elle vise à faire un traitement adéquat et pertinent des données afin de pouvoir les réutiliser facilement dans les sections suivantes. Une mauvaise application des concepts d’extraction, de traitement et de visualisation des données peut entraîner des interprétations abérantes des phénomènes que nous cherchons à analyser.
 
-%
-% In this file we aboard the first section of the Case Study : Extraction, traitement, visualisation et analyse des données
-%
+\subsection{Extraction}
+Les données d'OpenFlights possèdent l'avantage d'être téléchargeables directement via le web pour les rendre disponibles à notre environnement de travail. Pour ce faire, nous mettons à profit la fonction \emph{read.csv}. Bien que le nom de la fontion indique qu'elle permet de lire un fichier présenté dans un format \emph{.csv}, nous pouvons tout aussi bien utiliser cette fonction pour extraire des fichiers \emph{.dat}. La différence principale entre ces deux types de fichiers et que les fichiers \emph{.csv} utilisent un caractère d'encadrement des informations qui se trouve à être les doubles guillemets dans la majorité des cas. De plus, les fichiers \emph{.csv} utiliseront comme leur nom l'indique la virgule à titre de séparateur bien que celui-ci puisse être modifié pour un symbol différent.\cite{CSVDAT} Lorsque nous jetons un coup d'oeil à la structure des fichiers \emph{.dat} disponibles à la \autoref{fig:rawAirports}, nous constatons que ceux-ci respectent à la fois les deux caractéristiques que nous venons de mentionner rendant ainsi l'utilisation de la fonction \emph{read.csv} si naturelle. 
 
-\documentclass{report}
+\addPicture{1}{1}{rawAirports}{Extrait du fichier airports.dat}{rawAirports} 
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[french]{babel}
-\usepackage{amsmath,amsfonts,amssymb}
-\usepackage{graphicx}
-%Default Addition of Pictures
-\graphicspath{{./fig/}}
-\newcommand{\AddPicture}[4]{
-	\begin{figure}[h]
-		\begin{center}
-			\includegraphics[width=#1\textwidth, height=#2\textheight,keepaspectratio]{#3}
-			\caption{#4}
-		\end{center}
-	\end{figure}}
+\noindent
+Dans la même figure, on constate aussi l'absence d'une ligne servant à présenter les en-têtes de colonnes. Ceci pourra dans certains cas vous jouer de mauvais tours en ignorant la première ligne de données ou encore de considérer les titres comme étant des entrées en soi. \footnote{La deuxième situation étant bien moins dramatique et plus facilement identifiable.}  Bien qu'il serait possible de travailler avec des données sans nom, il s'agit ici d'une trèes mauvaise pratique à proscrire. Pour remédier à la situation, nous assignerons donc des noms aux colonnes grâce à l'attribut \emph{colnames} d'un objet \emph{data.frame} en lui passant un vecteur de noms.\\
 
-\begin{document}
+\noindent
+Par défaut, lors de l'importation, la fonction \emph{read.csv} retournera un \emph{data.frame} en transformant les chaînes de caractères sous la forme de facteurs (\emph{factors}). Cette action sera complètement transparente à l'utilisateur puisque l'affichage des variables ne sera pas impacté étant donné que R aura créer des formats d'affichage qui associe à chaque facteur la valeur unique corrspondante. Le seul impact réel réside dans la possibilité d'utiliser des fonctions à caractères mathématiques sur les données peu importe si ces dernières sont numériques ou non. Parmi ce genre de fonctions, nous pouvons penser à des fonctions d'agrégation (\emph{clustering}) ou tout simplement à l'utilisation de la fonction \emph{summary} permettant d'afficher des informations génériques sur le contenu d'un objet. Il est important de comprendre que les données ne sont toutefois plus représentées comme des chaînes de caractères, mais bien pas un indice référant à la valeur textuelle correspondante. \\
 
+\noindent
+La manière de représenter des valeurs manquantes varira souvent d'une base de données à une autre. Une fonctionnalité très intéressante de la fonction \emph{read.csv} est de pouvoir automatiquement convertir ces chaînes de caractères symboliques en \emph{NA} ayant une signification particulaire dans R. Dans le cas présent, les valeurs manquantes sont représentées par \text{\textbackslash \textbackslash n} ou \text{" "} correspondant à un simple retour de chariot et un espace vide respectivement. Il suffit donc de passer cette liste de valeurs à l'argument \emph{na.strings}. \\
 
-Cette section est certainement la plus importante de tous, elle vise à faire un traitement adéquat et pertinent des données afin de pouvoir les réutiliser facilement dans les sections suivantes. Une mauvaise application des concepts d’extraction, traitement et visualisation des données peut entrainer une interprétation inadéquate de la situation.
+\begin{moreInfo}{\emph{read.csv}}
+	La fonction \emph{read.csv} possède plusieurs autres arguments très intéressants dans des situations plus pointue. Pour en savoir plus, nous vous invitons à consulter la documentation officielle. \\
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/utils/html/read.table.html}
+\end{moreInfo}
 
-Le fichier source des données étant disponible en ligne on effectue l'extraction directement via leurs adresses à l'aide de la fonction R \textit{read.csv}. On utilise trois bases de données, la première sur les aéroports mondiaux \cite{Data:AirportWorlwide}, la seconde sur les trajets aériens mondiaux \cite{Data:RouteWorlwide} et la dernière sur les compagnies aériennes mondiales \cite{Data:AirlineWorldwide}.
+\noindent
+Comme nous venons de le démontrer, l'extraction des données peut facilement devenir une tâche ingrate si nous n'avons aucune connaissance sur la manière dont l'information y a été entreposée. La rèegle d'or est donc de toujours avoir une idée globale de ce que nous cherchons à importer afin de bien paramétriser les fonctions. Si nous assemblons les différents aspects que nous venons d'aborder, nous aboutissons donc au code suivant:
+\begin{lstlisting}[caption = Extraction des données,label=src:Extraction]
+	airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
+\end{lstlisting}
 
-Afin de facilité l'analyse des données qualitatives, il est beaucoup plus facile de représentées celle-ci à l'aide de variable \textit{factors} \cite{Rfunction:as.factor}. La transformation des données en factors permet l'association d'une chaîne de caractères à un nombre entier. Autrement dit, chaque valeur qualitative est \emph{entreposé} à l'aide d'un entier.
+\subsection{Traitement}
+Une fois en possession du jeu de données, il fut nécessaire de nettoyer ce dernier pour en rendre son utilisation plus simple selon nos besoins. Parmi les différentes modifications apportées nous retrouvons: \\
+\begin{itemize}
+	\item Conserver que les observations relatives au aéroports Canadiens
+	\item Filtrer les variables qui seront pertinentes dans le cadre de l'analyse que nous menons. 
+		\footnote{On ne devrait jamais travailler avec des informations superflues. Faire une pré-sélection de l'information ne fait qu'alléger les traitements et augmente de manière significative la compréhensibilité du programme.}
+	\item Alimentation des valeurs manquantes avec des sources de données externes (si possible) ou appliquer un traitement approximatif justifiable en documentant les impacts possibles sur le restant de l'analyse.
+\end{itemize}
+\vspace{\baselineskip}
 
-De plus, on remarque que dans la base de données les valeurs absentes sont représentées par \text{\textbackslash \textbackslash n} ou \text{' '}. Cette donnée n'a pas un sens significatif. On lui attribut plutôt la valeur \textit{NA} à l'aide du dernier argument de la fonction.
+\noindent
+Nous considérons pertinent d'apporter quelques précisions sur le fonctionnement de R avant d'expliciter les traitements sus-mentionnés. Tout d'abord, R est un langage interprèté orienté objet à caractère fonctionnel optimisé pour le traitement vectoriel. Ces simples mots ne sont pas à prendre à la légère puisque ce n'est qu'en s'appropriant ce mode de penser que les futurs développeurs que vous êtes parviendront à utiliser R dans toute sa puissance, sa simplicité et son élégance. Par sa sémantique objet, R permet de définir des attributs aux objets créés. Comme il sera possible de le voir plus loin, l'accès à ces attributs se fera à l'aide de l'opérateur \texttt{\$}. Vous vous demandez probablement: Comment savoir si nous sommes en présence d'un objet? C'est simple, tout dans R est un objet! Le langage R permet aussi de mimer le paradigme fonctionnel puisque les fonctions (qui sont en fait des objets) sont des valeurs à part entière qui peuvent être argument ou valeur d'une autre fonction. De plus, il est possible de définir des fonctions dites anonymes qui se révèleront très pratiques. Finalement, par son caractère vectoriel, la notion de scalaire n'existe tout simplement pas en R. C'est pour cette raison que l'utilisation de boucles est à proscrire (ou du moins à minimiser le plus possible). En effet, l'utilisation d'une boucle revient en quelque sorte à la création d'un nouveau vecteur et à la mise en place de processus itératifs afin d'exécuter la tâche demandée. Heureusement, par un raisonnement vectoriel, il est très simple de convertir ces traitements sous une forme vectorielle dans la plupart des cas. \cite{Goulet} Pour accéder à une valeur précise d'un vecteur, nous utiliserons l'opérateur \texttt{[]} en spécifiant les indices correspondants aux valeurs désirées, un vecteur booléen d'inclusion/exclusion ou encore un vecteur contenant les noms des attributs nommés qui nous intéressent. \\
 
-L'attribution manuelle des noms des différentes colonnes des données s'éffectue à l'aide de la fonction R \textit{colnames}. Il devient ainsi très facile de filtrer les aéroports canadien à l'aide de l'objet \emph{country} dans \emph{aiports}. Autrement dit, on copie dans une variable toutes les entrées (lignes) dont le pays dans la colonne \emph{country} correspond à \emph{Canada}.
-%
-% airportsCanada <- airports[airports$country=='Canada',]
-%
+\noindent
+Avec ces outils en mains, il devient ainsi très facile de filtrer les aéroports canadiens à l'aide de l'attribut que nous avons nommé \emph{country} du data.frame \emph{aiports}. Par un raisonnement connexe, la fonction \emph{subset} nous offre aussi la possibilité de conserver que certaines variables contenues dans une table tout en appliquant des contraintes sur les observations à conserver. Le \autoref{src:Filtrer} dévoile au grand jour la dualité qui peut exister entre la multitude des fonctionnalités présentent en R. \\
+
+\begin{lstlisting}[caption = Filtrer les données,label=src:Filter]
+	airportsCanada <- airports[airports$country=='Canada',]
+	airportsCanada2 <- subset(airports,country == 'Canada')
+	all.equal(airportsCanada,airportsCanada2)
+
+	airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
+	subset(airportsCanada, is.na(IATA), select = c("airportID","name","IATA","ICAO"))
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+Nous ne devons pas être surpris qu'il y ait autant de possibilités différentes de parvenir au même résultat, il s'agit là d'une des principales caractéristiques d'un logiciel libre puisque la responsabilité du développement continu ne dépend plus que d'une seule personne ou entité, mais bien de la communauté d'utilisateurs au complet. Ceci peut toutefois sembler mélangeant pour des nouveaux utilisateurs et la question suivante arrivera assez rapidement lorsque vous commencerez à developper vos propres applications: Quelle est la meilleure manière d'accomplir une tâche X? La bonne réponse est tout aussi décevante que la premisse étant donné que chaque fonction aura été devéloppée dans un besoin précis si ce n'est que de rendre l'utilisation de fonctionnalité de base plus aisée et facile d'approche... C'est pourquoi nous conseillons plutôt d'adopter un mode de penser itératif, créatif et ouvert qui consiste à utiliser les fonctions qui vous semblent, à la fois, les plus simples, les plus versatiles et les plus efficientes. À partir du moment où vous constaterez qu'une de ces trois caractéristiques n'est plus au rendez-vous, il suffira d'amorcer des recherches pour bonifier vos connaissances et améliorer vos techniques. C'est un peu le but de ce document de vous faire faire une visite guidée pour vous offrir un coffre d'outil qui facilitera vos premiers pas en R. \\
+
+\begin{moreInfo}{\emph{subset}}
+	Bien que la fonction \emph{subset} simplifie énormément l'écriture de requêtes afin de manipuler des bases de données, celle-ci souffre par le fait même de devenir rapidement innefficiente lors de traitements plus complexes. D'autres packages tels que \emph{dplyr} et \emph{sqldf} divendront dans ces situations des meilleures alternatives. \\
+	\url{https://www.rdocumentation.org/packages/raster/versions/2.5-8/topics/subset}
+\end{moreInfo}
+
+\noindent
+Après avoir fait une présélection des données qui nous seront utiles dans le reste de l'analyse, nous avons constater que certaines variables n'étaient pas toujours totalement alimentées. Tout d'abord, la variable IATA n'était pas toujours définie pour tous les aéroports canadiens contrairement à ICAO. Étant donné la faible proportion des valeurs manquantes et du fait qu'une valeur fictive n'aurait qu'un impact minimal dans le cas de l'analyse, nous avons décider de remplacer les valeurs manquantes par les 3 dernières lettres du code ICAO. En regardant les aéroports canadiens possèdant les deux codes, nous observons que cette relation est respectée dans plus de 80\% des cas. Une autre alternative aurait été de simplement prendre le code ICAO, mais le code IATA semblait beaucoup plus facile d'approche puisqu'il s'agit du code communément utiliser pour le transport des particuliers. \\
+
+\noindent
+Les vrais problèmes au niveau des données résidaient davantage dans l'absence d'informations sur les zones temporelles de certains aéroports ainsi qu'un accès indirect à la province de correspondance de tous les aéroports. Heureusement, ce genre d'information ne dépend que de l'emplacement de l'entité dans le monde, ce qui rend la tâche beaucoup plus simple lorsque nous avons accès aux coordonnées géospatiales. \\
+
+\begin{moreInfo}{Adresses et coordonnées géospatiales}
+	Dans la situation où seule l'adresse de l'entité aurait été disponible, nous aurions été contraint d'utiliser des techniques de géocodage qui permettent de transfomer une adresse en coordonnées longitude/latitude et parfois même altitude. Ce genre de transformation est devenu beaucoup plus accessible avec l'avancement de la technologie et plusieurs APIs sont disponibles gratuitement sur le web pour procéder à ce genre de transformation. Encore une fois, il vaut mieux bien se renseigner pour identifier l'interface qui répondra le mieux à nos besoins en considérant notamment:
+	\begin{itemize}
+		\item Format de l'entrant
+		\item Format de retour
+		\item Limitation du nombre de requêtes sur une période de temps donnée
+		\item Efficacité de l'outil
+		\item Méthode d'interpolation
+		\item Précision des valeurs
+	\end{itemize}
+	\url{https://www.programmableweb.com/news/7-free-geocoding-apis-google-bing-yahoo-and-mapquest/2012/06/21}
+\end{moreInfo}
+
+\noindent
+Bien que nous savons qu'il est possible de populer les valeurs manquantes à l'aide de données géographiques encore faut-il disposer de ses dites données. Encore une fois, grâce à de bonnes recherches vous parviendrez à trouver une source qui contiendra ce dont vous cherchez ou du moins un élément de réponse qui vous permettra d'en extrapoler la valeur ce qui sera déjà préférable à des données manquantes. Statistiques Canada possède une bibliothèque géographique très garnie et c'est notamment sur leur site que nous avons pris le fichier \emph{.shp} qui définit les provinces et territoires du Canada.
+
 
 La visualisation des données est une étape cruciale dans l’interprétation de celle-ci. De nombreuses fonctions R permettent de sortir plusieurs informations pertinentes sur les données. Tel que
 \begin{itemize}
@@ -102,10 +145,3 @@ Ainsi, on obtient des données complètes pour l'ensemble des aéroports canadie
 On s'intéresse maintenant aux deux dernières bases données pertinentes pour l'étude de cas, les voies aériennes et les compagnies aériennes. Tout d'abord, on sélectionne à l'aide d'une requête \textit{sql} les voies aériennes canadiennes. On analyse les informations présentes pour les voies aériennes et on observe que seulement 2 trajets ne sont pas des vols directs. Pour des fins de simplifications, tous les vols seront considérés comme des vols directs. Ainsi, les colonnes \textit{codeshare} et \textit{stops} sont inutiles.
 
 On s'intéresse maintenant à créer un indice d'achalandage des aéroports en fonction des routes. Cet indice nous sera utile plus tard dans la simulation des aéroports d'arrivée. On observe d'abord les faits marquants des voies aériennes, valeurs maximum, moyenne et variance. On représente graphiquement la répartition de l'index qui correspond au nombre de voies aériennes de l'aéroport diviser par le maximum de nombre de voies aériennes. Cet index nous permet ainsi de représenter sur un graphique à bulles  la densité des réseaux aériens pour chacun des aéroports.
-
-
-
-
-
-
-\end{document}
