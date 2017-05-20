@@ -44,9 +44,19 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 1. Écrivez le code source de la fonction **airportsDist(sourceIATA, destIATA)** qui permettra de calculer la distance par vol d'oiseau entre deux aéroports.
 2. Écrivez le code source de la fonction **arrivalTime(sourceIATA, destIATA)** qui permettra de calculer l'heure d'arrivée dans la ville de destination d'un colis qui serait posté immédiatement.
 3. Écrivez le code source de la fonction **shippingCost(sourceIATA, destIATA, weight, \*percentCredit, \*dollarCredit)** qui permettra de tarifer la livraison d'un colis donné en fonction de son poids, sa provenance et sa destination, et en tenant compte des frais fixes, des taxes (variant par province), de la marge de profits, des rabais applicables (% et $) ainsi que des normes suivantes:
-  * Distance minimal
-  * Poids maximale
-  * Aucune surcharge pour colis de poids inférieur à X
+  * Distance minimal de 100 km
+  * Poids maximale de 30 Kg
+  * Aucune surcharge pour colis de poids inférieur à 2 Kg
+  * Un rabais pour un envoie ayant un coût de base de plus de 100$
+  * Un rabais selon la province de destination
+  	* 15 % pour le Québec
+  	* 5 % our la Colombie-Britannique
+  	* 10 % pour l'Ontario
+  	* 2.5 % pour l'Alverta
+  * Un rabais pour les longues distances
+  	*  Un rabais de 15 % pour une distance  entre 2000  et 2500 Km
+  	*  Un rabais de 12.25 % pour une distance de entre 2500  et 3000 Km
+  	*  Un rabais de 10 % pour une distance de plus de 3000 Km
   * Un prix ne devrait jamais être négatif ou en deça des FraisFixes \* (1 + profitMargin)
 
 > Notes:
