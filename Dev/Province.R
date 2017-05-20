@@ -14,6 +14,14 @@ colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "tzFormat","typeAirport","Source")
 airportsCanada <- airports[airports$country=="Canada",]
 
+# We fill the missing IATA
+airportsCanada$IATA <- as.character(airportsCanada$IATA) 
+airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
+airportsCanada$IATA <- as.factor(airportsCanada$IATA)
+airportsCanada <- subset(airportsCanada, select = -ICAO)
+View(airportsCanada)
+
+
 # install.packages("sp")
 # install.packages("rgdal")
 library(sp)
@@ -36,9 +44,9 @@ airportsCanada <- sqldf("
   on a.airportID = c.airportID
   order by a.airportID")
 airportsCanada <- data.frame(as.matrix(airportsCanada))
-# Since the timezone, DST and city are now useless, we remove them from the dataset.
-# Plus, we withdraw tzFormat because it's incomplet and we will use the tzmerge data to replace will a complete data. 
-provinceData <- subset(airportsCanada, select = c(city, provMerged ))
+
+# We keep the province, city and IATA for the dataset
+provinceData <- subset(airportsCanada, select = c(city, IATA, provMerged ))
 summary(provinceData)
 
 # install.packages("plyr")
