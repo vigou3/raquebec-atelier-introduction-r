@@ -17,6 +17,7 @@ summary(airportsCanada)
 nbAirportCity <- table(airportsCanada$city) 
 \end{lstlisting}
 
+\vspace{\baselineskip}
 \noindent
 Ces fonctions ressemblent beaucoup plus à des outils pour optimiser le temps de développement qu'à des traitements que nous chercherons à laisser en production compte tenu de leur affichage très rudimentaire. De plus, il sera facile de se perdre dans le contenu présenté plus la relation possèdera des variables. Pour contrer ce problème, la production de graphiques sera la plupart du temps une solution plus qu'intéressante. Cependant, toujours dans un objectif de cohérence avec la structure du code source du projet, nous n'aborderons pas immédiatement la création de graphique en R. Nous nous contenterons plutôt d'introduire les méthodes de visualisation de données géospatiales pour faire le pont avec la \autoref{subsec:Traitement}.\\
 
@@ -48,6 +49,7 @@ mapPoints <-
   scale_size_continuous(range = c(0, 20),name = "Trafic Index"))
 \end{lstlisting}
 
+\vspace{\baselineskip}
 \noindent
 Pour ce faire, le paquetage \emph{leaflet} viendra à notre secours avec un faible coût en complexité compte tenu de la flexibilité impressionnate rajoutée. Le \autoref{src:leaflet} est à l'origine de la vue statique présentée à la \autoref{fig:leafletTrafic} extraite de la carte interactive qu'il génère. \\
 
@@ -95,9 +97,23 @@ library(htmlwidgets)
 saveWidget(mapTraffic, paste(path,"/Reference/leafletTrafic.html",sep = ""), selfcontained = TRUE)
 \end{lstlisting}
 
+\vspace{\baselineskip}
+\noindent
+Le fonctionnement des deux paquetages est sensiblement le même. Nous commençons par extraire une carte qui servira de support directement à partir du web. Nous passons ensuite les informations géographiques nécessaires au constructeur du paquetage utilisé pour créer une instance. Nous ajoutons ensuite des composantes à cette instance à l'aide de méthode conçues spécifiquement à cette fin. Sans entrer davantage dans les détails, il est intéressant de mentionner les particularités que le paquetage \emph{leaflet} offre en sus des fonctionnalités graphiques traditionnelles. Tout d'abord, les \emph{markers} peuvent être personnalisés de fond en comble. Dans l'exemple présent, nous avons mis à profit la banque de symboles et d'outils CSS (\emph{Cascading Style Sheets}) \emph{fontawesome} \cite{fontAwesome} qui est célèbre auprès des utilisateurs \LaTeX pour la diversité et la qualité de ses icônes. Un autre aspect encore plus pratique est la présentation d'informations supplémentaires lorsque l'utilisateur appuie sur le marqueur offrant ainsi une manière simple de stocké beaucoup d'information au sein du même objet sans alourdir indument sa lisibilité. L'ajout des ces informations et le formatage se résume par le passage de commande \emph{html} directement à l'argument \emph{popup}. Vous savez maintenant comment nous avons procédé pour exposer le code IATA, le nom, les coordonnées géographiques ainsi que l'indice de trafic aérien sur chacun des marqueurs auxquels l'icône \emph{fa-paper-plane} a été assigné. Le dernier point intéressant de \emph{leaflet} est la capacité de créer des \emph{widgets html} indépendant rendant le partage de l'information encore plus simple sans nécessité de recompiler le code source à chaque fois qu'un utilisateur aura envie de visionner l'objet. \cite{leaflet} \\
 
+\begin{moreInfo}{Est-ce tout ce que peut accomplir \emph{leaflet}?}
+	Bien entendu, les exemples présentés dans ce document font l'éloge que de deux applications grossières des capacités de ces deux paquetages. Vous serez en mesure d'aisément trouver plusieurs autres exemples d'applications sur le web. Pour l'instant, voici quelques pages d'intérêt qui ont servies à créer la carte intéractive pour amorcer vos recherches: \\
+	\url{https://rstudio.github.io/leaflet/} \\
+	\url{https://rstudio.github.io/leaflet/markers.html} \\
+	\url{https://rstudio.github.io/leaflet/popups.html} \\
+	\url{http://rgeomatic.hypotheses.org/550} \\
+	\url{https://www.r-bloggers.com/interactive-mapping-with-leaflet-in-r/} \\
+	\url{http://stackoverflow.com/questions/38837112/how-to-specify-radius-units-in-addcirclemarkers-when-using-leaflet-in-r} \\
+	\url{http://stackoverflow.com/questions/31562383/using-leaflet-library-to-output-multiple-popup-values} \\
+	\url{https://gis.stackexchange.com/questions/171827/generate-html-file-with-r-using-leaflet}
+\end{moreInfo}
 
-
-Afin de valider nos résultats...
+\noindent
+En terminant, il est possible de valider nos résultats en comparant ceux-ci avec la densité de la population canadienne. Nous devrions être en mesure d'observer une augmentatin du trafic aérien dans les zones où la densité de population est plus intense. Ainsi, nos cartographies sont cohérentes avec la \autoref{fig:popDensityCanada}.
 
 \addPicture{1}{0.4}{popDensityCanada}{\href{http://www.huffingtonpost.ca/2014/04/17/canada-empty-maps_n_5169055.html}{Densité de la population canadienne}}{popDensityCanada}

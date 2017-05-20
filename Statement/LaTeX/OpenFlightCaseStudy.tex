@@ -7,6 +7,7 @@
 \lstloadlanguages{R}
 \usepackage{graphicx}
 \usepackage{fontawesome}
+\usepackage{caption}
 \usepackage{enumitem}
 \usepackage{chngcntr}
 \usepackage[dvipsnames]{xcolor}
@@ -69,12 +70,11 @@
 	\end{mdframed}}
 
 % Lstlisting configurations
-\usepackage{caption}
 \DeclareCaptionFont{white}{\color{white}}
 \DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
 \renewcommand\lstlistingname{Code Source}
-\renewcommand\lstlistlistingname{Code Source}
+\renewcommand\lstlistlistingname{Liste des codes sources}
 %\AtBeginDocument{\counterwithin{lstlisting}{chapter}}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -118,19 +118,21 @@
 \end{titlepage}
 \tableofcontents
 \listoffigures
-\addcontentsline{toc}{section}{Listings}
+\addcontentsline{toc}{chapter}{Liste des figures}
 \lstlistoflistings
+\addcontentsline{toc}{chapter}{Liste des codes sources}
 \chapter*{Préface}
 \addcontentsline{toc}{chapter}{Préface}
 	\input{tex/preface}
 
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
+\setcounter{chapter}{1}
 	\input{tex/intro}
 
 \chapter*{Étude de cas}
 \addcontentsline{toc}{chapter}{Étude de cas}
-\setcounter{chapter}{1}
+\stepcounter{chapter}
 	
 \section{Extraction, traitement, visualisation et analyse des données}
 	\input{tex/part1}
@@ -147,13 +149,14 @@
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
+\stepcounter{chapter}
 
 \bibliographystyle{plain}
 \bibliography{bib/Reference,bib/data}
 %,bib/help,bib/links,bib/packages
 
 \appendix
-\chapter{Code Source}
+\chapter{Code source du projet}
 Cette annexe présente les codes sources constituant l'ensemble du projet. Ceux-ci se divisent sous la forme de 6 parties correspondant aux différents thèmes abordés dans le présent document. \\
 \lstinputlisting[caption=Benchmark.R]{../../dev/Benchmark.R}
 \label{src:Benchmark}
