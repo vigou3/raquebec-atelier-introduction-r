@@ -28,14 +28,17 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 ## Énoncé
 
 ### Question 1 - Extraction, traitement, visualisation et analyse des données
-1. Extraire les bases de données [**airports.dat**](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat) et [**routes.dat**](https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat).
+1. Extraire les bases de données [**airports.dat**](), [**routes.dat**]() et [**province**]().
 2. Nettoyer le jeu de données en ne conservant que les données relatives au Canada.
 3. Extraire des informations générales sur la distribution des variables présente dans le jeu de données et vous informer sur la signification de ces dernières. Ainsi que sur les différentes modalités qu'elles peuvent prendre. Identifier les données manquantes.
 4. Corriger les modalités des variables absentes et faire une sélection des variables qui vous semble utile pour le reste du traitement. 
-5. Créer une carte du Canada affichant les différents aéroports.
+5. Créer une carte du Canada affichant les différents aéroports à l'aide du paquetage ggmap.
 6. Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports.
 7. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en destination.
 8. Créer une carte permettant de visualiser l'indice grâce à un graphique à bulles.
+
+> Note:
+> Les données disponibles avec le code source on été simplifier, les données d'origines sont disponible en référence.
 
 ### Question 2 - Création des fonctions utilitaires
 1. Écrivez le code source de la fonction **airportsDist(sourceIATA, destIATA)** qui permettra de calculer la distance par vol d'oiseau entre deux aéroports.
@@ -65,24 +68,20 @@ Grâce à la base de données [benchmark.csv](https://github.com/vigou3/raquebec
 2. Visualiser ensuite la distribution des prix en fonction de la distance.
 3. Visualiser maintenant la distribution des prix en fonction de poids et de la distance.
 4. Vous constatez qu'un modèle linéaire serait suffisant pour faire l'approximation.
-5. Tester l'indépendance des deux variables par le *Chi's Square test*.
-6. En utilisant la fonction *lm*, déterminer la droite de régression afin de déterminer les paramètres de la loi sous-jacente.
+5. En utilisant la fonction *lm*, déterminer la droite de régression afin de déterminer les paramètres de la loi sous-jacente.
 
 > Note:
 > Vous savez que vos compétiteurs utilisent principalement le poids et la distance pour déterminer le prix des livraisons.
 
 ### Question 5 - Ajustement des lois de distribution sur les données empiriques
 En reprenant les données de la compétition, vous êtes aussi en mesure d'extraire la distribution suivie par le poids des colis et des distances.
-1. Utiliser le *package* *actuar* et la fonction *optim* pour ajuster les distributions suivantes à la distribution empirique.
+1. Utiliser le paquetage *actuar* et la fonction *fitdistr* pour ajuster les distributions suivantes à la distribution empirique en fonction du poids.
   * Loi Normale
   * Loi Gamma
   * Loi Log-normale
   * Loi Weibull
-  * Loi Pareto
-  * Loi inverse Gaussienne
-2. Calculer la qualité de l'ajustement par la déviance.
-3. Présenter les différentes distributions obtenues.
-4. Faire un choix de distribution
+2. Présenter les différentes distributions obtenues.
+3. Faire un choix de distribution
 
 > Note:
 > Les paramètres initiaux de vos optimisations peuvent impacter le résultat de la fonction.
@@ -104,7 +103,7 @@ Encore une fois, pour le bureau de Montréal, qui est inquiet que la nouvelle ta
 |  Octobre  |         2425         |
 | Novembre  |         2500         |
 | Décembre  |         3500         |
-2. Pour chacun des colis, vous devez ensuite générer un poids à l'aide de la distribution retenue précédemment  ainsi que la destination à l'aide de la distribution empirique des ...intrants....
+2. Pour chacun des colis, vous devez ensuite générer un poids à l'aide de la distribution retenue précédemment  ainsi que la destination à l'aide de la distribution empirique des indices d'aéroports.
 3. Calculer ensuite les prix chargés par votre compagnie ainsi que la compétition pour chacun des transports.
 4. Déterminer les revenus totaux de votre compagnie ainsi que de la compétition au cours de la prochaine année.
 5. Déterminer comment la nouvelle tarification impactera la part de marché.
