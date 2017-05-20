@@ -1,6 +1,8 @@
-#
+# coding: utf-8
+# CaseStudyRQuebec2017
+# Authors : David Beauchemin & Samuel Cabral Cruz
+
 # Source code for the creation of the benchmark.csv file
-#
 
 # Setting working directory properly 
 getwd()

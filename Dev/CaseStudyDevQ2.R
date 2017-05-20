@@ -1,15 +1,8 @@
-#
-# This is the main code for the Case Study R à Québec 2017
-#
-# Author : David Beauchemin & Samuel Cabral Cruz
-#
+# coding: utf-8
+# CaseStudyRQuebec2017
+# Authors : David Beauchemin & Samuel Cabral Cruz
 
 #### Question 2 #####
-#
-# Need the dataset from question 1
-#
-
-
 # Distance calculation function between two airports.
 # install.packages("geosphere")
 library(geosphere)

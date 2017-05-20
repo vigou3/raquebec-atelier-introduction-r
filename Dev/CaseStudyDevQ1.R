@@ -1,12 +1,11 @@
-#
-# This is the main code for the Case Study R à Québec 2017
-#
-# Author : David Beauchemin & Samuel Cabral Cruz
-#
+# coding: utf-8
+# CaseStudyRQuebec2017
+# Authors : David Beauchemin & Samuel Cabral Cruz
 
 #### Setting working directory properly ####
+setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
 getwd()
-setwd("..")
+setwd('..')
 (path <- getwd())
 set.seed(31459)
 
@@ -28,8 +27,9 @@ colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Cou
 
 
 # 1.3 - Keeping the Canada information of the dataset
-airportsCanada <- airports[airports$country=="Canada",]
-
+airportsCanada <- airports[airports$country=='Canada',]
+airportsCanada2 <- subset(airports,country == 'Canada')
+all.equal(airportsCanada,airportsCanada2)
 
 # 1.4 - Extraction of the genreral information about the distributions of the variables in the dataset and 
 # understanding of the signification of those variables and the different modalities they can take.
@@ -38,8 +38,7 @@ airportsCanada <- airports[airports$country=="Canada",]
 View(airportsCanada)
 head(airportsCanada)
 summary(airportsCanada)
-
-nbAirportCity <- table(airportsCanada$city)  
+nbAirportCity <- table(airportsCanada$city) 
 (nbAirportCity <- sort(nbAirportCity,decreasing=TRUE))[1:10]
 
 # The relevance of the data.
@@ -48,9 +47,9 @@ nbAirportCity <- table(airportsCanada$city)
 # A similar reasoning is applicable for the country variable which will only have the modality Canada.
 airportsCanada <- subset(airportsCanada, select = -c(country, typeAirport, Source ))
 
-
 # As seen in the sumary, we dont have the IATA for 27 airports.
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
+subset(airportsCanada, is.na(IATA), select = c("airportID","name","IATA","ICAO"))
 
 # The first option, is to simply ignore these airports in the rest of the analysis.
 # However, all these airports have a well-defined ICAO code which will allow a default value to be assigned.
@@ -118,7 +117,6 @@ summary(airportsCanada)
 library(plyr)
 airportsCanada <- rename(airportsCanada, c("tzMerged"="tzFormat", "provMerged"="province"))
 summary(airportsCanada)
-
 routesCanada <- sqldf("
   select *
   from routes
@@ -202,7 +200,7 @@ IATA <- names(totalFlights)
 
 # Index drawing
 curve(totalFlightsCDF(x-1),from = 0,to = 60,n = 100,
-      xlab = "Nombre de routes par aéroport", 
+      xlab = "Nombre de routes par aeroport", 
       ylab = "CDF")
 
 # Calculate a combined index from the index.
@@ -223,13 +221,57 @@ airportsCanada <- sqldf("
 airportsCanada <- data.frame(as.matrix(airportsCanada ))
 
 #1.11 - Create maps to visualize these indices using a bubble graph.
-lon <- as.numeric(paste(airportsCanada$longitude))
-lat <- as.numeric(paste(airportsCanada$latitude))
-size <- as.numeric(paste(airportsCanada$combinedIndex))
+TraficData <- subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.05)
+lon <- as.numeric(paste(TraficData$longitude))
+lat <- as.numeric(paste(TraficData$latitude))
+size <- as.numeric(paste(TraficData$combinedIndex))
 airportsCoord <- as.data.frame(cbind(lon, lat, size))
 mapPoints <- 
   ggmap(map) + 
-  geom_point(data=airportsCoord,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
+  geom_point(data=TraficData,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
 (mapTraffic <-  
   mapPoints + 
-  scale_size_continuous(range = c(0, 20),name = "Traffic Index"))
+  scale_size_continuous(range = c(0, 20),name = "Trafic Index"))
+
+# install.package("leaflet")
+library(leaflet)
+url <- "http://hiking.waymarkedtrails.org/en/routebrowser/1225378/gpx"
+download.file(url, destfile = paste(path,"/Reference/worldRoutes.gpx",sep=""), method = "wget")
+worldRoutes <- readOGR(paste(path,"/Reference/worldRoutes.gpx",sep=""), layer = "tracks")
+markersData <- subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB'))
+markersWeb <- c("https://www.aeroportdequebec.com/fr/pages/accueil",
+                "http://www.admtl.com/",
+                "http://www.yvr.ca/en/passengers",
+                "https://www.torontopearson.com/")
+
+# Defining the description text to be displayed by the markers
+descriptions <-paste("<b><FONT COLOR=#31B404> Airport Details</FONT></b> <br>",
+                    "<b>IATA: <a href=",markersWeb,">",markersData$IATA,"</a></b><br>",
+                    "<b>Name:</b>",markersData$name,"<br>",
+                    "<b>Coord.</b>: (",markersData$longitude,",",markersData$latitude,") <br>",
+                    "<b>Trafic Index:</b>",markersData$combinedIndex)
+
+# Defining the icon to be add on the markers from fontawesome library
+icons <- awesomeIcons(icon = 'paper-plane',
+                      iconColor = 'black',
+                      library = 'fa')
+
+# Combinaison of the different components in order to create a standalone map
+(mapTraffic <- leaflet(worldRoutes) %>%
+    addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
+    addCircleMarkers(stroke = FALSE,data = TraficData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
+                     color = 'black', fillColor = 'green',
+                     radius = ~as.numeric(paste(combinedIndex))*30, opacity = 0.5) %>%
+    addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = descriptions,icon=icons))
+
+# Resizing of the map
+mapTraffic$width <- 874
+mapTraffic$height <- 700
+
+# Export of the map into html format
+# install.packages("htmlwidgets")
+library(htmlwidgets)
+saveWidget(mapTraffic, paste(path,"/Reference/leafletTrafic.html",sep = ""), selfcontained = TRUE)
+
+#addMarkers(data = subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB')), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
+

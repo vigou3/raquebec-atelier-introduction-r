@@ -13,3 +13,5 @@
 *.lot
 *.lof
 *.pdf
+*.bcf
+*.run.xml

@@ -2,16 +2,20 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[french]{babel}
 \usepackage{listings}
 \lstloadlanguages{R}
-\usepackage[french]{babel}
 \usepackage{graphicx}
 \usepackage{fontawesome}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{chngcntr}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[framemethod=TikZ]{mdframed}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage[hyphens]{url}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 
 % Creation of a command to generate the title page
@@ -39,11 +43,12 @@
 
 % Default Addition of Pictures
 \graphicspath{{./fig/}}
-\newcommand{\addPicture}[4]{
+\newcommand{\addPicture}[5]{
 	\begin{figure}[h]
 		\begin{center}
 			\includegraphics[width=#1\textwidth, height=#2\textheight,keepaspectratio]{#3}
 			\caption{#4}
+			\label{fig:#5}
 		\end{center}
 	\end{figure}}
 	
@@ -51,6 +56,7 @@
 \mdfsetup{
 	linecolor=NavyBlue,
 	linewidth=2pt,
+	nobreak=true,
 	backgroundcolor=NavyBlue!10,
 	roundcorner=10pt}	
 \newenvironment{moreInfo}[1]
@@ -64,6 +70,12 @@
 	\end{mdframed}}
 
 % Lstlisting configurations
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\renewcommand\lstlistingname{Code Source}
+\renewcommand\lstlistlistingname{Liste des codes sources}
+%\AtBeginDocument{\counterwithin{lstlisting}{chapter}}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -78,10 +90,10 @@
 	showspaces=false,               
 	showstringspaces=false,         
 	showtabs=false,                 
-	frame=single,                   
+	frame=b,                   
 	rulecolor=\color{black},        
 	tabsize=2,                      
-	captionpos=b,                   
+	captionpos=t,                   
 	breaklines=true,                
 	breakatwhitespace=false,        
 	title=\lstname,                 
@@ -90,7 +102,8 @@
 	stringstyle=\ttfamily\color{mauve},
 	%identifierstyle=\color{magenta},
 	escapeinside={\%*}{*)},
-	morekeywords={*,...,seed}} 
+	%literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1,
+	morekeywords={*,...,seed,strings,header,select}} 
 
 \begin{document}
 
@@ -104,20 +117,25 @@
 	\titlePage
 \end{titlepage}
 \tableofcontents
+\listoffigures
+\addcontentsline{toc}{chapter}{Liste des figures}
+\lstlistoflistings
+\addcontentsline{toc}{chapter}{Liste des codes sources}
 \chapter*{Préface}
 \addcontentsline{toc}{chapter}{Préface}
 	\input{tex/preface}
 
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
+\setcounter{chapter}{1}
 	\input{tex/intro}
 
 \chapter*{Étude de cas}
 \addcontentsline{toc}{chapter}{Étude de cas}
-\setcounter{chapter}{1}
+\stepcounter{chapter}
 	
 \section{Extraction, traitement, visualisation et analyse des données}
-	\input{tex/Q1}
+	\input{tex/part1}
 
 \section{Création de fonctions utilitaires}
 
@@ -131,8 +149,27 @@
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
+\stepcounter{chapter}
 
-\bibliography{bib/Reference}
 \bibliographystyle{plain}
+\bibliography{bib/Reference,bib/data}
+%,bib/help,bib/links,bib/packages
 
+\appendix
+\chapter{Code source du projet}
+Cette annexe présente les codes sources constituant l'ensemble du projet. Ceux-ci se divisent sous la forme de 6 parties correspondant aux différents thèmes abordés dans le présent document. \\
+\lstinputlisting[caption=Benchmark.R]{../../dev/Benchmark.R}
+\label{src:Benchmark}
+\lstinputlisting[caption=CaseStudyDevQ1.R]{../../dev/CaseStudyDevQ1.R}
+\label{src:CaseStudyDevQ1}
+\lstinputlisting[caption=CaseStudyDevQ2.R]{../../dev/CaseStudyDevQ2.R}
+\label{src:CaseStudyDevQ2}
+\lstinputlisting[caption=CaseStudyDevQ3.R]{../../dev/CaseStudyDevQ3.R}
+\label{src:CaseStudyDevQ3}
+\lstinputlisting[caption=CaseStudyDevQ4.R]{../../dev/CaseStudyDevQ4.R}
+\label{src:CaseStudyDevQ4}
+\lstinputlisting[caption=CaseStudyDevQ5.R]{../../dev/CaseStudyDevQ5.R}
+\label{src:CaseStudyDevQ5}
+\lstinputlisting[caption=CaseStudyDevQ6.R]{../../dev/CaseStudyDevQ6.R}
+\label{src:CaseStudyDevQ6}
 \end{document}
