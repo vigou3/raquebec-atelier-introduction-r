@@ -147,7 +147,6 @@ combinedIndexTable
 # On reajoute l'index aux aéroports canadiens appropriés
 airportsCanada<- merge(airportsCanada, combinedIndexTable, by.x = "IATA", by.y = "IATA")
 
-
 # 1.8- Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
@@ -201,6 +200,36 @@ airportsDist("YPA" ,"YQB" )
 airportsDist("YUL" ,"YQB" )
 airportsDist("YUL" ,"YQB" )$value
 
+# Fonction pour établir l'heure d'arrivée prévue
+# install.packages("lubridate")
+library(lubridate)
+arrivalTime <- function(sourceIATA,destIATA)
+{
+     topSpeed <- 850
+     adjustFactor <- list()
+     adjustFactor$a <- 0.0001007194 # Trouvé par régression (non inclus)
+     adjustFactor$b <- 0.4273381 # Trouvé par régression (non inclus)
+     arrivalTimeList <- list()
+     arrivalTimeList$source <- sourceIATA
+     arrivalTimeList$dest <- destIATA
+     arrivalTimeList$departureTime <- Sys.time()
+     distance <- airportsDist(sourceIATA,destIATA)
+     cruiseSpeed <- (distance$value*adjustFactor$a + adjustFactor$b)*topSpeed
+     arrivalTimeList$avgCruiseSpeed <- cruiseSpeed
+     arrivalTimeList$flightTime <- ms(round(distance$value/cruiseSpeed*60, digits = 1))
+     arrivalTimeList$departureTZ <- paste(airportsCanada[distance$sourceIndex, "tzFormat"])
+     arrivalTimeList$arrivalTZ <- paste(airportsCanada[distance$destIndex, "tzFormat"])
+     arrivalTimeList$value <- with_tz(arrivalTimeList$departureTime + arrivalTimeList$flightTime, 
+                                      tzone = arrivalTimeList$arrivalTZ)
+     arrivalTimeList
+}
+arrivalTime("AAA","YYZ")
+arrivalTime("YUL","AAA")
+arrivalTime("YUL", "YYZ")
+arrivalTime("YUL","YVR")
+arrivalTime("YUL", "YYZ")$value
+difftime(arrivalTime("YUL", "YVR")$value,Sys.time())
+difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
 # Fonction de calcul des coûts
 shippingCost <- function(sourceIATA, destIATA, weight, 
@@ -255,7 +284,6 @@ shippingCost <- function(sourceIATA, destIATA, weight,
      automatedCredit <-  automatedCredit * ifelse(weight < 2, 0.5, 1)
      # Gold Member
      automatedCredit <-  automatedCredit * ifelse(baseCost > 100, 0.9, 1)
-     # Partnership with province
      
      # Rabais par province
      destProvince <- as.character(airportsCanada[match(destIATA, airportsCanada$IATA),]$province)
@@ -265,19 +293,15 @@ shippingCost <- function(sourceIATA, destIATA, weight,
                                                  "Ontario" = 0.9,
                                                  "Alberta" = 0.975)
      # The Migrator
-     if(distance$value > 3500)
-     {
-          automatedCredit <- automatedCredit * 0.8125
-     }
-     else if(distance$value >= 3000)
-     {
-          automatedCredit <- automatedCredit * 0.825
-     }
-     else if(distance$value >= 2500)
+     if(distance$value <= 2500 & distance$value > 2000)
      {
           automatedCredit <- automatedCredit * 0.85
      }
-     else if(distance$value >= 2000)
+     else if(distance$value <= 3000 & distance$value > 2500)
+     {
+          automatedCredit <- automatedCredit * 0.875
+     }
+     else if(distance$value > 3000)
      {
           automatedCredit <- automatedCredit * 0.9
      }
@@ -406,7 +430,7 @@ mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE
 # On choisi donc la loi LogNormal qui possède le meilleur ajustement
 # Omis les tests statistiques pour simplification
 distChoice <- "LogNormal"
-(paramAdjust <- resultDistFitting[c(1:2),match(distChoice,distName)])
+(paramAdjust <- fit.lognormal$estimate[c(1:2)])
 
 
 #### Question 6 ####
