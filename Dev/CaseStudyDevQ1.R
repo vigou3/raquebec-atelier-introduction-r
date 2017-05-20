@@ -38,8 +38,7 @@ all.equal(airportsCanada,airportsCanada2)
 View(airportsCanada)
 head(airportsCanada)
 summary(airportsCanada)
-
-nbAirportCity <- table(airportsCanada$city)  
+nbAirportCity <- table(airportsCanada$city) 
 (nbAirportCity <- sort(nbAirportCity,decreasing=TRUE))[1:10]
 
 # The relevance of the data.
@@ -222,48 +221,57 @@ airportsCanada <- sqldf("
 airportsCanada <- data.frame(as.matrix(airportsCanada ))
 
 #1.11 - Create maps to visualize these indices using a bubble graph.
-lon <- as.numeric(paste(airportsCanada$longitude))
-lat <- as.numeric(paste(airportsCanada$latitude))
-size <- as.numeric(paste(airportsCanada$combinedIndex))
+TraficData <- subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.05)
+lon <- as.numeric(paste(TraficData$longitude))
+lat <- as.numeric(paste(TraficData$latitude))
+size <- as.numeric(paste(TraficData$combinedIndex))
 airportsCoord <- as.data.frame(cbind(lon, lat, size))
 mapPoints <- 
   ggmap(map) + 
-  geom_point(data=airportsCoord,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
+  geom_point(data=TraficData,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
 (mapTraffic <-  
   mapPoints + 
   scale_size_continuous(range = c(0, 20),name = "Trafic Index"))
 
-
 # install.package("leaflet")
 library(leaflet)
-
-# Fetch the route of the PCT and convert it into a SpatialLine object
 url <- "http://hiking.waymarkedtrails.org/en/routebrowser/1225378/gpx"
-download.file(url, destfile = paste(path,"/Reference/pct.gpx",sep=""), method = "wget")
-pct <- readOGR(paste(path,"/Reference/pct.gpx",sep=""), layer = "tracks")
+download.file(url, destfile = paste(path,"/Reference/worldRoutes.gpx",sep=""), method = "wget")
+worldRoutes <- readOGR(paste(path,"/Reference/worldRoutes.gpx",sep=""), layer = "tracks")
 markersData <- subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB'))
 markersWeb <- c("https://www.aeroportdequebec.com/fr/pages/accueil",
                 "http://www.admtl.com/",
                 "http://www.yvr.ca/en/passengers",
                 "https://www.torontopearson.com/")
-description <-paste("<b><FONT COLOR=#31B404> Airport Details</FONT></b> <br>",
+
+# Defining the description text to be displayed by the markers
+descriptions <-paste("<b><FONT COLOR=#31B404> Airport Details</FONT></b> <br>",
                     "<b>IATA: <a href=",markersWeb,">",markersData$IATA,"</a></b><br>",
                     "<b>Name:</b>",markersData$name,"<br>",
                     "<b>Coord.</b>: (",markersData$longitude,",",markersData$latitude,") <br>",
                     "<b>Trafic Index:</b>",markersData$combinedIndex)
-icons <- awesomeIcons(
-  icon = 'paper-plane',
-  iconColor = 'black',
-  library = 'fa')
 
-# Import list with shapefiles of the three states the PCT is crossing
-  (your.map <- leaflet(pct) %>%
+# Defining the icon to be add on the markers from fontawesome library
+icons <- awesomeIcons(icon = 'paper-plane',
+                      iconColor = 'black',
+                      library = 'fa')
+
+# Combinaison of the different components in order to create a standalone map
+(mapTraffic <- leaflet(worldRoutes) %>%
     addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
-    addCircleMarkers(stroke = FALSE,data = subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.1), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
+    addCircleMarkers(stroke = FALSE,data = TraficData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
                      color = 'black', fillColor = 'green',
-                     radius = ~as.numeric(paste(combinedIndex))*20, opacity = 0.5) %>%
-    addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = description,icon=icons))
+                     radius = ~as.numeric(paste(combinedIndex))*30, opacity = 0.5) %>%
+    addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = descriptions,icon=icons))
 
+# Resizing of the map
+mapTraffic$width <- 874
+mapTraffic$height <- 700
+
+# Export of the map into html format
+# install.packages("htmlwidgets")
+library(htmlwidgets)
+saveWidget(mapTraffic, paste(path,"/Reference/leafletTrafic.html",sep = ""), selfcontained = TRUE)
 
 #addMarkers(data = subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB')), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
 

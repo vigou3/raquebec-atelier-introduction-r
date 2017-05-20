@@ -1,66 +1,103 @@
 \subsection{Visualisation et analyse des données}
+\label{subsec:Visualisation}
 
-La visualisation des données est une étape cruciale dans l’interprétation de ces dernières. 
+La visualisation des données est une étape cruciale dans l’interprétation de ces dernières. En effet, seule une connaissance approfondie des données vous permettra d'en percer les secrets les plus précieux qui y résident. Afin de visualiser les données directement contenues dans une relation, le langage R met à notre disposition différentes fonctions qui sont décrites ci-dessous. 
 
-\begin{itemize}
-\item \textit{View}\cite{Rfunction:View} qui permet de visualiser le \emph{data frame} R dans un onglet à part;
-\item \textit{head} \cite{Rfunction:head} qui permet de visualiser dans la console les premières entrées;
-\item \textit{summary}\cite{Rfunction:summary} qui permet de visualiser différentes informations sur les données quantitatives et qualitatives telles que les quartiles, la moyenne, le maximum et le minimum pour les données quantitatives  et la fréquence des observations de chacune des données qualitatives.
-\end{itemize}
-Par la suite, il devient possible de sortir différentes informations spécifiques de chaque variable. Par exemple, le nombre d'aéroports par ville a été extrait et présenter à l'aide de la fonction R \textit{table} \cite{Rfunction:table}
-%
-% nbAirportCity <- table(as.character(airportsCanada$city)) #We use as.character to convert the factor into a fixed caractor
-%
+\begin{description}[style=multiline,leftmargin=2cm]
+		\item[\emph{View}] Permet d'ouvrir la relation dans l'outil de visualisation de RStudio. Ce dernier permettra aussi d'appliquer des transformations de faible complexité comme le filtre sur un variable ou le tri. \cite{Rfunction:View}
+		\item[\emph{head}] Renvoie en console un extrait des premières observations d'une relation (par défaut, 10 observations sont renvoyées)
+		\item[\emph{summary}] Compilation de statistiques pertinentes au sujet des différentes variables contenues dans une relation. Pour les variables quantitatives, le minimum, le $1^{er}$ quintile, la moyenne, la médiane, le $3^{ième}$ quintile et le maximum seront calculés, tandis qu'une simple analyse de fréquence des différentes modalités sera produite dans le cas d'une variable qualitative.
+		\item[\emph{table}] Au même titre que le comportement de \emph{summary} pour les variables qualitative, la fonction \emph{table} renvoie un vecteur comptabilisant le nombre d'occurrences de chaque valeur unique.
+\end{description}
+
+\begin{lstlisting}[caption = Fonctions de visualisation de données,label=src:DataVisual]
+View(airportsCanada)
+head(airportsCanada)
+summary(airportsCanada)
+nbAirportCity <- table(airportsCanada$city) 
+\end{lstlisting}
+
+\noindent
+Ces fonctions ressemblent beaucoup plus à des outils pour optimiser le temps de développement qu'à des traitements que nous chercherons à laisser en production compte tenu de leur affichage très rudimentaire. De plus, il sera facile de se perdre dans le contenu présenté plus la relation possèdera des variables. Pour contrer ce problème, la production de graphiques sera la plupart du temps une solution plus qu'intéressante. Cependant, toujours dans un objectif de cohérence avec la structure du code source du projet, nous n'aborderons pas immédiatement la création de graphique en R. Nous nous contenterons plutôt d'introduire les méthodes de visualisation de données géospatiales pour faire le pont avec la \autoref{subsec:Traitement}.\\
+
+\noindent
+Au moment de l'analyse, deux paquetages ont retenus notre attention pour la production de cartes géographiques qui faciliteront la transmission de connaissances sommaires au sujet du jeu de données. Nos critères de sélection étaient encore une fois la simplicité des requêtes, la beauté de l'extrant final et la flexibilité des instructions pour les adapter à un contexte précis. \\
+
+\noindent
+Le paquetage \emph{ggmap}, nous as permis de produire la \autoref{fig:ggmapTrafic}. Si cette dernière vous semble familière, ce n'est pas sans raison! Le paquetage \emph{ggmap} vise en fait à rendre la visualisation de données géospatiales sur des supports statiques disponibles en ligne tels que ceux de \emph{Google Maps} en les combinant avec la puissance des fonctionnalités du paquetage \emph{ggplot2}. \cite{Rpackage:ggmap} \\
+
+\addPicture{1}{0.5}{ggmapTrafic}{Exemple de carte géographique produite avec \emph{ggmap}}{ggmapTrafic} 
+
+\noindent
+En jetant un coup d'oeil au \autoref{src:ggmap}, nous voyons qu'il est possible des cartes très rapidement avec seulement quelques lignes de code. Malgré la facilité d'utilisation de \emph{ggmap}, nous ressentons rapidement ses limitations lorsque nous espérons produire des cartes interactives similaires à celles que nous retrouvons dans la plupart des applications web et mobiles modernes. \\
+
+\begin{lstlisting}[caption = Générer une carte du trafic aérien avec \emph{ggmap},label=src:ggmap]
+# install.packages("ggmap")
+library(ggmap)
+map <- get_map(location = "Canada", zoom = 3)
+TraficData <- subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.05)
+lon <- as.numeric(paste(TraficData$longitude))
+lat <- as.numeric(paste(TraficData$latitude))
+size <- as.numeric(paste(TraficData$combinedIndex))
+airportsCoord <- as.data.frame(cbind(lon, lat, size))
+mapPoints <- 
+  ggmap(map) + 
+  geom_point(data=TraficData,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
+(mapTraffic <-  
+  mapPoints + 
+  scale_size_continuous(range = c(0, 20),name = "Trafic Index"))
+\end{lstlisting}
+
+\noindent
+Pour ce faire, le paquetage \emph{leaflet} viendra à notre secours avec un faible coût en complexité compte tenu de la flexibilité impressionnate rajoutée. Le \autoref{src:leaflet} est à l'origine de la vue statique présentée à la \autoref{fig:leafletTrafic} extraite de la carte interactive qu'il génère. \\
+
+\addPicture{1}{0.4}{leafletTrafic}{Exemple de carte géographique produite avec \emph{leaflet}}{leaftetTrafic}
+
+\begin{lstlisting}[caption = Générer une carte du trafic aérien avec \emph{leaflet},label=src:leaflet]
+# install.package("leaflet")
+library(leaflet)
+url <- "http://hiking.waymarkedtrails.org/en/routebrowser/1225378/gpx"
+download.file(url, destfile = paste(path,"/Reference/worldRoutes.gpx",sep=""), method = "wget")
+worldRoutes <- readOGR(paste(path,"/Reference/worldRoutes.gpx",sep=""), layer = "tracks")
+markersData <- subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB'))
+markersWeb <- c("https://www.aeroportdequebec.com/fr/pages/accueil",
+                "http://www.admtl.com/",
+                "http://www.yvr.ca/en/passengers",
+                "https://www.torontopearson.com/")
+
+# Defining the description text to be displayed by the markers
+descriptions <-paste("<b><FONT COLOR=#31B404> Airport Details</FONT></b> <br>",
+                    "<b>IATA: <a href=",markersWeb,">",markersData$IATA,"</a></b><br>",
+                    "<b>Name:</b>",markersData$name,"<br>",
+                    "<b>Coord.</b>: (",markersData$longitude,",",markersData$latitude,") <br>",
+                    "<b>Trafic Index:</b>",markersData$combinedIndex)
+
+# Defining the icon to be add on the markers from fontawesome library
+icons <- awesomeIcons(icon = 'paper-plane',
+                      iconColor = 'black',
+                      library = 'fa')
+
+# Combinaison of the different components in order to create a standalone map
+(mapTraffic <- leaflet(worldRoutes) %>%
+    addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
+    addCircleMarkers(stroke = FALSE,data = TraficData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
+                     color = 'black', fillColor = 'green',
+                     radius = ~as.numeric(paste(combinedIndex))*30, opacity = 0.5) %>%
+    addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = descriptions,icon=icons))
+
+# Resizing of the map
+mapTraffic$width <- 874
+mapTraffic$height <- 700
+
+# Export of the map into html format
+# install.packages("htmlwidgets")
+library(htmlwidgets)
+saveWidget(mapTraffic, paste(path,"/Reference/leafletTrafic.html",sep = ""), selfcontained = TRUE)
+\end{lstlisting}
 
 
-La prochaine étape consiste à nettoyer la pertinence des données ainsi que le remplissage des données absentes. On observe que les relations (colonne) \textit{typeAirport}, \textit{country} et \textit{Source} ne sont pas pertinentes à notre situation puisque nous observons uniquement les aéroports canadiens. Elles seront retirées à l'aide du code suivant,
-
-%
-% airportsCanada <- airportsCanada[,-match(c("country","typeAirport","Source"), colnames(airportsCanada))]
-% # We delete the columns who the name match the name of columns in airportsCanada
-%
-
-On cherche maintenant les données absentes, on observe à l'aide de la fonction \emph{summary} que 27 aéroports ne comportent pas leur indicatif IATA, que l'on peut visualiser ainsi
-
-%
-% airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
-%
-
-Deux solutions sont possibles concernant cette situation, étant donné que seulement 18\% des IATA sont manquants, il pourrait être possible d'ignorer et de retirer les données. Par contre, à l'aide de l'indicatif ICAO il est possible de déterminer l'indicatif IATA. En effet, le ICAO correspond à un caractère unique par pays concaténer avec le IATA. À l'aide de cette information, il est possible de retrouver les informations manquantes facilement 
-
-%
-%# We are now able to fill the missing IATA and we delete the IACO since it's now useless
-% airportsCanada$IATA <- as.character(airportsCanada$IATA) 
-% # We fill the NA with the substring ICAO
-% airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
-% airportsCanada$IATA <- as.factor(airportsCanada$IATA)
-% airportsCanada <- airportsCanada[,-match("ICAO",colnames(airportsCanada))]
-%
-La fonction R \textit{substr} \cite{Rfunction:substr} permet de faire un découpage de la chaîne de caractère.
-
-Finalement, on peut aussi observer que 52 aéroports ne comportent pas de fuseau horaire, deux options sont envisageables pour résoudre la problématique.
-
-\begin{enumerate}
-\item Étant donné que les fuseaux horaires sont déterminés par des positions géographiques, il est possible de déduire les informations manquantes à partir des aéroports à proximité
-\item Utiliser des outils de cartographie pour retrouver les vrais fuseaux horaires.
-\end{enumerate}
-
-La seconde solution a été adoptée, elle peut sembler complexe, mais avec les bons outils elle s'avère beaucoup plus simple et efficace. Cette partie nécessite l'installation de deux paquetages R soit \textit{sp} \cite{Rpackage:sp} et \textit{rgdal} \cite{Rpackage:rgdal}.
 
 
-%
-% Partie sur les spatials points for tz
-%
-% Help + lien function to include
+Afin de valider nos résultats...
 
-
-%
-% Partie sur les spatials points for province révision sql
-%
-On constate qu'il y a absence de la province de chacun des aéroports, alors pour le calcul des taxes cette information est nécessaire. Il est donc possible à l'aide des méthodes de cartographie vue précédemment ainsi qu'avec les données sur les frontières des provinces \cite{Data:BoundaryFiles} de déterminer la province de l'aéroport. L'installation du paquetage R \textit{sqldf} \cite{Rpackage:sqldf} est nécessaire pour l'exécution de cette partie. En effet, on applique les mêmes concepts de cartographie au territoire canadien afin de \emph{quadriller} les provinces. Par la suite, à l'aide du langage \emph{sql} \cite{Language:sql} on [...] %%%%% explication SQL
-
-Ainsi, on obtient des données complètes pour l'ensemble des aéroports canadiens. Certaines informations sont toutefois devenues obsolètes pour la suite de l'étude de cas, en effet les relations (colonnes) \textit{ timezone}, \textit{DST} et \textit{city} ne sont plus pertinentes. De plus, la relation \textit{ tzformat} doit être retirée car elle sera remplacé par la relation \textit{tzmerge} créée par la requête \textit{sql} précédente. Afin de renommer les nouvelles colonnes ajouter par la requête, on utilise la fonction R \textit{rename} \cite{Rfunction:rename,} du paquetage \textit{plyr} \cite{Rpackage:plyr}.
-
-On s'intéresse maintenant aux deux dernières bases données pertinentes pour l'étude de cas, les voies aériennes et les compagnies aériennes. Tout d'abord, on sélectionne à l'aide d'une requête \textit{sql} les voies aériennes canadiennes. On analyse les informations présentes pour les voies aériennes et on observe que seulement 2 trajets ne sont pas des vols directs. Pour des fins de simplifications, tous les vols seront considérés comme des vols directs. Ainsi, les colonnes \textit{codeshare} et \textit{stops} sont inutiles.
-
-On s'intéresse maintenant à créer un indice d'achalandage des aéroports en fonction des routes. Cet indice nous sera utile plus tard dans la simulation des aéroports d'arrivée. On observe d'abord les faits marquants des voies aériennes, valeurs maximum, moyenne et variance. On représente graphiquement la répartition de l'index qui correspond au nombre de voies aériennes de l'aéroport diviser par le maximum de nombre de voies aériennes. Cet index nous permet ainsi de représenter sur un graphique à bulles  la densité des réseaux aériens pour chacun des aéroports.
+\addPicture{1}{0.4}{popDensityCanada}{\href{http://www.huffingtonpost.ca/2014/04/17/canada-empty-maps_n_5169055.html}{Densité de la population canadienne}}{popDensityCanada}

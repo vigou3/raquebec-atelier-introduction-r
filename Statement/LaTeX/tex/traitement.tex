@@ -1,4 +1,6 @@
 \subsection{Traitement}
+\label{subsec:Traitement}
+
 Une fois en possession du jeu de données, il fut nécessaire de nettoyer ce dernier pour en rendre son utilisation plus simple selon nos besoins. Parmi les différentes modifications apportées nous retrouvons: \\
 \begin{itemize}
 	\item Conserver que les observations relatives au aéroports Canadiens
@@ -77,7 +79,7 @@ Cette structure peut donner l'impression que leur utilisation conjointement avec
 \noindent
 Le paquetage \emph{rgdal} n'aura qu'une utilité bien précise, soit celle d'aller extraire les informations contenues dans le \emph{ShapeFile}. Cepenant, il possède des dépendances directement dans le paquetage \emph{sp} ce qui explique pourquoi le seul appel de \emph{rgdal} entraîne du même coup l'appel de \emph{sp}. Les rôles de \emph{sp} sont plutôt de transformer les informations des objets R sous une forme compatible au \emph{ShapeFile} que nous aurons lu. Notez bien la transformation de la projection sous une base commune en passant ainsi de \emph{NA} vers \begin{verbatim} "+proj=longlat" \end{verbatim} (projection choisie en fonction des données contenues) à \begin{verbatim} "+proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0" \end{verbatim} soit la projection du \emph{ShapeFile}. La nécessité que nos points soit sous la même projection que celle du \emph{ShapeFile} provient du fait que nous voulons superposer ces derniers pour ensuite en extraire l'information correspondante. Les deux fonctions indispensables ici sont \emph{CRS} qui retourne un objet de classe \emph{Coordinate Reference System} à partir d'une chaîne de caractère passée en argument et \emph{over} qui se chargera de faire la superposition de points géométriques sur un couche (correspondant ici au \emph{ShapeFile} vu selon une certaine projection) qui contient les attributs envers lesquels nous avons un intérêt. Le retour de la fonction \emph{over} sera finalement un \emph{data.frame} de même longueur que le nombre de points donnés en argument que nous pourrons facilement combiner le jeu de données initial. Cette recette ne risque pas de varier beaucoup d'un ShapeFile à un autre vous pourrez donc litéralement reprendre le code ci-dessous. \\
 
-\begin{lstlisting}[caption = Filtrer les données,label=src:Filter]
+\begin{lstlisting}[caption = Procédé standard pour le traitement de données géospatiales en R,label=src:GeoDataR]
 	# Step 1 - Import the Packages	
 	library(sp)
 	library(rgdal)
