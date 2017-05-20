@@ -385,6 +385,7 @@ library("MASS")
 
 # Paramètres pours les graphiques
 distName <- c("Normal","Gamma","LogNormal","Weibull")
+col <- c("red", "yellow", "purple", "green", "cyan", "blue")
 x <- seq(0,30,0.1)
 
 par(mfrow = c(1,2),font = 2)
