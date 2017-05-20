@@ -1,21 +1,8 @@
-#
-# This is the main code for the Case Study R à Québec 2017
-#
-# Author : David Beauchemin & Samuel Cabral Cruz
-#
+# coding: utf-8
+# CaseStudyRQuebec2017
+# Authors : David Beauchemin & Samuel Cabral Cruz
 
 #### Question 6 ####
-
-#
-# Need the dataset from question 1
-#
-
-#
-# Need the function from question 2
-#
-
-
-
 theurl <- getURL(paste("file:///",path,"/Statement/CaseStudyStatement.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
 lambdaTable <- as.data.frame(tables$"NULL")

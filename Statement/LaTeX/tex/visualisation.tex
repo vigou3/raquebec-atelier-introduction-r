@@ -1,0 +1,66 @@
+\subsection{Visualisation et analyse des données}
+
+La visualisation des données est une étape cruciale dans l’interprétation de ces dernières. 
+
+\begin{itemize}
+\item \textit{View}\cite{Rfunction:View} qui permet de visualiser le \emph{data frame} R dans un onglet à part;
+\item \textit{head} \cite{Rfunction:head} qui permet de visualiser dans la console les premières entrées;
+\item \textit{summary}\cite{Rfunction:summary} qui permet de visualiser différentes informations sur les données quantitatives et qualitatives telles que les quartiles, la moyenne, le maximum et le minimum pour les données quantitatives  et la fréquence des observations de chacune des données qualitatives.
+\end{itemize}
+Par la suite, il devient possible de sortir différentes informations spécifiques de chaque variable. Par exemple, le nombre d'aéroports par ville a été extrait et présenter à l'aide de la fonction R \textit{table} \cite{Rfunction:table}
+%
+% nbAirportCity <- table(as.character(airportsCanada$city)) #We use as.character to convert the factor into a fixed caractor
+%
+
+
+La prochaine étape consiste à nettoyer la pertinence des données ainsi que le remplissage des données absentes. On observe que les relations (colonne) \textit{typeAirport}, \textit{country} et \textit{Source} ne sont pas pertinentes à notre situation puisque nous observons uniquement les aéroports canadiens. Elles seront retirées à l'aide du code suivant,
+
+%
+% airportsCanada <- airportsCanada[,-match(c("country","typeAirport","Source"), colnames(airportsCanada))]
+% # We delete the columns who the name match the name of columns in airportsCanada
+%
+
+On cherche maintenant les données absentes, on observe à l'aide de la fonction \emph{summary} que 27 aéroports ne comportent pas leur indicatif IATA, que l'on peut visualiser ainsi
+
+%
+% airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
+%
+
+Deux solutions sont possibles concernant cette situation, étant donné que seulement 18\% des IATA sont manquants, il pourrait être possible d'ignorer et de retirer les données. Par contre, à l'aide de l'indicatif ICAO il est possible de déterminer l'indicatif IATA. En effet, le ICAO correspond à un caractère unique par pays concaténer avec le IATA. À l'aide de cette information, il est possible de retrouver les informations manquantes facilement 
+
+%
+%# We are now able to fill the missing IATA and we delete the IACO since it's now useless
+% airportsCanada$IATA <- as.character(airportsCanada$IATA) 
+% # We fill the NA with the substring ICAO
+% airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
+% airportsCanada$IATA <- as.factor(airportsCanada$IATA)
+% airportsCanada <- airportsCanada[,-match("ICAO",colnames(airportsCanada))]
+%
+La fonction R \textit{substr} \cite{Rfunction:substr} permet de faire un découpage de la chaîne de caractère.
+
+Finalement, on peut aussi observer que 52 aéroports ne comportent pas de fuseau horaire, deux options sont envisageables pour résoudre la problématique.
+
+\begin{enumerate}
+\item Étant donné que les fuseaux horaires sont déterminés par des positions géographiques, il est possible de déduire les informations manquantes à partir des aéroports à proximité
+\item Utiliser des outils de cartographie pour retrouver les vrais fuseaux horaires.
+\end{enumerate}
+
+La seconde solution a été adoptée, elle peut sembler complexe, mais avec les bons outils elle s'avère beaucoup plus simple et efficace. Cette partie nécessite l'installation de deux paquetages R soit \textit{sp} \cite{Rpackage:sp} et \textit{rgdal} \cite{Rpackage:rgdal}.
+
+
+%
+% Partie sur les spatials points for tz
+%
+% Help + lien function to include
+
+
+%
+% Partie sur les spatials points for province révision sql
+%
+On constate qu'il y a absence de la province de chacun des aéroports, alors pour le calcul des taxes cette information est nécessaire. Il est donc possible à l'aide des méthodes de cartographie vue précédemment ainsi qu'avec les données sur les frontières des provinces \cite{Data:BoundaryFiles} de déterminer la province de l'aéroport. L'installation du paquetage R \textit{sqldf} \cite{Rpackage:sqldf} est nécessaire pour l'exécution de cette partie. En effet, on applique les mêmes concepts de cartographie au territoire canadien afin de \emph{quadriller} les provinces. Par la suite, à l'aide du langage \emph{sql} \cite{Language:sql} on [...] %%%%% explication SQL
+
+Ainsi, on obtient des données complètes pour l'ensemble des aéroports canadiens. Certaines informations sont toutefois devenues obsolètes pour la suite de l'étude de cas, en effet les relations (colonnes) \textit{ timezone}, \textit{DST} et \textit{city} ne sont plus pertinentes. De plus, la relation \textit{ tzformat} doit être retirée car elle sera remplacé par la relation \textit{tzmerge} créée par la requête \textit{sql} précédente. Afin de renommer les nouvelles colonnes ajouter par la requête, on utilise la fonction R \textit{rename} \cite{Rfunction:rename,} du paquetage \textit{plyr} \cite{Rpackage:plyr}.
+
+On s'intéresse maintenant aux deux dernières bases données pertinentes pour l'étude de cas, les voies aériennes et les compagnies aériennes. Tout d'abord, on sélectionne à l'aide d'une requête \textit{sql} les voies aériennes canadiennes. On analyse les informations présentes pour les voies aériennes et on observe que seulement 2 trajets ne sont pas des vols directs. Pour des fins de simplifications, tous les vols seront considérés comme des vols directs. Ainsi, les colonnes \textit{codeshare} et \textit{stops} sont inutiles.
+
+On s'intéresse maintenant à créer un indice d'achalandage des aéroports en fonction des routes. Cet indice nous sera utile plus tard dans la simulation des aéroports d'arrivée. On observe d'abord les faits marquants des voies aériennes, valeurs maximum, moyenne et variance. On représente graphiquement la répartition de l'index qui correspond au nombre de voies aériennes de l'aéroport diviser par le maximum de nombre de voies aériennes. Cet index nous permet ainsi de représenter sur un graphique à bulles  la densité des réseaux aériens pour chacun des aéroports.

@@ -93,66 +93,81 @@ Le paquetage \emph{rgdal} n'aura qu'une utilité bien précise, soit celle d'all
 	merged_prov <- cbind(airportsCanada,over(sppts,prov_terr.shape))
 \end{lstlisting}
 
-La visualisation des données est une étape cruciale dans l’interprétation de celle-ci. De nombreuses fonctions R permettent de sortir plusieurs informations pertinentes sur les données. Tel que
-\begin{itemize}
-\item \textit{View}\cite{Rfunction:View} qui permet de visualiser le \emph{data frame} R dans un onglet à part;
-\item \textit{head} \cite{Rfunction:head} qui permet de visualiser dans la console les premières entrées;
-\item \textit{summary}\cite{Rfunction:summary} qui permet de visualiser différentes informations sur les données quantitatives et qualitatives telles que les quartiles, la moyenne, le maximum et le minimum pour les données quantitatives  et la fréquence des observations de chacune des données qualitatives.
-\end{itemize}
-Par la suite, il devient possible de sortir différentes informations spécifiques de chaque variable. Par exemple, le nombre d'aéroports par ville a été extrait et présenter à l'aide de la fonction R \textit{table} \cite{Rfunction:table}
-%
-% nbAirportCity <- table(as.character(airportsCanada$city)) #We use as.character to convert the factor into a fixed caractor
-%
+\vspace{\baselineskip}
+\noindent
+Maintenant que nous disposons de l'information requise pour compléter notre base de données, nous devons combiner la table primaire avec les sous-tables crées lors de nos extractions et refaire un dernier filtre final pour se débarasser de tout ce qui ne sera plus utile. Bien que les fonctionnalités de base de R vous permettrait d'accomplir la tâche, nous profitons de cette étape du processus pour vous introduire les paquetages \emph{sqldf} et \emph{dplyr}. \\
 
+\noindent
+Le langage SQL (\emph{Structured Query Language}) fut inventé en 1974 et ce dernier fut normalisé en 1986 devenant aisni un standard dans l'exploitation de base de données relationnelles. Devenir familier avec les langages normalisés tel que le SQL ne peut qu'être à votre avantage puisque ceux-ci vous permettront d'écrire des tronçons de code qui pourront facilement être transportés avec peu de modifications d'un environnement à un autre. Leur caractère normalisé impose aux environnements voulant respecter les standards de l'industrie d'être en mesure de compiler ces instructions bien qu'il y ait des fonctionnalités permettant de répliquer leur comportement ou du moins offrir un paquetage permettant leur interprétation. \cite{SQL} Nous conseillons fortement à tous les analystes de données de s'approprier les rudiments du SQL très tôt dans leur cheminement en raison de sa simplicité et sa flexibilité. Les requêtes SQL sont habituellement constituées des quatres instructions suivantes: \\
 
-La prochaine étape consiste à nettoyer la pertinence des données ainsi que le remplissage des données absentes. On observe que les relations (colonne) \textit{typeAirport}, \textit{country} et \textit{Source} ne sont pas pertinentes à notre situation puisque nous observons uniquement les aéroports canadiens. Elles seront retirées à l'aide du code suivant,
+\begin{description}[style=multiline,leftmargin=2cm]
+	\item[Select] Déclare les variables que nous voulons conserver
+	\item[From] Indique la source des données
+	\item[Where] Mentionne les conditions que les observations doivent respecter pour se retrouver dans l'extrant
+	\item[Order by] Spécifie la manière de trier l'extrant
+\end{description}
 
-%
-% airportsCanada <- airportsCanada[,-match(c("country","typeAirport","Source"), colnames(airportsCanada))]
-% # We delete the columns who the name match the name of columns in airportsCanada
-%
+\noindent
+La syntaxe rudimentaire rend sa compréhension presque immédiate, et ce, même à des personnes ignorant même qu'il s'agit en fait d'une requête SQL. Dépendemment des noms de variables contenues dans les relations exploitées, les requêtes peuvent parfois se lire aussi bien qu'une liste d'épicerie écrite en anglais. Le \autoref{src:simpleSQL} fourni un exemple de l'utilisation du langage SQL avec R rendu disponible par le paquetage \emph{sqldf}.
 
-On cherche maintenant les données absentes, on observe à l'aide de la fonction \emph{summary} que 27 aéroports ne comportent pas leur indicatif IATA, que l'on peut visualiser ainsi
+\begin{lstlisting}[caption = Exemple de requête SQL,label=src:simpleSQL]
+library(sqldf)
+sqldf("SELECT name,IATA,altitude,province
+      FROM airportsCanada
+      WHERE province = 'New Brunswick'
+      ORDER BY name")
+\end{lstlisting}
 
-%
-% airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
-%
-
-Deux solutions sont possibles concernant cette situation, étant donné que seulement 18\% des IATA sont manquants, il pourrait être possible d'ignorer et de retirer les données. Par contre, à l'aide de l'indicatif ICAO il est possible de déterminer l'indicatif IATA. En effet, le ICAO correspond à un caractère unique par pays concaténer avec le IATA. À l'aide de cette information, il est possible de retrouver les informations manquantes facilement 
-
-%
-%# We are now able to fill the missing IATA and we delete the IACO since it's now useless
-% airportsCanada$IATA <- as.character(airportsCanada$IATA) 
-% # We fill the NA with the substring ICAO
-% airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
-% airportsCanada$IATA <- as.factor(airportsCanada$IATA)
-% airportsCanada <- airportsCanada[,-match("ICAO",colnames(airportsCanada))]
-%
-La fonction R \textit{substr} \cite{Rfunction:substr} permet de faire un découpage de la chaîne de caractère.
-
-Finalement, on peut aussi observer que 52 aéroports ne comportent pas de fuseau horaire, deux options sont envisageables pour résoudre la problématique.
-
+\vspace{\baselineskip}
+\noindent
+En nous fiant à la requête ci-dessus, nous pourrions la transformer de manière textuelle sous la forme suivante:
 \begin{enumerate}
-\item Étant donné que les fuseaux horaires sont déterminés par des positions géographiques, il est possible de déduire les informations manquantes à partir des aéroports à proximité
-\item Utiliser des outils de cartographie pour retrouver les vrais fuseaux horaires.
+	\item Sélectionne les variables \emph{name, IATA, altitude et province}
+	\item Dans la relation \emph{airportsCanada}
+	\item Dont la province est \emph{New Brunswick}
+	\item En triant le tout par \emph{name}
 \end{enumerate}
 
-La seconde solution a été adoptée, elle peut sembler complexe, mais avec les bons outils elle s'avère beaucoup plus simple et efficace. Cette partie nécessite l'installation de deux paquetages R soit \textit{sp} \cite{Rpackage:sp} et \textit{rgdal} \cite{Rpackage:rgdal}.
+\noindent
+Toutefois, les fonctionnalités de SQL ne s'arrête pas ici. Grâce à des intructions très compactes, nous pourrons rendre le comportement de la requête bien plus complexe. Parmi les fonctionnalités qui font partie de notre quotidien, nous retrouvons \emph{*} qui lorsqu'utiliser au sein de l'instruction \emph{select} permettra d'extraire l'ensemble des variables de la relation sans avoir à les écrire une à la fois. La fonction \emph{coalesce} servira à extraire la première valeur non manquante parmi une liste de variables fournie en argument. Nous attirons au passage votre attention sur le mot clé \emph{as} qui a pour effet d'attribut un nom à l'expression sous-jacente. Finalement, le bon vieux \emph{left join} rendant si simple la fusion conditionnelle de deux tables en conservant toutefois les observations de la relation mère malgré le fait qu'il n'y ait pas eu correspondance dans la table à fusionner. Les conditions de cette fusion seront explicitées avec l'instruction \emph{on} qui n'aura pas de signification tangible sans la présence de \emph{join}. Le \autoref{src:advancedSQL} présente une requête combinant tous ces fonctionnalités que vous serez en mesure de retrouver dans le code source du projet.
 
+\begin{lstlisting}[caption = Fonctionnalités avancées de SQL,label=src:advancedSQL]
+airportsCanada <- sqldf("
+  SELECT 
+    a.*, 
+    COALESCE(a.tzFormat,b.TZID) AS tzMerged,
+    c.PRENAME AS provMerged
+  FROM airportsCanada a 
+  LEFT JOIN merged_tz b
+  	ON a.airportID = b.airportID
+  LEFT JOIN merged_prov c
+  	ON a.airportID = c.airportID
+  ORDER BY a.airportID")
+\end{lstlisting}
 
-%
-% Partie sur les spatials points for tz
-%
-% Help + lien function to include
+\vspace{\baselineskip}
+\noindent
+Il serait faux de dire que ceci correspond à une bonne introduction à SQL sans parler de la capacité d'imbriquer des requête SQL. C'est à ce moment que toute la puissance du langage se révèle à nous. Le \autoref{src:interlinkedSQL} montre un exemple standard d'imbrication qui a été exploité pour créer la relation \emph{routesCanada} en ne conservant que les routes aériennes empruntées pour les vols internes au Canada. \footnote{Le mot clé \emph{DISTINCT} spécifie de ne conserver qu'une seule observation pour chaque modalité retrouvée} \footnote{L'utilisation de la case dans les exemples n'a été utilisé que pour bien faire la différence entre les instructions SQL des informations spécifiques aux relations traitées. Le SQL n'est pas sensible à la case.}
 
+\begin{lstlisting}[caption = Fonctionnalités avancées de SQL,label=src:interlinkedSQL]
+routesCanada <- sqldf("
+  SELECT *
+  FROM routes
+  WHERE sourceAirportID IN (SELECT DISTINCT airportID
+                            FROM airportsCanada)
+    AND destinationAirportID IN (SELECT DISTINCT airportID
+                                 FROM airportsCanada)")                           
+\end{lstlisting}
 
-%
-% Partie sur les spatials points for province révision sql
-%
-On constate qu'il y a absence de la province de chacun des aéroports, alors pour le calcul des taxes cette information est nécessaire. Il est donc possible à l'aide des méthodes de cartographie vue précédemment ainsi qu'avec les données sur les frontières des provinces \cite{Data:BoundaryFiles} de déterminer la province de l'aéroport. L'installation du paquetage R \textit{sqldf} \cite{Rpackage:sqldf} est nécessaire pour l'exécution de cette partie. En effet, on applique les mêmes concepts de cartographie au territoire canadien afin de \emph{quadriller} les provinces. Par la suite, à l'aide du langage \emph{sql} \cite{Language:sql} on [...] %%%%% explication SQL
+\begin{moreInfo}{\emph{Structured Query Language} (SQL)}
+	Le langage SQL regorge de plusieurs autres fonctionnalités qui ne seront pas abordées dans ce document. Parmi ces dernières, nous retrouvons \emph{GROUP BY}, \emph{HAVING}, les fonctions d'aggrégation numérique tel quel \emph{SUM}, \emph{AVG}, \emph{MIN}, \emph{MAX}, etc. et nous pourrions continuer ainsi encore longtemps. \\
+	\url{https://www.w3schools.com/sql/}
+\end{moreInfo}
 
-Ainsi, on obtient des données complètes pour l'ensemble des aéroports canadiens. Certaines informations sont toutefois devenues obsolètes pour la suite de l'étude de cas, en effet les relations (colonnes) \textit{ timezone}, \textit{DST} et \textit{city} ne sont plus pertinentes. De plus, la relation \textit{ tzformat} doit être retirée car elle sera remplacé par la relation \textit{tzmerge} créée par la requête \textit{sql} précédente. Afin de renommer les nouvelles colonnes ajouter par la requête, on utilise la fonction R \textit{rename} \cite{Rfunction:rename,} du paquetage \textit{plyr} \cite{Rpackage:plyr}.
+\noindent
+Avant de passer à la prochaine section, il serait injuste de présenter \emph{sqldf} avec autant de précisions sans toucher un mot sur les paquetages \emph{plyr} et \emph{dplyr}. Ces derniers visent à reproduire les opérations permises par le langage SQL avec une notation aussi simpliste, mais en optimisant ces opérations en tenant compte du fonctionnement intrinsèque de R, soit le calcul matriciel. Une différence majeure avec le SQL provient du mode de pensée se rapprochant davantage d'un mode procédural pour \emph{plyr} que du mode fonctionnel pour le SQL. Ces packages deviendront des outils très pertinents lorsque vous commencerez à faire face à des problèmes de temps d'exécution inraisonables.
 
-On s'intéresse maintenant aux deux dernières bases données pertinentes pour l'étude de cas, les voies aériennes et les compagnies aériennes. Tout d'abord, on sélectionne à l'aide d'une requête \textit{sql} les voies aériennes canadiennes. On analyse les informations présentes pour les voies aériennes et on observe que seulement 2 trajets ne sont pas des vols directs. Pour des fins de simplifications, tous les vols seront considérés comme des vols directs. Ainsi, les colonnes \textit{codeshare} et \textit{stops} sont inutiles.
-
-On s'intéresse maintenant à créer un indice d'achalandage des aéroports en fonction des routes. Cet indice nous sera utile plus tard dans la simulation des aéroports d'arrivée. On observe d'abord les faits marquants des voies aériennes, valeurs maximum, moyenne et variance. On représente graphiquement la répartition de l'index qui correspond au nombre de voies aériennes de l'aéroport diviser par le maximum de nombre de voies aériennes. Cet index nous permet ainsi de représenter sur un graphique à bulles  la densité des réseaux aériens pour chacun des aéroports.
+\begin{moreInfo}{\emph{plyr} ou \emph{dplyr} ?}
+	Le paquetage \emph{dplyr} est en fait une seconde version du paquetage \emph{plyr} visant à optimiser le temps de calcul, simplifier son utilisation à l'aide d'une syntaxe plus intuitive et à rendre ses fonctions plus cohérentes entre elles. De plus, \emph{dplyr} concentre son développement autour de la classe object \emph{data.frame}. Pour toutes ces raisons, l'utilisation de \emph{dplyr} serait à préconiser si vous travaillez avec des \emph{data.frame} qui consistent du même coup en la classe standard de R pour représenter les bases de données...\\
+	\url{https://blog.rstudio.org/2014/01/17/introducing-dplyr/}
+\end{moreInfo}

@@ -1,12 +1,10 @@
-#
-# This is the main code for the Case Study R à Québec 2017
-#
-# Author : David Beauchemin & Samuel Cabral Cruz
-#
+# coding: utf-8
+# CaseStudyRQuebec2017
+# Authors : David Beauchemin & Samuel Cabral Cruz
 
 #### Setting working directory properly ####
+setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
 getwd()
-#setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
 setwd('..')
 (path <- getwd())
 set.seed(31459)
@@ -49,7 +47,6 @@ nbAirportCity <- table(airportsCanada$city)
 # We observe that the variables typeAirport and Source are useless in our situation since we only use information on air transport. 
 # A similar reasoning is applicable for the country variable which will only have the modality Canada.
 airportsCanada <- subset(airportsCanada, select = -c(country, typeAirport, Source ))
-
 
 # As seen in the sumary, we dont have the IATA for 27 airports.
 airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
@@ -121,7 +118,6 @@ summary(airportsCanada)
 library(plyr)
 airportsCanada <- rename(airportsCanada, c("tzMerged"="tzFormat", "provMerged"="province"))
 summary(airportsCanada)
-
 routesCanada <- sqldf("
   select *
   from routes
@@ -205,7 +201,7 @@ IATA <- names(totalFlights)
 
 # Index drawing
 curve(totalFlightsCDF(x-1),from = 0,to = 60,n = 100,
-      xlab = "Nombre de routes par aéroport", 
+      xlab = "Nombre de routes par aeroport", 
       ylab = "CDF")
 
 # Calculate a combined index from the index.
@@ -235,4 +231,39 @@ mapPoints <-
   geom_point(data=airportsCoord,aes(x=lon,y=lat,size=size),alpha=0.5,shape=16)
 (mapTraffic <-  
   mapPoints + 
-  scale_size_continuous(range = c(0, 20),name = "Traffic Index"))
+  scale_size_continuous(range = c(0, 20),name = "Trafic Index"))
+
+
+# install.package("leaflet")
+library(leaflet)
+
+# Fetch the route of the PCT and convert it into a SpatialLine object
+url <- "http://hiking.waymarkedtrails.org/en/routebrowser/1225378/gpx"
+download.file(url, destfile = paste(path,"/Reference/pct.gpx",sep=""), method = "wget")
+pct <- readOGR(paste(path,"/Reference/pct.gpx",sep=""), layer = "tracks")
+markersData <- subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB'))
+markersWeb <- c("https://www.aeroportdequebec.com/fr/pages/accueil",
+                "http://www.admtl.com/",
+                "http://www.yvr.ca/en/passengers",
+                "https://www.torontopearson.com/")
+description <-paste("<b><FONT COLOR=#31B404> Airport Details</FONT></b> <br>",
+                    "<b>IATA: <a href=",markersWeb,">",markersData$IATA,"</a></b><br>",
+                    "<b>Name:</b>",markersData$name,"<br>",
+                    "<b>Coord.</b>: (",markersData$longitude,",",markersData$latitude,") <br>",
+                    "<b>Trafic Index:</b>",markersData$combinedIndex)
+icons <- awesomeIcons(
+  icon = 'paper-plane',
+  iconColor = 'black',
+  library = 'fa')
+
+# Import list with shapefiles of the three states the PCT is crossing
+  (your.map <- leaflet(pct) %>%
+    addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
+    addCircleMarkers(stroke = FALSE,data = subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.1), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
+                     color = 'black', fillColor = 'green',
+                     radius = ~as.numeric(paste(combinedIndex))*20, opacity = 0.5) %>%
+    addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = description,icon=icons))
+
+
+#addMarkers(data = subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB')), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
+

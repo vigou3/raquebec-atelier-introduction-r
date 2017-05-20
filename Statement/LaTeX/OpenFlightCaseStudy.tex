@@ -2,9 +2,9 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[french]{babel}
 \usepackage{listings}
 \lstloadlanguages{R}
-\usepackage[french]{babel}
 \usepackage{graphicx}
 \usepackage{fontawesome}
 \usepackage{enumitem}
@@ -100,6 +100,7 @@
 	stringstyle=\ttfamily\color{mauve},
 	%identifierstyle=\color{magenta},
 	escapeinside={\%*}{*)},
+	%literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1,
 	morekeywords={*,...,seed,strings,header,select}} 
 
 \begin{document}
@@ -148,9 +149,25 @@
 
 \appendix
 \chapter{Code Source}
-Cette annexe présente l'ensemble des codes sources constituant l'ensemble du projet. Ceux-ci se divisent sous la forme de 6 parties correspondantes aux différents thèmes abordés dans le présent document. \\
+Cette annexe présente les codes sources constituant l'ensemble du projet. Ceux-ci se divisent sous la forme de 6 parties correspondant aux différents thèmes abordés dans le présent document. \\
 \lstinputlisting[caption=Benchmark.R]{../../dev/Benchmark.R}
 \label{src:Benchmark}
-%\lstinputlisting[caption=CaseStudyDevQ1.R]{../../dev/CaseStudyDevQ1.R}
-%\label{src:CaseStudyDevQ1}
+\newpage
+\lstinputlisting[caption=CaseStudyDevQ1.R]{../../dev/CaseStudyDevQ1.R}
+\label{src:CaseStudyDevQ1}
+\newpage
+\lstinputlisting[caption=CaseStudyDevQ2.R]{../../dev/CaseStudyDevQ2.R}
+\label{src:CaseStudyDevQ2}
+\newpage
+\lstinputlisting[caption=CaseStudyDevQ3.R]{../../dev/CaseStudyDevQ3.R}
+\label{src:CaseStudyDevQ3}
+\newpage
+\lstinputlisting[caption=CaseStudyDevQ4.R]{../../dev/CaseStudyDevQ4.R}
+\label{src:CaseStudyDevQ4}
+\newpage
+\lstinputlisting[caption=CaseStudyDevQ5.R]{../../dev/CaseStudyDevQ5.R}
+\label{src:CaseStudyDevQ5}
+\newpage
+\lstinputlisting[caption=CaseStudyDevQ6.R]{../../dev/CaseStudyDevQ6.R}
+\label{src:CaseStudyDevQ6}
 \end{document}
