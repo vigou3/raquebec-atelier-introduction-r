@@ -159,12 +159,14 @@ mapply(fun, x, c(3, 5, 7, 7))
 ### FONCTION 'replicate'
 ###
 
-## La fonction 'replicate' va répéter un certain nombre de
-## fois une expression quelconque.
+## La fonction 'replicate' répète 'n' fois une expression
+## quelconque.
 ##
-## Par exemple, pour simuler dix échantillons aléatoires
-## indépendants de longueur 12, il faut exécuter la même
-## expression 10 fois. C'est un travail pour 'replicate'. À
+## La fonction sert surtout pour la simulation.
+##
+## Par exemple, simuler dix échantillons aléatoires
+## indépendants de longueur 12 requiert d'exécuter la même
+## expression dix fois. C'est un travail pour 'replicate'. À
 ## noter que les échantillons se trouvent dans les colonnes de
 ## la matrice résultante.
 replicate(10, sample(1:100, 12))
