@@ -52,9 +52,10 @@
     basicstyle=\small\ttfamily\NoAutoSpacing,
     commentstyle=\color{comments}\slshape,
     keywordstyle=\mdseries,
-    showstringspaces=false,
-    backgroundcolor=\color{codebg},
-    frame=leftline,framerule=3pt}
+    escapeinside=`',
+    aboveskip=0pt,
+    belowskip=0pt,
+    showstringspaces=false}
 
   %% =========================
   %%  Nouveaux environnements
@@ -95,6 +96,8 @@
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\link}[2]{\href{#1}{#2~\raisebox{-0.2ex}{\faExternalLink}}}
   \newcommand{\capsule}[2]{\href{#1}{\faYoutubePlay~#2}}
+
+  \newcommand{\meta}[1]{\ensuremath\langle{\normalfont\itshape #1\/}\ensuremath\rangle}
 
   %% «Bouton» de la page de copyright
   \newcommand{\browsebutton}{%
@@ -138,6 +141,7 @@
 \include{bases}
 \include{donnees}
 \include{application}
+\include{controle}
 
 \end{document}
 
