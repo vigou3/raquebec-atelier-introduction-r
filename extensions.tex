@@ -5,21 +5,12 @@
 
   \begin{itemize}
   \item Fonctions, données et documentation réunies dans des
-    \alert{paquetages} (\emph{package})
-  \item Paquetages réunis dans des \alert{bibliothèques}
+    \alert{paquetages} (\emph{packages})
+  \item Paquetages réunis dans une \alert{bibliothèque}
     (\emph{library})
   \item Bibliothèque de base de R contient une trentaine de paquetages
     dont certains sont chargés par défaut au démarrage
-<<echo=FALSE>>=
-options(width=65)
-@
-<<echo=TRUE>>=
-options("defaultPackages")
-@
   \item Fonction pour charger un paquetage: \texttt{library}
-<<echo=TRUE, eval=FALSE>>=
-library(MASS)
-@
   \item Nous recommandons de vous créer une bibliothèque personnelle
   \end{itemize}
 \end{frame}
@@ -35,14 +26,11 @@ library(MASS)
     \end{quote}
   \item Installation automatisée depuis R avec
     \texttt{install.packages}
-<<echo=TRUE, eval=FALSE>>=
-install.packages(actuar)
-@
   \item Après installation, charger le paquetage avec \texttt{library}
-<<echo=TRUE, eval=FALSE>>=
-library(actuar)
-@
   \end{itemize}
+
+  \pause
+  \gotoR{extensions.R}
 \end{frame}
 
 %%% Local Variables:
