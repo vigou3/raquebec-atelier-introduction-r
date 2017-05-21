@@ -8,6 +8,7 @@
 \setlength{\bandeorwidth}{\TPHorizModule}
 \setlength{\bandeorheight}{\banderougeheight}
 \setlength{\imageheight}{29\TPVertModule}
+\setlength{\imagewidth}{3\TPHorizModule}
 \setlength{\logoheight}{2.5\TPVertModule}
 \setlength{\gapwidth}{0.75pt}
 \addtolength{\bandeorwidth}{-\gapwidth}
@@ -15,7 +16,7 @@
 
 \begin{frame}[plain]
   %% bandeau identitaire
-  \begin{textblock*}{125mm}[0,1](0mm,30\TPVertModule)
+  \begin{textblock*}{3\TPHorizModule}[0,1](0mm,30\TPVertModule)
     \textcolor{rouge}{\rule{\banderougewidth}{\banderougeheight}}% % bande rouge
     \rule{\gapwidth}{0pt}%                                         % filet
     \textcolor{or}{\rule{\bandeorwidth}{\bandeorheight}}           % bande or
@@ -28,51 +29,32 @@
   \end{textblock*}
 
   %% image de fond
-
-  %% https://commons.wikimedia.org/wiki/File:Harfang_des_neiges_-_Snowy_owl_(25136870099).jpg?uselang=fr
-  %% Par Kristina Servant from Montreal, Canada — Harfang des neiges | Snowy owl, CC BY 2.0, https://commons.wikimedia.org/w/index.php?curid=56696139
-
-  \begin{textblock*}{125mm}(0mm,0mm)
-    \includegraphics[height=\imageheight,keepaspectratio=true]{Suricata-diapos.jpg}
+  \begin{textblock*}{3\TPHorizModule}(0mm,0mm)
+    \includegraphics[height=\imageheight,width=\imagewidth]{Fotolia_99831160.jpg}
   \end{textblock*}
 
-  %% trame (titre)
-  \begin{textblock*}{2\TPHorizModule}(0mm,14\TPVertModule)
-    \pgfsetfillopacity{0.5}
-    \textcolor{white}{\rule{\linewidth}{10\TPVertModule}}
-    \pgfsetfillopacity{1}
-  \end{textblock*}
+  % %% trame (titre)
+  % \begin{textblock*}{2\TPHorizModule}(0mm,14\TPVertModule)
+  %   \pgfsetfillopacity{0.5}
+  %   \textcolor{white}{\rule{\linewidth}{10\TPVertModule}}
+  %   \pgfsetfillopacity{1}
+  % \end{textblock*}
 
   %% titre
-  \begin{textblock*}{1.6\TPHorizModule}(0.4\TPHorizModule,15.2\TPVertModule)
+  \begin{textblock*}{2\TPHorizModule}(0.2\TPHorizModule,3\TPVertModule)
     \raggedright%
-    \titles\bfseries
-    \fontsize{20}{20}\selectfont
-    Rédaction avec \\
-    \rmfamily\mdseries
-    \fontsize{22.5}{22.5}\selectfont
-    \raisebox{5pt}{{\textbackslash}title}%
-    \fontsize{40}{40}\selectfont%
-    \{%
-    \fontsize{35}{35}\selectfont%
-    \LaTeX
-    \fontsize{40}{40}\selectfont%
-    \}
+    \bfseries
+    \fontsize{30}{30}\selectfont
+    Introduction à R \\
+    \mdseries
+    \fontsize{14}{18}\selectfont
+    Atelier du colloque R à Québec 2017 \\
   \end{textblock*}
 
-  %% trame (premiers pas)
-  \begin{textblock*}{\TPHorizModule}(2\TPHorizModule,24\TPVertModule)
-    \pgfsetfillopacity{0.5}
-    \textcolor{white}{\rule{\linewidth}{2\TPVertModule}}
-    \pgfsetfillopacity{1}
-  \end{textblock*}
-
-  %%
-  \begin{textblock*}{0.8\TPHorizModule}(2.1\TPHorizModule,24.5\TPVertModule)
-    \raggedright%
-    \titles\bfseries
-    \fontsize{11}{11}\selectfont
-    Premiers pas
+  %% date
+  \begin{textblock*}{2\TPHorizModule}(0.2\TPHorizModule,26\TPVertModule)
+    \fontsize{10}{12}\selectfont
+    25 mai 2017
   \end{textblock*}
 \end{frame}
 \endgroup
@@ -80,5 +62,5 @@
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-engine: xetex
-%%% TeX-master: "formation-latex-ul-diapos"
+%%% TeX-master: "raquebec-atelier-introduction-r"
 %%% End:

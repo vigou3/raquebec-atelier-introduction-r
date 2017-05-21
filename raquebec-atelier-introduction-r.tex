@@ -131,18 +131,22 @@
   %% arrière.
   \newlength{\banderougewidth} \newlength{\banderougeheight}
   \newlength{\bandeorwidth}    \newlength{\bandeorheight}
-  \newlength{\imageheight}
+  \newlength{\imageheight}     \newlength{\imagewidth}
   \newlength{\logoheight}
   \newlength{\gapwidth}
 
+  %\includeonly{couverture-avant}
+
 \begin{document}
 
+\include{couverture-avant}
 \include{presentation}
 \include{bases}
 \include{donnees}
 \include{application}
 \include{controle}
 \include{extensions}
+\include{couverture-arriere}
 
 \end{document}
 
