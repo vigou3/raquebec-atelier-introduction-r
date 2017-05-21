@@ -1,0 +1,14 @@
+lubridate
+https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
+
+date-time conversion
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/as.POSIXlt.html
+
+get current date and time
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/Sys.time.html
+
+object identification
+http://stackoverflow.com/questions/1177926/r-object-identification
+
+verify time conversion
+https://www.timeanddate.com/worldclock/canada/vancouver

@@ -1,0 +1,15 @@
+Legend for plot
+https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/legend.html
+
+curve
+https://www.math.ucla.edu/~anderson/rw1001/library/base/html/curve.html
+
+bold
+https://stat.ethz.ch/pipermail/r-help/2008-March/157265.html
+
+main title
+https://stat.ethz.ch/pipermail/r-help/2008-August/170110.html
+http://stackoverflow.com/questions/14660372/common-main-title-of-a-figure-panel-compiled-with-parmfrow
+
+straight line
+https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/abline.html

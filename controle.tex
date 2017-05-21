@@ -1,0 +1,107 @@
+\section{Structures de contrôle}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Exécution conditionnelle}
+
+  Formes sans ou avec alternative.
+
+  \begin{minipage}{\linewidth}
+    \begin{minipage}[t]{0.48\linewidth}
+      \begin{Schunk}
+\begin{lstlisting}
+if (`\meta{condition}')
+    `\meta{conséquence}'
+\end{lstlisting}
+      \end{Schunk}
+    \end{minipage}
+    \begin{minipage}[t]{0.48\linewidth}
+      \begin{Schunk}
+\begin{lstlisting}
+if (`\meta{condition}')
+    `\meta{conséquence}'
+else
+    `\meta{alternative}'
+\end{lstlisting}
+      \end{Schunk}
+    \end{minipage} \\
+    \mbox{}
+  \end{minipage}
+  \begin{itemize}
+  \item \meta{condition} expression évaluant à une valeur
+    \texttt{TRUE} ou \texttt{FALSE} \alert{unique}
+    \begin{itemize}
+    \item utiles: \verb=all=, \verb=any=,
+      \verb=isTRUE=, \dots
+    \item inutile: \verb|if (TRUE == TRUE)|
+    \end{itemize}
+  \item \meta{conséquence} expression, ou groupe d'expressions
+    regroupées entre \verb={ }=, à exécuter quand la condition est
+    \texttt{TRUE}
+  \item \meta{alternative} expression, ou groupe d'expressions
+    regroupées entre \verb={ }=, à exécuter quand la condition est
+    \texttt{FALSE}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exécution répétitive}
+
+  \begin{itemize}
+  \item Chercher d'abord à vectoriser les calculs
+  \item Utiliser les fonctions
+    \begin{itemize}
+    \item \texttt{outer}
+    \item \texttt{apply}
+    \item \texttt{tapply}
+    \item \texttt{lapply}, \texttt{sapply}
+    \item \texttt{mapply}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Trois types de boucles}
+
+  Nombre d'itérations connu.
+  \begin{Schunk}
+\begin{lstlisting}
+for (`\meta{variable}' in `\meta{suite}')
+    `\meta{expression}'
+\end{lstlisting}
+  \end{Schunk}
+
+  Nombre d'itérations inconnu, pas nécessairement exécuté.
+  \begin{Schunk}
+\begin{lstlisting}
+while (`\meta{condition}')
+    `\meta{expression}'
+\end{lstlisting}
+  \end{Schunk}
+
+  Nombre d'itérations inconnu, exécuté au moins une fois.
+  \begin{Schunk}
+\begin{lstlisting}
+repeat
+    `\meta{expression}'
+\end{lstlisting}
+  \end{Schunk}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Contrôle du flux}
+
+  \begin{itemize}
+  \item \texttt{break} cause une sortie immédiate d'une boucle
+  \item \texttt{next} force le passage à l'itération suivante
+  \item \texttt{stop()} force la sortie de la fonction avec message
+    d'erreur
+  \item \texttt{warning()} force la sortie de la fonction avec
+    avertissement
+  \item \texttt{return()} force la sortie de la fonction avec résultat
+  \end{itemize}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "raquebec-atelier-introduction-r"
+%%% End:
