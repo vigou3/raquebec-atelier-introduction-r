@@ -6,7 +6,9 @@
   \texttt{apply} applique une fonction sur une partie d'une
   \alert{matrice} ou d'un \alert{tableau}.
   \begin{Schunk}
-    \verb=apply(X, MARGIN, FUN, ...)=
+\begin{lstlisting}
+apply(X, MARGIN, FUN, ...)
+\end{lstlisting}
   \end{Schunk}
   \begin{itemize}
   \item \texttt{X} matrice ou tableau
@@ -26,7 +28,9 @@
   \texttt{tapply} applique une fonction sur les \alert{groupes de données}
   définis par les catégories de \alert{facteurs}.
   \begin{Schunk}
-    \verb=tapply(X, INDEX, FUN, ...)=
+\begin{lstlisting}
+tapply(X, INDEX, FUN, ...)
+\end{lstlisting}
   \end{Schunk}
   \begin{itemize}
   \item \texttt{X} vecteur simple
@@ -39,7 +43,7 @@
   \texttt{by}, \texttt{aggregate}.
 \end{frame}
 
-\begin{frame}[fragile=singleslide]
+\begin{frame}[fragile]
   \frametitle{Fonctions \texttt{lapply} et \texttt{sapply}}
 
   \texttt{lapply} applique une fonction sur tous les éléments d'un
@@ -49,8 +53,10 @@
   \texttt{sapply} retourne le résultat sous forme de vecteur simple ou
   de matrice, lorsque c'est possible.
   \begin{Schunk}
-    \verb=lapply(X, FUN, ...)= \\
-    \verb=sapply(X, FUN, ...)=
+\begin{lstlisting}
+lapply(X, FUN, ...)
+sapply(X, FUN, ...)
+\end{lstlisting}
   \end{Schunk}
   \begin{itemize}
   \item \texttt{X} vecteur simple ou liste
@@ -59,6 +65,9 @@
   \end{itemize}
 
   Autre fonction de la même famille: \texttt{mapply}.
+
+  \pause
+  \gotoR{application.R}
 \end{frame}
 
 %%% Local Variables:
