@@ -1,6 +1,6 @@
-#
+# coding: utf-8
 # Source code for the modification of the airport dataset
-#
+# Authors: David Beauchemin & Samuel Cabral Cruz
 
 #
 # This data is modified for a more simplify version of the complet CaseStudy. 

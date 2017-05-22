@@ -1,6 +1,6 @@
-#
-# Source code for the creation of province dataset
-#
+# coding: utf-8
+# Code source pour la création des données province
+# Authors: David Beauchemin & Samuel Cabral Cruz
 
 
 # Setting working directory properly 
