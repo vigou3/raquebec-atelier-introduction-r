@@ -13,3 +13,6 @@ missfont.log
 *.blg
 *.lot
 *.lof
+*.nav
+*.snm
+*.vrb
