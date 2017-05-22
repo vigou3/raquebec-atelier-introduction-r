@@ -30,10 +30,10 @@ TABLE DES MATIÈRES
    - facteurs
    - indiçage général
 [4. Fonctions et opérateurs utiles (nous n'aurons pas le temps)]
-5. Calcul répétitif
+5. Fonctions d'application
    - `apply` pour les matrices et tableaux
-   - `lapply`, `sapply`, `mapply` pour les vecteurs et listes
    - `tapply` pour les données catégorielles
+   - `lapply`, `sapply`, `mapply` pour les vecteurs et listes
    - `replicate` pour les simulations
 6. Structures de contrôle
    - exécution conditionnelle (`if`)
@@ -44,6 +44,8 @@ TABLE DES MATIÈRES
    - chargement d'un package
    - installer un package externe depuis CRAN
 8. Quelques procédures statistiques standard
+   - importation de données
+   - tri et sélection de données
    - estimation par le maximum de vraisemblance (`fitdistr`, `optim`)
    - régression linéaire (`lm`)
    - séries chronologiques (`ar`, `arima`)
@@ -51,7 +53,3 @@ TABLE DES MATIÈRES
    - fonction générique `plot`
    - fonction `curve`
    - options
-   
-# Deuxième partie: étude de cas
-## Test ajout image
-<img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/Octocat.png" width="100"><img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/R_logo.svg.png" width="100"><img src="https://github.com/vigou3/raquebec-intro/blob/master/Statement/Alecive-Flatwoken-Apps-Haroopad.ico" width="100">

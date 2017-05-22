@@ -114,8 +114,7 @@ array(1:24, dim = c(3, 4, 2))
 \begin{frame}[fragile=singleslide]
   \frametitle{Facteur}
 
-  Type de stockage facilitant grandement le traitement des données
-  catégorielles.
+  Type de stockage pour les données catégorielles.
   \begin{itemize}
   \item Facteur est un vecteur de données correspondant à des
     \alert{catégories}

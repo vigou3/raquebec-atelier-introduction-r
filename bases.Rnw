@@ -26,23 +26,20 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]
+\begin{frame}
   \frametitle{Vecteurs}
 
   Dans R \alert{tout} est un vecteur.
 
   \begin{itemize}
-  \item Opérateurs de base définis pour les vecteurs
   \item Vecteur simple: tous les éléments du même \alert{mode}
-  \item Fonctions de base pour créer des vecteurs
+  \item Fonctions de base pour créer des vecteurs simples
     \begin{itemize}
-    \item \verb|c| (concaténation);
-    \item \verb|numeric| (vecteur numérique)
-    \item \verb|logical| (vecteur booléen)
-    \item \verb|character| (vecteur de chaines de caractères)
+    \item \texttt{c} (concaténation);
+    \item \texttt{numeric} (vecteur numérique)
+    \item \texttt{logical} (vecteur booléen)
+    \item \texttt{character} (vecteur de chaines de caractères)
     \end{itemize}
-  \item \alert{Recyclage} automatique des éléments dans les opérations
-    sur des vecteurs
   \end{itemize}
 \end{frame}
 
@@ -58,6 +55,24 @@
 <<echo=TRUE>>=
 v[3]
 v["c"]
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Arithmétique vectorielle}
+
+  Une des grandes forces du langage R.
+
+  \begin{itemize}
+  \item Procédures de base définies pour les vecteurs
+<<echo=TRUE>>=
+c(1, 3, 4) + c(2, 1, 5)
+@
+  \item \alert{Recyclage} automatique des éléments dans les opérations sur des
+    vecteurs
+<<echo=TRUE>>=
+c(1, 1, 4, 4) + c(1, 2)
 @
   \end{itemize}
 \end{frame}
