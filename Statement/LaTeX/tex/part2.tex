@@ -5,9 +5,149 @@ Cette section servira principalement à faire la revue des concepts les plus imp
 	\item[shippingCost] Calculer le coût d'une livraison
 \end{description}
 
+\noindent
+Lorsque nous voulons définir une fonction, la structure présentée par le \autoref{src:fct} sera toujours utilisée. 
 
-%structure
-%declaratin/definition
-%evaluation/retour
-%retour multiple/avantage
-%gestion d'erreurs
+\begin{lstlisting}[caption = Structure pour la définition d'une fonction,label=src:fct]
+# nom_de_la_fonction <- function( liste_des_arguments )
+# {
+# 	corps_de_la_fonction
+# 	...
+#	valeur_retournee_par_la_fonction
+# }
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+À partir du \autoref{src:fct}, nous pouvons dès lors déduire plusieurs éléments de théorie. Tout d'abord, le mot clé \emph{function} sera toujours nécessaire pour mentionner à R que nous sommes en train de définir une foncton, et ce, qu'elle soit anonyme ou non. D'autre part, la valeur retrounée par une fonction sera toujours la valeur de la dernière expression évaluée au sein de son corps qui sera délimitée par les accolades. Bien entendu, il est possible de contourner ce processus standard en introduisant le mot clé \emph{return} qui aura pour effet d'entreprendre les processus de retour à l'exécution du programme principal tout en ignorant le reste de l'exécution que la fonction aurait pu engendrer. C'est exatement ce que le \autoref{src:return} cherche à expliciter. Bien que la seule différence entre les deux fonctions soit la présence de l'instructon \emph{return}, ces deux fonctions auront un comportement bien différent puisque la première retournera l'addition des deux paramètres qu'elle aura reçus pendant que la seconde ne arrêtera son exécution au croissement de l'instruction \emph{return} pour renvoyer la valeur du premier argument, soit 5 et 2 respectivement. En théorie, nous chercherons donc à éviter l'utilisation du \emph{return} ou d'autres modificateurs de flux du même genre et il n'y aura donc qu'une entrée et une sortie possible pour chaque fonction. En pratique, ce genre d'instruction peuvent simplifier grandement l'écriture du code, mais leur utilisation restera réservée à des situations bien particulière.
+
+\begin{lstlisting}[caption = L'instruction \emph{return} et le retour standard d'une fonction R ,label=src:return]
+ftest1 <- function(a,b)
+{
+  a+b
+}
+ftest2 <- function(a,b)
+{
+  return(a)
+  a+b
+}
+ftest1(2,3)
+ftest2(2,3)
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+L'exemple du \autoref{src:return} combiné à la structure générique présentée précédemment, nous accorde un environnement idéal pour introduire les notions d'argumentation. Comme mentionné ci-dessus, le passage des arguments se fera à l'intérieur des paranthèses suivants le nom des fonctions. Il s'agit en fait de la même syntaxe que toutes les autres fonctions que nous avons déjà utilisées dans la section précédente. En d'autres mots, une fois une fonction utilitaire définie correctement par l'utilisateur, celle-ci sera équivalente aux autres fonctions rendues disponibles par les différents paquetages. Si nous examinons le \autoref{src:return}, nous voyons que la fonction \emph{ftest1} et \emph{ftest2} prennent 2 paramètres à titre d'arguments nommé \emph{a} et \emph{b}. Une fois les arguments déclarés dans l'en-tête de fonction, nous pourrons les utiliser comme bon nous semble à l'intérieur du corps en utilisant leur étiquette.
+
+\begin{lstlisting}[caption = Définir des valeurs par défauts dans les fonctions utilitaires,label=src:defaultParams]
+ftest3 <- function(a=2,b=3)
+{
+  a+b
+}
+ftest3()
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+Comme plusieurs autres langages de programmation, la méthode entreprise pour définir des paramètres par défaut revient simplement à en faire la définiton directement dans l'en-tête de la fonction grâce à l'opérateur d'égalité. Bien que la définition de paramètre par défaut peut sembler anodine pour un nouveau programmeur, vous apprendrez rapidement au cours de votre carrière que vos programmes ne doivent jamais contenir de chiffres magiques. Nous désignons par chiffre magique, tout nombre (et par extension toute expression) constant présent dans un programme sur lesquel un utilisateur donné ne pourrait avoir une influence sur celui-ci sans directement modifier le code source. Malgré le fait que vous soyez convaincus que votre programme ne vous sera jamais utile dans un autre dessein que celui pour lequel qui vous a initialement amené à le créer, vous serez souvent influencé par le contexte dans lequel vous opérez. En plus d'être innefficace, ce genre de pratique vont directement à l'encontre du but premier de la définition de fonction au sens élargi, soit la réutilisation du code. Un moyen simple d'ajouter de la flexibilité à une fonction sera alors la définition de paramètres par défaut. Vous ne pourrez que retirer du positif d'adopter des bonnes pratiques de programmation dès vos débuts dans le domaine. Sur le long terme et à l'aide d'une documentation adéquate de vos programmes (et fonctions), vous ne pourrez que bénéficiez de votre rigueur même si cette dernière vous aura fait perdre du temps précieux au début de votre apprentissage. \\
+
+\noindent
+D'accord, mais qu'entendons-nous par doucmentation "adéquate"? Trop souvent, la mauvaise documentation d'un programme ne vient pas d'un mal intentionnellement causé par le développeur, mais bien d'une mauvaise éducation sur ce qui caractérise une bonne documentation. Premièrement, le fait qui vous semble le plus évident au moment du procédé de documentation ne le sera pas nécessairement au futur utilisateur.  Par le fait même, une documentation devrait être aussi monotone à lire qu'à écrire. Deuxièmement, une documentation ne devrait pas correspondre à un paragraphe sans structure précise ou encore à un enchaînement de faits complètement désorganisés qui n'auront un sens logique que pour celui qui les aura écrit. Troisièmement, un utilisateur s'attendra à retrouver le même type d'information dans la documentation de deux entités différentes qui son toutefois du même genre. \\
+
+\noindent
+Lorsque nous mettons ces considérations en perspective, on vient donc rapidement à la conclusion qu'une structure standard devrait toujours être utilisée. En plus d'offrir un cadre rigide sur la manière de créer notre documentation, ces outils auront l'avantage de produire des fichiers de référence complets qui possèderont toutes les aspects pratiques d'une documentation professionnelle. Un bon exemple de ce genre d'outils est \emph{Doxygen} \cite{doxygen} qui est très populaire pour la documentation de script écrit en C/C++. Le principe derrière cet outil a justement été repris pour l'adapter au code R dans le cadre du développement du paquetage \emph{roxygen2} \cite{roxygen2}. Nous croyons que l'utilisation de ces balises est indispensable même si aucune documentation officielle ne sera jamais générée. Il s'agit simplement d'une excellente habitude de travail et cela vous aidera à structurer votre documentation selon un modèle standard et reconnu par la communauté.\\
+
+\begin{moreInfo}{\emph{Doxygen} et \emph{Roxygen}, ça respire quoi en hiver?}
+	Le principe de ces outils est extrêmement rudimentaire. De manière intuitive, nous utiliserons les commentaires afin de faire la documentation de nos programmes. Ce sera toujours le cas! La principale différence provient de l'introduction de balises qui guideront la présentation de l'information lors de la production de la documentation officielle disponible sous plusieurs formats (html, PDF, \LaTeX, etc.) À titre d'exemple, nous utiliserons la balise \@param pour décrire un paramètre, \@return pour décrire le retour et \@examples pour donner des exemples d'utilisation dans le cadre de la documentation d'une fonction. Dans bien des cas, \LaTeX sera derrière le formatage de cette documentation. Il est bon de savoir que l'écriture d'une telle documentation sera un pré-requis à tous ceux qui seraient tentés de créer un paquetage et de le publier sur \emph{Comprehensive \TeX Archive Network (CTAN)}. \\
+	\url{https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text}
+\end{moreInfo}
+
+\noindent
+En reprenant les fonctions \emph{ftest1}, \emph{ftest2} et \emph{ftest3}, nous pouvons faire quelques tests en variant le nombre d'arguments envoyés et le comportement résultant.
+
+\begin{lstlisting}[caption = Passage d'arguments à une fonction,label=src:callFctParam]
+> ftest1(3)
+Error in ftest1(3) : argument "b" is missing, with no default
+> ftest2(3)
+[1] 3
+> ftest2(b=5)
+Error in ftest2(b = 5) : argument "a" is missing, with no default
+> ftest3(3)
+[1] 6
+> ftest3(3,5)
+[1] 8
+> ftest3(b=5)
+[1] 7
+> ftest3(b=5,3)
+[1] 8
+> ftest3(3,5,4)
+Error in ftest3(3, 5, 4) : unused argument (4)
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+Comme le montre le \autoref{src:callFctParam}, nous pourrions admettre comme règle que tout argument ne possédant pas de valeur par défaut doit absolument avoir une valeur d'attribuer lors de l'appel de la fonction. De plus, nous observons que la notion d'argument nommé n'a pas vraiment de signification en R. Ainsi, tous les arguments seront traités de manière positionnelle à moins d'indication contraire par la spécification du nom de l'argument dans l'appel de la fonction. Nous pouvons toutefois remarqué un cas particulier avec l'appel de \texttt{ftest2(3)} qui fournira bel et bien la valeur de 3 même si aucune valeur n'a été fournie pour le paramètre \texttt{b} et qu'il n'aille aucune valeur par défaut. Ceci s'explique par le fait que R détectera une erreur de valeur manquante qu'au moment de l'exécution plutôt qu'au moment de l'appel de la fonction. Ainsi, puisque cette \emph{ftest2} retournera la valeur de \texttt{a} et que son exécution n'ira jamais évaluer la commande \texttt{a+b}, R n'aura jamais remarqué l'absence d'une valeur pour \texttt{b}. De manière similaire, une erreur sera produite si nous fournissons à \texttt{ftest2} qu'une valeur à \texttt{b}. L'appel \texttt{ftest3(b=5,3)} expose la flexibilité tout aussi incroyable que dangereuse des procédés d'assignation de valeurs lors de l'appel de fonction en R. Cette flexibilité de pouvoir alterné l'ordre pour spécifier les valeurs à nos paramètres vient du fait que R traitera ces deux processus d'assignation de manière indépendante. Dans un premier temps, l'ensemble des valeurs assignées à des paramètres en spécifiant leur nom sera extrait du vecteur de paramètres fourni par l'appel et les valeurs restantes seront attribuées de manière positionnelle sur les arguments n'ayant pas reçu de valeur. Il faut toutefois faire attention à ceci puisque qu'aucune discrimination ne sera effectué par rapport aux paramètres ayant des valeurs par défaut comme illustré par le \autoref{src:assignPositionalDefault}.
+
+\begin{lstlisting}[caption = L'assignation et les valeurs par défaut,label=src:assignPositionalDefault]
+> ftest4 <- function(a,b=3,c,d)
++ {
++   a+b+c+d
++ }
+> ftest4(c=2,1,3)
+Error in ftest4(c = 2, 1, 3) : argument "d" is missing, with no default
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+Votre oeil déjà très aguerri a probablement remarqué que les fonctions définies dans le cadre de cette étude de cas utilisaient une technique de retour multiple par l'entremise d'une liste. Cette technique deviendra intéressante dans les cas où une fonction doit effectuer plusieurs sous-calculs correspondant à des entités distinctes d'un calcul donné. À titre d'exemple, bien qu'une fonction soit destinée à exécuter une tâche précise, son utilisateur pourrait parfois être intéressé par la valeur d'un des calculs intermédiaire réalisé. L'avantage de la liste est la possibilité intrisèque d'attribuer des noms aux différentes valeurs renvoyées. En plus d'ajouter beaucoup de valeur à vos fonctions sans nécessairement rendre le code sourde beaucoup plus complexe, ce type de retour vous aidera grandement dans le débogage de ces dernières lors de leur développement. Cette technique possède toutefois les désavantages d'imposer une certaine rigueur au niveau de leur utilisation en obligeant l'utilisateur à récupérer la liste dans un objet et d'ensuite faire l'extraction de la valeur désirée avec l'opérateur \texttt{\$}. Le \autoref{src:multipleReturn} offre un exemple concret de cette notion de retour multiple.
+
+\begin{lstlisting}[caption = Retour multiple par l'entremise d'une liste,label=src:multipleReturn]
+> ftest5 <- function(a,b=3,c,d)
++ {
++   returningList <- list()
++   returningList$value <- a+b+c+d
++   returningList$params <- c(a,b,c,d)
++   returningList
++ }
+> (x <- ftest5(c=2,1,3,4))
+$value
+[1] 10
+
+$params
+[1] 1 3 2 4
+
+> x$value
+[1] 10
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+Le dernier thème qu'il nous reste à aborder au sujet des fonctions consiste en la gestion des erreurs. Lorsque nous voulons définir les limites d'utilisation d'une fonction, il est préférable de parfaitement connaître ce qu'elle ne peut accomplir. Nous définirons ensuite des validations pour s'assurer que nous ne sommes pas de ce genre de cas particuliers et nous renverrons à l'utilisateur un message lui permettant de corriger son appel. La simplicité de R pour générer ce genre de traitement enlève toute raison possible de ne pas le faire. Ce procédé se résume en quatre étapes qui sont:
+\begin{enumerate}
+	\item Identifier une limitation du programme
+	\item Faire la validation nécessaire pour détecter la survenance de cette limitation
+	\item Composer un message concis fournissant toute l'information nécessaire pour corriger l'appel
+	\item Soulever l'erreur à l'exécution à l'aide de l'instruction \emph{stop} en fournissant le message composer à l'étape précédente en argument
+\end{enumerate}
+
+\begin{lstlisting}[caption = Gestion des erreurs sous R,label=src:errorManagement]
+> ftest6 <- function(a,b)
++ {
++   if(b == 0)
++   {
++     stop("The value of b is not valid. A division by 0 would be generated.")
++   }
++   a/b
++ }
+> ftest6(3,4)
+[1] 0.75
+> ftest6(3,0)
+Error in ftest6(3, 0) : 
+  The value of b is not valid. A division by 0 would be generated.
+\end{lstlisting}
+
+\begin{moreInfo}{Comment jouer avec le feu sans se brûler?}
+	Il arrivera parfois où la génération d'erreurs sera inévitable, mais pour lesquelles nous voudrons appliquer un traitement particulier. Nous appelons ce processus la gestion d'exception. Similairement à la majorité des autres langage de programmation, R inclus des méthodes \emph{try/catch} pour palier au problème. Nous avons mis cette technique en pratique dans la dernière partie de cette étude de cas. \\
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/try.html} \\
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/try.html}
+\end{moreInfo}

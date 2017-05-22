@@ -196,3 +196,57 @@ shippingCost("YUL", "YVR", 30)
 shippingCost("YUL", "YQB", 30)
 
 
+
+ftest1 <- function(a,b)
+{
+  a+b
+}
+ftest2 <- function(a,b)
+{
+  return(a)
+  a+b
+}
+ftest1(2,3)
+ftest2(2,3)
+
+ftest3 <- function(a=2,b=3)
+{
+  a+b
+}
+ftest3()
+
+ftest1(3)
+ftest2(3)
+ftest2(b=5)
+ftest3(3)
+ftest3(3,5)
+ftest3(b=5)
+ftest3(b=5,3)
+ftest3(3,5,4)
+
+ftest4 <- function(a,b=3,c,d)
+{
+  a+b+c+d
+}
+ftest4(c=2,1,3)
+
+ftest5 <- function(a,b=3,c,d)
+{
+  returningList <- list()
+  returningList$value <- a+b+c+d
+  returningList$params <- c(a,b,c,d)
+  returningList
+}
+(x <- ftest5(c=2,1,3,4))
+x$value
+
+ftest6 <- function(a,b)
+{
+  if(b == 0)
+  {
+    stop("The value of b is not valid. A division by 0 would be generated.")
+  }
+  a/b
+}
+ftest6(3,4)
+ftest6(3,0)
