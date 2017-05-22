@@ -1,4 +1,7 @@
+# coding: utf-8
 # Code source Case Study R à Québec 2017
+# Auteurs: David Beauchemin & Samuel Cabral Cruz
+
 
 #### Setting working directory properly ####
 getwd()
@@ -30,7 +33,6 @@ nbAirportCity <- table(airportsCanada$city)
 
 # 1.4 - Corriger les modalités des variables et faire une sélection des variables qui vous semble utiles 
 # pour le reste du traitement.
-# Filtrer la pertinence des données
 # Nous observons que les variables typeAirport et Source ne sont d'aucune utilité dans la situation présente
 # compte tenu que nous n'utilisons que l'information sur le transport par voies aériennes.
 # De plus, les variables timezone et DST ne sont pas pertinente étant donner que nous avons le tzFormat complet.
@@ -53,14 +55,14 @@ airportsCanada$IATA <- as.factor(airportsCanada$IATA)
 airportsCanada <- subset(airportsCanada, select = -ICAO)
 View(airportsCanada)
 
-# Plus tard, il sera nécessaire d'avoir la province des aéroports pour la tarrification, 
+# Plus tard, il sera nécessaire d'avoir la province des aéroports pour la tarification, 
 # à l'aide des données sur les provinces on joint les données airportsCanada  et
 # province.
 
-# On analyse d'abord les données province
+# On analyse d'abord les données sur les provinces
 summary(province)
 
-# On remarque qu'il manque 12 provinces, nous allons garder les données et les traiter la situation plus tard.
+# On remarque qu'il manque 12 provinces, malgré cela nous allons garder les données sans modification.
 airportsCanada<- merge(airportsCanada, province, by.x = "IATA", by.y = "IATA", all.x = TRUE, all.y = TRUE, incomparables = NULL)
 
 # Maintenant on s'intéresse aux voies aériennes canadiennes.
@@ -79,7 +81,7 @@ summary(routesCanada$stops)
 # De plus, la notion de codeshare ne sera pas utile compte tenu que la livraison de
 # de marchandise peut autant se faire par l'intermédiaire d'agence aérienne que par 
 # vol privé.
-# Nous pouvons ainsi nous débarasser de ces variables
+# Nous pouvons ainsi nous débarrasser de ces variables
 routesCanada <- subset(routesCanada, select = -c(codeshare, stops))
 summary(routesCanada)
 
@@ -96,7 +98,7 @@ airportsCoord <- as.data.frame(cbind(lon, lat))
 summary(routesCanada)
 summary(airportsCanada)
 
-# Ici, on utilise une requête SQL.
+# Ici, on utilise une requête SQL pour simplifier le code.
 # install.packages("sqldf")
 library("sqldf")
 routesCoord <- sqldf("
@@ -144,7 +146,7 @@ rownames(combinedIndexTable) <- NULL
 colnames(combinedIndexTable) <- c("IATA","totalFlights","combinedIndex")
 combinedIndexTable
 
-# On reajoute l'index aux aéroports canadiens appropriés
+# On joint les données sur les index aux aéroports canadiens appropriés
 airportsCanada<- merge(airportsCanada, combinedIndexTable, by.x = "IATA", by.y = "IATA")
 
 # 1.8- Créer des cartes permettant de visualiser ces indices grâce à un graphique à bulles
@@ -235,7 +237,7 @@ difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-     # vérifions qu'il existe une route entre sourceIATA et destIATA 
+     # Vérifions qu'il existe une route entre sourceIATA et destIATA 
      routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
      if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
      {
@@ -285,7 +287,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
      # Gold Member
      automatedCredit <-  automatedCredit * ifelse(baseCost > 100, 0.9, 1)
      
-     # Rabais par province
+     # Rabais par province d'arrivée du colis
      destProvince <- as.character(airportsCanada[match(destIATA, airportsCanada$IATA),]$province)
      automatedCredit <- automatedCredit * switch(destProvince,
                                                  "Quebec" = 0.85,
@@ -309,7 +311,7 @@ shippingCost <- function(sourceIATA, destIATA, weight,
      # Calcul du prix
      price <- round(pmax(fixedCost*profitMargin*automatedCredit,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)),2)
      
-     # Liste retourné par la fonction
+     # Liste retournée par la fonction
      shippingCostList <- list()
      shippingCostList$distance <- distance
      shippingCostList$weight <- weight
@@ -360,7 +362,7 @@ curve(weightCDF(x),0,15,ylim = c(0,1),lwd = 2,
       xlab = "weight (Kg)",
       ylab = "Cumulative Distribution Function")
 
-# Visulisation de la variable disntace
+# Visulisation de la variable distance
 hist(compData$distance, freq = TRUE, main = "Repartition according to the distance", 
      xlab = "distance (Km)", col = "cadetblue",breaks = 50)
 distanceCDF <- ecdf(compData$distance)
@@ -381,14 +383,14 @@ plot(compData$distance,compData$price,main = "Price according to the distance",
 library(rgl)
 plot3d(compData$weight,compData$distance,compData$price)
 
-# Linear model
+# Modèle linéaire
 # Hypothèse de modèle sans taxes pour simplification 
 
 profitMargin <- 1.12
 compModel <- lm(price/(profitMargin) ~ distance + weight, compData)
 summary(compModel)
 
-# Visualisation du modèele de régression
+# Visualisation du modèle de régression
 par(mfrow=c(2,2))
 plot(compModel)
 
@@ -428,7 +430,7 @@ legend(x="left", y = "center",distName, inset = 0.1, col = col, pch = 20, pt.cex
 mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE)
 
 # On choisi donc la loi LogNormal qui possède le meilleur ajustement
-# Omis les tests statistiques pour simplification
+
 distChoice <- "LogNormal"
 (paramAdjust <- fit.lognormal$estimate[c(1:2)])
 
@@ -440,7 +442,7 @@ distChoice <- "LogNormal"
 library(XML)
 library(RCurl)
 library(rlist)
-theurl <- getURL(paste("file:///",path,"/Statement/MarkDown/CaseStudyStatement.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
+theurl <- getURL(paste("file:///",path,"/Statement/MarkDown/CaseStudyStatementStudent.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
 lambdaTable <- as.data.frame(tables$"NULL")
 colnames(lambdaTable) <- c("Month","Avg3yrs")
@@ -468,9 +470,9 @@ simulShipmentPrice <- function(Arrival,Weight)
 simulShipment <- function(simNbShipments)
 {
      # On génère ensuite des poids pour chacun des colis
-     simWeights <- eval(parse(text = paste("r",law[match(distChoice,distName)],sep = "")))(simNbShipments,paramAdjust[1],paramAdjust[2])
+     simWeights <- rlnorm(simNbShipments,paramAdjust[1],paramAdjust[2])
      # On génère finalement une destination pour chacun des colis (le départ se fera toujours à partir de 'YUL')
-     simArrivals <- sample(size = simNbShipments,names(airportsDensity),prob = airportsDensity,replace = TRUE)
+     simArrivals <- sample(size = simNbShipments,names(airportsDensity),prob = airportsDensity, replace = TRUE)
      sapply(seq(1,simNbShipments),function(x) simulShipmentPrice(simArrivals[x],simWeights[x]))
 }
 
@@ -505,7 +507,7 @@ table(arrivalComp)
 mean(distanceComp)
 par(mfrow = c(1,1))
 hist(weightSales,freq = FALSE,breaks = 100, xlim = c(0,15), main = "Sales vs Theoretical Weights Distribution", xlab = "weight (Kg)")
-curve(do.call(eval(parse(text = paste("d",law[match(distChoice,distName)],sep = ""))),c(list(x),as.vector(paramAdjust))),add = TRUE, lwd = 2)
+curve(dlnorm(x, paramAdjust[1], paramAdjust[2]), add = TRUE, lwd = 2)
 abline(v = v <- exp(paramAdjust[1]+paramAdjust[2]**2/2), lwd = 2)
 text(v+0.75,0.3,as.character(round(v,2)))
 abline(v = v <- mean(weightSales),col = "red", lwd = 2)
