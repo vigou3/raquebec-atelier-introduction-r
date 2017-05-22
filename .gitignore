@@ -15,5 +15,6 @@
 *.pdf
 *.bcf
 *.run.xml
+*.lol
 
 **leafletTrafic_files
