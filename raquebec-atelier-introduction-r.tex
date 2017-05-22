@@ -3,9 +3,13 @@
   \usepackage[autolanguage]{numprint}
   \usepackage[noae]{Sweave}
   \usepackage{fontawesome}
-  \usepackage{listings}
-  \usepackage{framed}           % env. leftbar
-  \usepackage[overlay,absolute]{textpos}
+  \usepackage{changepage}                % page licence
+  \usepackage{tabularx}                  % page licence
+  \usepackage{listings}                  % code source
+  \usepackage{framed}                    % env. leftbar
+  \usepackage[export]{adjustbox}         % cadre autour image
+  \usepackage[overlay,absolute]{textpos} % couvertures
+  \usepackage{metalogo}                  % logo \XeLaTeX
 
   %% =============================
   %%  Informations de publication
@@ -99,10 +103,9 @@
 
   \newcommand{\meta}[1]{\ensuremath\langle{\normalfont\itshape #1\/}\ensuremath\rangle}
 
-  %% «Bouton» de la page de copyright
-  \newcommand{\browsebutton}{%
-    \setlength{\fboxrule}{0.5pt}%
-    \framebox[20mm][c]{%
+  %% Renvoi vers GitHub sur la page de copyright
+  \newcommand{\viewsource}[1]{%
+    \href{#1}{%
       \makebox[2.5mm]{\raisebox{-1pt}{\footnotesize\faGithub}}\;%
       {\sffamily Voir sur GitHub}}}
 
@@ -118,7 +121,6 @@
   %% Renvois vers vidéos YouTube
   \newcommand{\video}[2]{%
     \begin{center}
-      \setlength{\fboxrule}{0.5pt}%
       \href{#1}{%
         \makebox[5mm]{\raisebox{-2pt}{\Large\faYoutubePlay}}\;{#2}}
     \end{center}}
@@ -139,13 +141,22 @@
 
 \begin{document}
 
+%% frontmatter
 \include{couverture-avant}
+\include{frontispice}
+\include{licence}
+\include{reference}
+
+%% mainmatter
 \include{presentation}
 \include{bases}
 \include{donnees}
 \include{application}
 \include{controle}
 \include{extensions}
+
+%% backmatter
+\include{colophon}
 \include{couverture-arriere}
 
 \end{document}
