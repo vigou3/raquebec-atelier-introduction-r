@@ -1,6 +1,6 @@
 ### -*-Makefile-*- pour préparer R à Québec - Atelier d'introduction à R
 ##
-## Copyright (C) 2017 Vincent Goulet
+## Copyright (C) 2017 Vincent Goulet, David Beauchemin, Samuel Cabral Cruz
 ##
 ## 'make pdf' crée les fichiers .tex à partir des fichiers .Rnw avec
 ## Sweave, place les bonnes URL vers les vidéos dans le code source et
@@ -17,12 +17,12 @@
 ##
 ## Auteur: Vincent Goulet
 ##
-## Ce fichier fait partie du projet R à Québec - Atelier d'introduction à R
+## Ce fichier fait partie du projet «Introduction à R - Atelier du
+## colloque R à Québec 2017»
 ## http://github.com/vigou3/raquebec-atelier-introduction-r
 
 
-## Document maître, archive et fichier contenant les URL vers les
-## vidéos explicatives dans la châine YouTube
+## Document maître et archive
 MASTER = raquebec-atelier-introduction-r.pdf
 CODE = raquebec-atelier-introduction-r-code.zip
 
@@ -41,12 +41,20 @@ TEXFILES = \
 	couverture-avant.tex \
 	frontispice.tex \
 	licence.tex \
+	reference.tex \
 	presentation.tex \
+	application.tex \
+	controle.tex \
+	extensions.tex \
 	colophon.tex \
 	couverture-arriere.tex
 RFILES = \
 	presentation.R \
-	bases.R
+	bases.R \
+	donnees.R \
+	application.R \
+	controle.R \
+	extensions.R
 
 ## Outils de travail
 SWEAVE = R CMD SWEAVE --encoding="utf-8"

@@ -1,9 +1,9 @@
 ### Emacs: -*- coding: utf-8; fill-column: 62; comment-column: 27; -*-
 ##
-## Copyright (C) 2017 Vincent Goulet
+## Copyright (C) 2017 Vincent Goulet, David Beauchemin, Samuel Cabral Cruz
 ##
-## Ce fichier fait partie du projet «R à Québec - Atelier
-## d'introduction à R»
+## Ce fichier fait partie du projet «Introduction à R - Atelier
+## du colloque R à Québec 2017»
 ## http://github.com/vigou3/raquebec-atelier-introduction-r
 ##
 ## Cette création est mise à disposition selon le contrat
