@@ -1,0 +1,109 @@
+Un des aspects du langage R sur lequel sa réputation s'est bâtie est la variété des outils statistiques qu'il place à la disposition de son utilisateur. Sans même avoir à importer une quelconque librarie à partir de CRAN, plusieurs distributions statistiques sont disponibles. La \autoref{tab:distStatsR} fait la revue des ces distributions et de leur identifiant R correspondant. \cite{distStatsR} \\
+
+\begin{table}
+	\centering
+	\begin{tabular}{c c}
+		\textbf{Distribution} & \textbf{identifiant R} \\
+		\hline
+		Bêta & beta \\
+		Binomiale & binom \\
+		Binomiale négative & nbinom \\
+		Chi Deux & chisq \\
+		Exponentielle & exp \\
+		Fisher & f \\
+		Gamma & gamma \\
+		Géometrique & geom \\
+		Hypergéometrique & hyper \\
+		Normale & norm \\
+		Poisson & pois \\
+		Student & t \\
+		Uniforme & unif \\
+		Weibull & weibull	
+	\end{tabular}
+	\caption{Liste des distributions statistiques disponibles en R}
+\end{table}
+\label{tab:distStatsR}
+
+\noindent
+D'autres distributions deviendront aussi disponible via des paquetages dédiés à cette fin. Le paquetage \emph{actuar} donne accès à plusieurs distributions supplémentaires communément utilisées en actuariat. La distribution Pareto en est un bon exemple. \\
+
+\noindent
+Un aspect partculièrement intéressant de ces implementation de distribution statistique (qu'elles soient disponibles par défaut en R ou via l'importation d'un paquetage) est la constance dans la structure de ces fonctions. Pour chacune des distribution, nous retrouverons en autre les trois fonctions qui suivent: \\
+
+\begin{description}[style=multiline,leftmargin=2cm]
+	\item[$d\langle ID_R \rangle$] Calcule la valeur de la fonction de densité de la distribution ayant l'identifiant R $\langle ID_R \rangle$
+	\item[$p\langle ID_R \rangle$] Calcule la valeur de la fonction de répartition de la distribution ayant l'identifiant R $\langle ID_R \rangle$
+	\item[$q\langle ID_R \rangle$] Renvoie le quantile associé à la valeur fournie en argument selon  la fonction de répartition de la distribution ayant l'identifiant R $\langle ID_R \rangle$
+	\item[$r\langle ID_R \rangle$] Permet de générer des valeurs aléatoires suivants la distribution ayant l'identifiant R $\langle ID_R \rangle$
+\end{description}
+
+\noindent
+De plus, les arguments de ces fonctions se présenteront toujours sous le même format. Nous devrons soit fournir la valeur à laquelle nous voulons évaluer la fonction ou encore un nombre d'observation à générer dans le cas des fonctions préfixée par "r" et les paramètres de la loi utilisée. À des fins d'optimisation des performances, le logarithme de ces fonctions sera souvent nécessaire et c'est ce qui explique la présence de l'argument \emph{log}. Finalement, nous serons parfois intéressé par la fonction de survie d'une distribution donnée correspondant au complément de la fonction de répartition. En attribuant la valeur faux à l'argument \emph{lower.tail}, les fonctions préfixée par "p" renverront ainsi la valeur de la fonction de survie. Un exemple d'utilisation de ces fonctions est présenté par le \autoref{src:distStats}. \\
+
+\begin{lstlisting}[caption = Fonctions relatives à la distribution Normale,label=src:distStats]
+> set.seed(2017)
+> mean <- 6
+> sd <- 2
+> x <- 0:12
+> dnorm(x,mean,sd)
+ [1] 0.002215924 0.008764150 0.026995483 0.064758798
+ [5] 0.120985362 0.176032663 0.199471140 0.176032663
+ [9] 0.120985362 0.064758798 0.026995483 0.008764150
+[13] 0.002215924
+> pnorm(x,mean,sd)
+ [1] 0.001349898 0.006209665 0.022750132 0.066807201
+ [5] 0.158655254 0.308537539 0.500000000 0.691462461
+ [9] 0.841344746 0.933192799 0.977249868 0.993790335
+[13] 0.998650102
+> r <- seq(0,1,0.1)
+> qnorm(r,mean,sd)
+ [1]     -Inf 3.436897 4.316758 4.951199 5.493306
+ [6] 6.000000 6.506694 7.048801 7.683242 8.563103
+[11]      Inf
+> rnorm(10,mean,sd)
+ [1] 8.868403 5.845416 7.478274 2.482791 5.860350
+ [6] 6.903811 2.083267 5.996951 5.469328 9.126445
+\end{lstlisting}
+
+\noindent
+Ceux qui sont familiers avec les distributions statistiques auront remarqués qu'à l'aide des fonctions décrites ci-dessus nous aurons donc deux manières de générer des nombres aléatoires. La première qui est aussi la plus évidente sera d'utiliser les fonctions préfixée avec "r". La seconde utilisera le théroême de la réciproque consistant à générer des valeurs aléatoires suivant une loi uniforme de paramètre $a := 0$ et $b := 1$ pour ensuite trouver le quantile correspondant de la fonction de répartition de la loi pour laquelle nous voulons générer des nombres aléatoires grâce aux fonctions préfixée par "q". Ces deux techniques sont mise à profit dans le \autoref{src:aleaNorm}. \\
+
+\begin{lstlisting}[caption = Génération de nombres aléatoires,label=src:aleaNorm]
+> y1 <- rnorm(1000,mean,sd)
+> summary(y1)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+ 0.07041  4.70800  6.02800  6.06200  7.35500 12.59000 
+> sd(y1)
+[1] 1.96455
+> r <- runif(1000)
+> y2 <- qnorm(r,mean,sd)
+> summary(y2)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.1347  4.7670  6.0830  6.0910  7.5070 12.2400 
+> sd(y2)
+[1] 1.966951
+\end{lstlisting}
+
+\begin{moreInfo}{Théorème de la réciproque}
+	%https://fr.wikipedia.org/wiki/Fonction_de_r%C3%A9partition#Th.C3.A9or.C3.A8me_de_la_r.C3.A9ciproque
+\end{moreInfo}
+
+\noindent
+En présence de données empiriques, la première étape d'une analyse statistiques sera de dresser le portrait statistique de ces données. Nous avons déjà parlé de la fonction \emph{summary} à la \autoref{subsec:extraction}. Nous rajouterons ici les fonctions \emph{mean} et \emph{sd} retournant respectivement la moyenne et l'écart-type d'un jeu de données empiriques comme nous l'avons fait montré dans le \autoref{src:aleaNorm}. \\
+
+\noindent
+Afin de valider l'ajustement d'une distribution donnée sur les données empiriques, nous serons souvent contraint à identifier les fonctions de densité et de répartition sous-jacentes. Il existe plusieurs façons de faire. Celle qui nous semble toutefois la plus pertinente et polyvalente exploite le comportement de la fonction \emph{ecdf}. Cette dernière permet de construire une fonction de répartition empirique à partir des observations fourniess en argument. Nous pouvons ensuite construire une fonction de densité empirique en évaluant cette fonction de répartition à deux points autour de la valeur désirée et en divisant ensuite le résultat par la largeur de l'intervalle évalué. Les instructions permettant de construire ces fonctions sont fournies par \autoref{src:fctEmp}. \\
+
+\begin{lstlisting}[caption = Construction de fonction de densité et de répartition empiriques,label=src:fctEmp]
+empCDF <- ecdf(compData$weight)
+empPDF <- function(x,delta=0.01)
+{
+  (empCDF(x+delta/2)-empCDF(x-delta/2))/delta
+}
+\end{lstlisting}
+
+\noindent
+
+%test independance
+%
+%linear model
