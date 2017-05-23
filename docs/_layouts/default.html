@@ -5,14 +5,13 @@
     <title>{{ page.title | default: site.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
   </head>
   <body>
     <section class="page-header">
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
-      <a href="{{ site.github.releases_url }}/download/edition-5a/introduction-programmation-r.pdf" class="btn">Télécharger (PDF)</a>
-      <a href="{{ site.github.releases_url }}/tag/edition-5a" class="btn">Voir les nouveautés</a>
+      <a href="{{ site.github.releases_url }}/download/v<VERSION>/<ARCHIVE>" class="btn">Télécharger</a>
       <a href="{{ site.github.repository_url }}" class="btn">Voir sur GitHub</a>
     </section>
 
