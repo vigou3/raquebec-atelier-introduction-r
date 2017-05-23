@@ -37,19 +37,19 @@
     1990 --- \textbf{R}oss Ihaka et \textbf{R}obert Gentleman
   \item Inspirée de Scheme (un dérivé du Lisp) avec syntaxe du S
 \begin{Schunk}
-\begin{Sinput}
+\begin{lstlisting}[language=lisp]
 (define factorial (lambda (n)
   (if (= n 1)
       1
     (* n (factorial (- n 1))))))
-\end{Sinput}
+\end{lstlisting}
 \end{Schunk}
 vs
 \begin{Schunk}
-\begin{Sinput}
+\begin{lstlisting}
 factorial <- function(n)
   if (n == 1) 1 else n * factorial(n - 1)
-\end{Sinput}
+\end{lstlisting}
 \end{Schunk}
   \item Libre («GNU S») et ouvert (CRAN) --- R surpasse S-PLUS
   \end{itemize}
@@ -73,6 +73,45 @@ factorial <- function(n)
 
   \pause
   \video{https://youtu.be/PSQIKSKw_ys}{Principales caractéristiques du langage R}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Obtenir de l'aide}
+
+  \begin{alertblock}{Astuce}
+    Consulter l'aide en ligne officielle de R.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Obtenir de l'aide (suite)}
+
+  \begin{itemize}
+  \item Rubrique d'aide de l'objet \texttt{foo} accessible avec
+    \begin{Schunk}
+\begin{lstlisting}
+?foo
+\end{lstlisting}
+    \end{Schunk}
+    ou
+    \begin{Schunk}
+\begin{lstlisting}
+help(foo)
+\end{lstlisting}
+    \end{Schunk}
+    ou via les interfaces graphiques
+  \item Documents plus longs avec
+    \begin{Schunk}
+\begin{lstlisting}
+vignette("`\meta{sujet}'")
+\end{lstlisting}
+    \end{Schunk}
+  \item Documentation officielle de R en six guides
+    \begin{itemize}
+    \item \emph{An Introduction to R}
+    \item \emph{R Data Import/Export}
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
