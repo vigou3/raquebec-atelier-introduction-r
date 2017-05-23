@@ -32,7 +32,7 @@ Aucune expérience avec R n’est requise pour la formation. Toutefois,
 Les participants doivent au préalable installer sur leur poste de
 travail:
 
-- la plus récente version de [R](https://cran.r-project.org/)
+- la plus récente version de [R](https://cran.r-project.org/);
 - la plus récente version de [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/#download); 
 - la [documentation]() de la formation (décompresser l'archive `.zip` dans un dossier quelconque).
 
