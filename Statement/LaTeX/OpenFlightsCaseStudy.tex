@@ -118,9 +118,11 @@
 \end{titlepage}
 \tableofcontents
 \listoffigures
-\addcontentsline{toc}{chapter}{Liste des figures}
+\addcontentsline{toc}{chapter}{Table des figures}
 \lstlistoflistings
 \addcontentsline{toc}{chapter}{Liste des codes sources}
+\listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
 \chapter*{Préface}
 \addcontentsline{toc}{chapter}{Préface}
 	\input{tex/preface}
@@ -140,14 +142,16 @@
 \newpage
 \section{Création de fonctions utilitaires}
 	\input{tex/part2}
+	\label{sec:fctUtil}
 
 \newpage
 \section{Conception de graphiques en R}
 	\input{tex/part3}
 
-\section{Analyse de la compétition}
+\section{Outils d'analyse statistique en R}
+	\input{tex/part4}
 
-\section{Ajustement de distribution statistiques sur données empiriques}
+\section{Ajustement de distributions statistiques sur données empiriques}
 
 \section{Simulation et analyse de rentabilité}
 

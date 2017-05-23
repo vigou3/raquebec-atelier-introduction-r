@@ -41,8 +41,9 @@ plot3d(compData$weight,compData$distance,compData$price)
 # Chi's Square Test of Independency between the two variables
 weightsBinded <- as.numeric(cut(compData$weight,25))
 distancesBinded <- as.numeric(cut(compData$distance,25))
-(contingencyTable <- table(weightsBinded,distancesBinded))
-(contingencyTable <- rbind(contingencyTable[1:4,],colSums(contingencyTable[5:18,])))
+contingencyTable <- table(weightsBinded,distancesBinded)
+chisq.test(contingencyTable)
+contingencyTable <- rbind(contingencyTable[1:4,],colSums(contingencyTable[5:18,]))
 (contingencyTable <- cbind(contingencyTable[,1:14],rowSums(contingencyTable[,15:24])))
 independencyTest <- chisq.test(contingencyTable)
 head(independencyTest$expected)
@@ -53,8 +54,7 @@ cor.test(compData$weight,compData$distance,method = "pearson")
 
 # Linear model 
 # we assume the same profit margin to simplify the situation
-# We keep an intercept since we have a fixe cost
-
+# We keep an intercept since we have a fixed cost
 profitMargin <- 1.12
 avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
 compModel <- lm(price/(profitMargin*avgTaxRate) ~ distance + weight, compData)

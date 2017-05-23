@@ -5,6 +5,7 @@
 # Source code for the creation of the benchmark.csv file
 
 # Setting working directory properly 
+setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
 getwd()
 setwd("..")
 (path <- getwd())

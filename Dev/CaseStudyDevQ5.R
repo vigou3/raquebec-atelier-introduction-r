@@ -10,7 +10,7 @@ distName <- c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian")
 empCDF <- ecdf(compData$weight)
 empPDF <- function(x,delta=0.01)
 {
-  (empCDF(x)-empCDF(x-delta))/delta
+  (empCDF(x+delta/2)-empCDF(x-delta/2))/delta
 }
 
 # We built a general function for all kind of distribution. 
