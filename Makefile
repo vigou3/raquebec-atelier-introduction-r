@@ -24,7 +24,7 @@
 
 ## Noms du document maître et de l'archive
 MASTER = raquebec-atelier-introduction-r.pdf
-CODE = raquebec-atelier-introduction-r-code.zip
+ARCHIVE = raquebec-atelier-introduction-r-code.zip
 
 ## Numéro de version extrait du fichier maître
 YEAR = $(shell grep "newcommand{\\\\year" ${MASTER:.pdf=.tex} \
@@ -73,34 +73,34 @@ RM = rm -rf
 
 ## Dépôt GitHub et authentification
 REPOSURL = https://api.github.com/repos/vigou3/raquebec-atelier-introduction-r
-OAUTHTOKEN = $(shell cat ~/.github/token)
+OAUTHTOKEN = ${shell cat ~/.github/token}
 
 
 all: pdf
 
 .PHONY: tex pdf zip release create-release upload publish clean
 
-pdf: $(MASTER)
+pdf: ${MASTER}
 
-tex: $(RNWFILES:.Rnw=.tex)
+tex: ${RNWFILES:.Rnw=.tex}
 
 release: create-release upload publish
 
 %.tex: %.Rnw
-	$(SWEAVE) '$<'
+	${SWEAVE} '$<'
 
-$(MASTER): $(MASTER:.pdf=.tex) $(RNWFILES:.Rnw=.tex) $(TEXFILES) $(SCRIPTS) $(AUXFILES)
-	$(TEXI2DVI) $(MASTER:.pdf=.tex)
+${MASTER}: ${MASTER:.pdf=.tex} ${RNWFILES:.Rnw=.tex} ${TEXFILES} ${SCRIPTS} ${AUXFILES}
+	${TEXI2DVI} ${MASTER:.pdf=.tex}
 
-zip: $(MASTER) $(SCRIPTS) $(DATA)
-	zip -j $(MASTER) ${SCRIPTS} $(DATA)
+zip: ${MASTER} ${SCRIPTS} ${DATA}
+	zip -j ${MASTER} ${SCRIPTS} ${DATA} ${ARCHIVE}
 
 create-release :
 	@echo ----- Creating release on GitHub...
 	if [ -e relnotes.in ]; then rm relnotes.in; fi
 	touch relnotes.in
-	git commit -a -m "Édition ${VERSION}" && git push
-	awk 'BEGIN { ORS=" "; print "{\"tag_name\": \"edition-${VERSION}\"," } \
+	git commit -a -m "Version ${VERSION}" && git push
+	awk 'BEGIN { ORS=" "; print "{\"tag_name\": \"v${VERSION}\"," } \
 	      /^$$/ { next } \
 	      /^## Historique/ { state=0; next } \
               (state==0) && /^### / { state=1; out=$$2; \
@@ -145,7 +145,7 @@ publish :
 	@echo ----- Done publishing
 
 clean:
-	$(RM) $(RNWFILES:.Rnw=.tex) \
+	${RM} ${RNWFILES:.Rnw=.tex} \
 	      *-[0-9][0-9][0-9].pdf \
 	      *.aux *.log  *.blg *.bbl *.out *.rel *~ Rplots.ps
 
