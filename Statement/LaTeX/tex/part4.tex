@@ -1,6 +1,6 @@
 Un des aspects du langage R sur lequel sa réputation s'est bâtie est la variété des outils statistiques qu'il place à la disposition de son utilisateur. Sans même avoir à importer une quelconque librarie à partir de CRAN, plusieurs distributions statistiques sont disponibles. La \autoref{tab:distStatsR} fait la revue des ces distributions et de leur identifiant R correspondant. \cite{distStatsR} \\
 
-\begin{table}
+\begin{table}[h]
 	\centering
 	\begin{tabular}{c c}
 		\textbf{Distribution} & \textbf{identifiant R} \\
@@ -38,7 +38,7 @@ Un aspect partculièrement intéressant de ces implementation de distribution st
 \end{description}
 
 \noindent
-De plus, les arguments de ces fonctions se présenteront toujours sous le même format. Nous devrons soit fournir la valeur à laquelle nous voulons évaluer la fonction ou encore un nombre d'observation à générer dans le cas des fonctions préfixée par "r" et les paramètres de la loi utilisée. À des fins d'optimisation des performances, le logarithme de ces fonctions sera souvent nécessaire et c'est ce qui explique la présence de l'argument \emph{log}. Finalement, nous serons parfois intéressé par la fonction de survie d'une distribution donnée correspondant au complément de la fonction de répartition. En attribuant la valeur faux à l'argument \emph{lower.tail}, les fonctions préfixée par "p" renverront ainsi la valeur de la fonction de survie. Un exemple d'utilisation de ces fonctions est présenté par le \autoref{src:distStats}. \\
+De plus, les arguments de ces fonctions se présenteront toujours sous le même format. Nous devrons soit fournir la valeur à laquelle nous voulons évaluer la fonction ou encore un nombre d'observation à générer dans le cas des fonctions préfixée par "r" et les paramètres de la loi utilisée. À des fins d'optimisation des performances, le logarithme de ces fonctions sera souvent nécessaire et c'est ce qui explique la présence de l'argument \emph{log}. \footnote{Plusieurs propriétés statistiques découlent du logarithme des fonctions de densité et de répartition tel que la fonction génératrice de moments pour ne nommer que cette denière.} Finalement, nous serons parfois intéressé par la fonction de survie d'une distribution donnée correspondant au complément de la fonction de répartition. En attribuant la valeur faux à l'argument \emph{lower.tail}, les fonctions préfixée par "p" renverront ainsi la valeur de la fonction de survie. Un exemple d'utilisation de ces fonctions est présenté par le \autoref{src:distStats}. \\
 
 \begin{lstlisting}[caption = Fonctions relatives à la distribution Normale,label=src:distStats]
 > set.seed(2017)
@@ -85,7 +85,15 @@ Ceux qui sont familiers avec les distributions statistiques auront remarqués qu
 \end{lstlisting}
 
 \begin{moreInfo}{Théorème de la réciproque}
-	%https://fr.wikipedia.org/wiki/Fonction_de_r%C3%A9partition#Th.C3.A9or.C3.A8me_de_la_r.C3.A9ciproque
+	Ce sont les 4 propriétés des fonctions de répartition qui rendent possible l'application du théorème de la réciproque. Ces propriété sont définies comme suit (où $F$ désigne la fonction de répartition d'une variable aléatoire $X$ quelconque):
+	\begin{enumerate}
+		\item $F_X$ est croissante
+		\item Elle est partout continue à droite
+		\item $lim_{x \rightarrow -\infty} F_X(x) = 0$
+		\item $lim_{x \rightarrow \infty} F_X(x) = 1$
+	\end{enumerate}
+	Étant donné que ces propriétés seront toujours respectées pour toute fonction de répartition, nous pourrons appliquer cette méthode peut importe la distribution qu'elle soit clairement définie ou non!
+	\url{https://fr.wikipedia.org/wiki/Fonction_de_r%C3%A9partition#Th.C3.A9or.C3.A8me_de_la_r.C3.A9ciproque}
 \end{moreInfo}
 
 \noindent
@@ -94,7 +102,7 @@ En présence de données empiriques, la première étape d'une analyse statistiq
 \noindent
 Afin de valider l'ajustement d'une distribution donnée sur les données empiriques, nous serons souvent contraint à identifier les fonctions de densité et de répartition sous-jacentes. Il existe plusieurs façons de faire. Celle qui nous semble toutefois la plus pertinente et polyvalente exploite le comportement de la fonction \emph{ecdf}. Cette dernière permet de construire une fonction de répartition empirique à partir des observations fourniess en argument. Nous pouvons ensuite construire une fonction de densité empirique en évaluant cette fonction de répartition à deux points autour de la valeur désirée et en divisant ensuite le résultat par la largeur de l'intervalle évalué. Les instructions permettant de construire ces fonctions sont fournies par \autoref{src:fctEmp}. \\
 
-\begin{lstlisting}[caption = Construction de fonction de densité et de répartition empiriques,label=src:fctEmp]
+\begin{lstlisting}[caption = Fonctions de densité et de répartition empiriques,label=src:fctEmp]
 empCDF <- ecdf(compData$weight)
 empPDF <- function(x,delta=0.01)
 {
@@ -102,8 +110,121 @@ empPDF <- function(x,delta=0.01)
 }
 \end{lstlisting}
 
+\vspace{\baselineskip}
 \noindent
+En plus de dresser le portrait statistique du jeu de données, nous pourrions être tentés d'effectuer des tests statistiques sur ces mêmes données. Parmi les tests disponibles, nous retrouvons notamment :
+\begin{itemize}
+	\item Test de normalité (Test de Shapiro-Wilk)
+	\item Test de comparaison de deux variances (Test F)
+	\item Test de Student
+	\item Test du Khi carré
+	\item Test de Wilcoxon
+	\item ANOVA (Analyse de variance)
+	\item Test de corrélation
+\end{itemize}
+Il n'est toutefois pas indispensable de connaître l'utilité de tous ces tests, les situations dans lesquelles ils devraient être utilisés ni la mécanique mathétique sous-entendue puisque la plupart des méthodes statistiques inclueront déjà les appels nécessaires de ceux-ci. Ce sera le cas de la fonction \emph{lm} comme nous le verrons plus loin. \cite{testStatsR} \\
 
-%test independance
-%
-%linear model
+\noindent
+Dans le cadre de notre étude de cas, nous avons performé les tests du Khi carré et de corrélation afin de s'assurer que les variables explicatives du poids et de la distance soient indépendantes et sans corrélation. Dans le cas où ce genre de phénoène serait apparru entre nos variables, nous aurions été contraint d'utiliser des modèles de régression plus complexes tel que les modèles linéaires généralisés. \\
+
+\noindent 
+Lorsque nous effectuons un test statistique, nous cherchons toujours à répondre à une question binaire représentée sous la forme de deux hypothèses $H_0$ et $H_1$ complémentaires. Une valeur nommée la \emph{p-value} sera ensuite calculée en acceptant l'hypothèse $H_0$ comme vraie. Cette valeur correspondra à la probabilité d'observer un résultat équivalent ou encore plus extrême du test que nous venons d'exécuter en considérant l'hypothèse nulle comme vraie. En d'autres mots, cette valeur nous indiquera la probabilité de se tromper en rejetant l'hypothèse nulle en considérant l'hypothèse nulle comme vraie initialement. Ainsi, à partir du moment où la \emph{p-value} sera inférieure au seuil de crédibilité que l'on s'était fixé (habituellement 5\%), nous considérerons l'hypothèse nulle comme fausse. \\ 
+
+\noindent
+Dans le cas du test du Khi carré, l'hypothèse nulle suppose que les deux distributions sont indépendantes. Le test de corrélation suppose tant qu'à lui que la valeur théorique de corrélation est équivalente à 0. Comme nous pouvons le voir avec le \autoref{src:testStat}, nous pouvons ne pouvons pas rejeter ces deux hypothèses. \\
+
+\begin{lstlisting}[caption = Tests d'indépendance et de corrélation entre distributions,label=src:testStat]
+> weightsBinded <- as.numeric(cut(compData$weight,25))
+> distancesBinded <- as.numeric(cut(compData$distance,25))
+> contingencyTable <- table(weightsBinded,distancesBinded)
+> chisq.test(contingencyTable)
+
+	Pearson's Chi-squared test
+
+data:  contingencyTable
+X-squared = 248.38, df = 391, p-value = 1
+
+Warning message:
+In chisq.test(contingencyTable) :
+  Chi-squared approximation may be incorrect
+> contingencyTable <- rbind(contingencyTable[1:4,],colSums(contingencyTable[5:18,]))
+> contingencyTable <- cbind(contingencyTable[,1:14],rowSums(contingencyTable[,15:24]))
+> (independencyTest <- chisq.test(contingencyTable))
+
+	Pearson's Chi-squared test
+
+data:  contingencyTable
+X-squared = 72.814, df = 56, p-value = 0.06495
+
+> cor.test(compData$weight,compData$distance,method = "pearson")
+
+	Pearson's product-moment correlation
+
+data:  compData$weight and compData$distance
+t = -0.7801, df = 99998, p-value = 0.4353
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.008664731  0.003731121
+sample estimates:
+       cor 
+-0.0024669 
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+Il est pertinent de remarqué que le test du Khi carré possède des limitations importantes dans le cas de distributions devenant un peu trop clairsemée. Ce test nécessite une efficience statistique d'au minimum 5 observations à toutes les intersections des deux variables catégoriques. C'est pour cette même raison que nous combinons les dernières lignes et colonnes de la table de contingences. Malgré tout, le test offre toujours une \emph{p-value} d'environ 6\% ce qui reste supérieur à notre seuil de 5\% et nous ne pouvons donc pas rejeter notre hypothèse nulle. Dans le cas du test de corrélation, nous voyons que la valeur 0 est comprise dans notre intervalle de confiance autour du la valeur de corrélation empirique déterminée, ce qui nous permet d'affirmer qu'aucune corrélation n'existe entre ces deux variables. La \emph{p-value} de 43\% aurait été suffisante pour arriver à la même conclusion. \\
+
+\noindent
+Pour terminer cette section, jettons un coup d'oeil à la régression linéaire qui fut accomplie dans le but de modéliser la distribution ayant menée à générer les données (\autoref{src:linReg}).
+
+\begin{lstlisting}[caption = Régression linéaire sur données empiriques,label=src:linReg]
+> profitMargin <- 1.12
+> avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
+> compModel <- lm(price/(profitMargin*avgTaxRate) ~ distance + weight, compData)
+> summary(compModel)
+
+Call:
+lm(formula = price/(profitMargin * avgTaxRate) ~ distance + weight, 
+    data = compData)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-30.7903  -4.6585   0.0305   4.6462  29.9563 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 3.227e+01  7.509e-02   429.7   <2e-16 ***
+distance    2.820e-02  9.206e-05   306.4   <2e-16 ***
+weight      7.252e-01  9.479e-03    76.5   <2e-16 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.89 on 99997 degrees of freedom
+Multiple R-squared:  0.499,	Adjusted R-squared:  0.499 
+F-statistic: 4.98e+04 on 2 and 99997 DF,  p-value: < 2.2e-16
+\end{lstlisting}
+
+\vspace{\baselineskip}
+\noindent
+L'appel de la fonction \emph{lm} est assez rudimentaire. Il suffit de fournir une formule de regression contenant les variables explicatives avec lesquelles nous tenons à faire la regression et nous spécifions le nom de la table contenant ces variables. Nous remarquons ici la technique du retour multiple abordée à la \autoref{sec:fctUtil}. Nous voyons aussi que pour chaque coefficient un test de Student a été effectué pour déterminer à quel point l'estimé était significativement différent de 0. D'autre part, le test de Fisher permet de savoir s'il existe réellement une relation entre les variables explicatives choisies et la variable réponse analysée. \cite{outputLM} \\
+
+\noindent
+Lorsque l'on compare les valeurs réellement utilisées dans le \autoref{src:Benchmark} et les coefficients estimés, nous voyons que ces derniers sont très proches les uns des autres. La \autoref{tab:linRegFit} fait la revue de ces valeurs. \\
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{ccc}
+		\textbf{Variable} & \textbf{Valleur réelle} & \textbf{Valeur estimée} \\
+		\hline
+		distance & 0.0275 & 0.0282 \\
+		poids & 0.7 & 0.7252		
+	\end{tabular}
+	\caption{Comparaison entre les coefficients réels et estimés par régression linéaire}
+	\label{tab:linRegFit}
+\end{table}
+
+\begin{moreInfo}{Lire des tables directement sur le web}
+	Afin de récupérer les valeurs sur les niveaux de taxe pour chaque province canadienne, nous avons pris l'initiative de passer directement via le web. Cette méthode possède l'avantage de se mettre à jour directement avec l'information la plus récente si la structure de la page n'est pas modifiée. Afin de parvenir à ce résultat, les paquetages \emph{XML}, \emph{RCurl} et \emph{rlist} fournissent des fonctions permettant d'interprêter la structure \emph{HTML} d'une page web spécifiée par le passage du chemin \emph{url} en argument à la fonction \emph{readHTMLTable} pour y détecter les occurrences de balises du genre $\langle table \rangle$. \\
+	\url{http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/XML/html/readHTMLTable.html}
+\end{moreInfo}
