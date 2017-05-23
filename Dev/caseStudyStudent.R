@@ -1,6 +1,7 @@
 # Code source Case Study R à Québec 2017
 
 #### Setting working directory properly ####
+setwd("C:/Users/Samuel/Documents/ColloqueR/Dev")
 getwd()
 setwd("..")
 (path <- getwd())
