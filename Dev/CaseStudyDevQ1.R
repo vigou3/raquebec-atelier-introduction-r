@@ -3,18 +3,17 @@
 # Authors : David Beauchemin & Samuel Cabral Cruz
 
 #### Setting working directory properly ####
-setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
+setwd("C:/Users/Samuel/Documents/ColloqueR/Dev")
 getwd()
-setwd('..')
+setwd("..")
 (path <- getwd())
 set.seed(31459)
 
 #### Question 1 - Data extraction, processing, visualization and analysis ####
 
-# 1.1 - Database extraction of airports.dat, routes.dat and airlines.dat.
+# 1.1 - Database extraction of airports.dat, and routes.dat.
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c("\\N",""))
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c("\\N",""))
-airlines <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat", header = FALSE, na.strings=c("\\N",""))
 
 # 1.2 - Coloumns names assignation  base on the information available on the website.
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
@@ -23,12 +22,11 @@ colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
 colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
                       "destinationAirport","destinationAirportID","codeshare",
                       "stops","equipment")
-colnames(airlines) <- c("airlineID","name","alias","IATA","ICAO","Callsign","Country","Active")
 
 
 # 1.3 - Keeping the Canada information of the dataset
-airportsCanada <- airports[airports$country=='Canada',]
-airportsCanada2 <- subset(airports,country == 'Canada')
+airportsCanada <- airports[airports$country=="Canada",]
+airportsCanada2 <- subset(airports,country == "Canada")
 all.equal(airportsCanada,airportsCanada2)
 
 # 1.4 - Extraction of the genreral information about the distributions of the variables in the dataset and 
@@ -136,12 +134,6 @@ summary(routesCanada)
 unique(routesCanada$airline)
 unique(routesCanada[,c("airline","airlineID")])
 unique(routesCanada$airlineID)
-summary(airlines)
-(airlinesCanada <- sqldf("
-  select *
-  from airlines
-  where IATA in (select distinct airline
-                 from routesCanada)"))
 routesCanada[is.na(routesCanada$airlineID),]
 unique(routesCanada$airlineID)
 unique(routesCanada[is.na(routesCanada$airlineID),]$airline)
@@ -238,7 +230,7 @@ library(leaflet)
 url <- "http://hiking.waymarkedtrails.org/en/routebrowser/1225378/gpx"
 download.file(url, destfile = paste(path,"/Reference/worldRoutes.gpx",sep=""), method = "wget")
 worldRoutes <- readOGR(paste(path,"/Reference/worldRoutes.gpx",sep=""), layer = "tracks")
-markersData <- subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB'))
+markersData <- subset(airportsCanada,IATA %in% c("YUL","YVR","YYZ","YQB"))
 markersWeb <- c("https://www.aeroportdequebec.com/fr/pages/accueil",
                 "http://www.admtl.com/",
                 "http://www.yvr.ca/en/passengers",
@@ -252,15 +244,15 @@ descriptions <-paste("<b><FONT COLOR=#31B404> Airport Details</FONT></b> <br>",
                     "<b>Trafic Index:</b>",markersData$combinedIndex)
 
 # Defining the icon to be add on the markers from fontawesome library
-icons <- awesomeIcons(icon = 'paper-plane',
-                      iconColor = 'black',
-                      library = 'fa')
+icons <- awesomeIcons(icon = "paper-plane",
+                      iconColor = "black",
+                      library = "fa")
 
 # Combinaison of the different components in order to create a standalone map
 (mapTraffic <- leaflet(worldRoutes) %>%
     addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
     addCircleMarkers(stroke = FALSE,data = TraficData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
-                     color = 'black', fillColor = 'green',
+                     color = "black", fillColor = "green",
                      radius = ~as.numeric(paste(combinedIndex))*30, opacity = 0.5) %>%
     addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = descriptions,icon=icons))
 
@@ -273,5 +265,5 @@ mapTraffic$height <- 700
 library(htmlwidgets)
 saveWidget(mapTraffic, paste(path,"/Reference/leafletTrafic.html",sep = ""), selfcontained = TRUE)
 
-#addMarkers(data = subset(airportsCanada,IATA %in% c('YUL','YVR','YYZ','YQB')), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
+#addMarkers(data = subset(airportsCanada,IATA %in% c("YUL","YVR","YYZ","YQB")), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
 

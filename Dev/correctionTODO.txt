@@ -1,5 +1,0 @@
-
-question 1 retirer airlines data et sql on data (lignes 143)
-Question2-3 Vérifier les "" certain semble avoir un espace après
-question 5 la légenre x = right, y = center
-question 6 le chemin html a changer

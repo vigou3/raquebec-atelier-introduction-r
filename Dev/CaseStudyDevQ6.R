@@ -3,7 +3,7 @@
 # Authors : David Beauchemin & Samuel Cabral Cruz
 
 #### Question 6 ####
-theurl <- getURL(paste("file:///",path,"/Statement/CaseStudyStatement.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
+theurl <- getURL(paste("file:///",path,"/Statement/MarkDown/CaseStudyStatement.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
 lambdaTable <- as.data.frame(tables$"NULL")
 colnames(lambdaTable) <- c("Month","Avg3yrs")
