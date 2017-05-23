@@ -3,24 +3,20 @@
 # Auteurs: David Beauchemin & Samuel Cabral Cruz
 
 
-# Revoir les as.numeric
-
 #### Setting working directory properly ####
 getwd()
 setwd("..")    # Dont execute two times
 (path <- getwd())
 set.seed(31459)
 
-#### Question 1 - Extraction, traitement, visualisation et analyse des données ####
+#### Question 1 - Importation, traitement, visualisation et analyse des données ####
 
-# 1.1 - Extraction des bases de données Airports.dat, routes.dat et airlines.dat
+# 1.1 - Importation des bases de données Airports.dat, routes.dat et airlines.dat
 airports <- read.csv(paste(path,"/Reference/AirportModif.csv",sep=""), comment = "#",
                      as.is = c(2, 3, 5), na.strings=c("\\N",""), fileEncoding = "UTF-8")
 routesCanada <- read.csv(paste(path,"/Reference/RoutesModif.csv",sep=""),  na.strings=c("\\N",""), fileEncoding = "UTF-8", comment = "#")
-province <- read.csv(paste(path,"/Reference/province.csv",sep=""), na.strings=c("\\N",""), fileEncoding = "UTF-8", comment = "#")
-
-# name airports, city, IATA, ICAO
-# colClasses pour définir le style des colonnes
+province <- read.csv(paste(path,"/Reference/province.csv",sep=""), na.strings=c("\\N",""), 
+                     as.is = 1, fileEncoding = "UTF-8", comment = "#")
 
 # 1.2 - On garde l'informations pour la Canada seulement
 # drop level et subset
@@ -40,8 +36,7 @@ summary(airportsCanada)
 # pour le reste du traitement.
 # Nous observons que les variables typeAirport et Source ne sont d'aucune utilité dans la situation présente
 # compte tenu que nous n'utilisons que l'information sur le transport par voies aériennes.
-############# tzFormat retirer
-# De plus, les variables timezone et DST ne sont pas pertinente étant donner que nous avons le tzFormat complet.
+# De plus, les variables timezone, DST  et tzFormat ne sont pas pertinente à notre situation.
 # Un raisonnement similaire est applicable pour la variable country qui ne possèdera que la modalité Canada.
 airportsCanada <- subset(airportsCanada, select = -c(country, timezone, DST, tzFormat, typeAirport, Source ))
 
@@ -83,8 +78,6 @@ map <- get_map(location = " Canada" , zoom = 3)
 lon <- airportsCanada$longitude
 lat <- airportsCanada$latitude
 airportsCoord <- as.data.frame(cbind(lon, lat))
-
-# moins de variable
 (mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5))
 
 # 1.6 - Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports
@@ -139,8 +132,8 @@ mapPoints <-
 #### Question 2 #####
 
 # Fonction de calcul de distance entre deux aéroports
-# install.packages("geosphere")
 
+# install.packages("geosphere")
 library(geosphere)
 airportsDist <- function(sourceIATA,destIATA)
 {
@@ -212,10 +205,10 @@ shippingCost <- function(sourceIATA, destIATA, weight,
      }
      
      # Variables de tarification
-     distanceFactor <- 0.03
-     weightFactor <- 0.8
-     fixedCost <- 3.75
-     profitMargin <- 1.12
+     distanceFactor <- 0.02
+     weightFactor <- 0.6
+     fixedCost <- 4
+     profitMargin <- 1.10
      
      # Indice de trafic de l'aéroport
      # On extrait le traffic Index de la source et de la destination
@@ -228,6 +221,8 @@ shippingCost <- function(sourceIATA, destIATA, weight,
      
      # Rabais sur le prix
      automatedCredit <- 1
+     # Lightweight
+     automatedCredit <-  automatedCredit * ifelse(weight < 4, 0.5, 1)
      
      # Rabais par province d'arrivée du colis
      destProvince <- as.character(airportsCanada[match(destIATA, airportsCanada$IATA),]$province)
@@ -236,20 +231,20 @@ shippingCost <- function(sourceIATA, destIATA, weight,
                                                  "British Columbia" = 0.95,
                                                  "Ontario" = 0.9,
                                                  "Alberta" = 0.975)
+     
      # The Migrator
-     if(distance$value <= 2500 & distance$value > 2000)
-     {
-          automatedCredit <- automatedCredit * 0.85
-     }
-     else if(distance$value <= 3000 & distance$value > 2500)
-     {
-          automatedCredit <- automatedCredit * 0.875
-     }
-     else if(distance$value > 3000)
+     if(distance$value > 3000)
      {
           automatedCredit <- automatedCredit * 0.9
      }
-     
+     else if(distance$value <= 3000 & distance$value > 2500)
+     {
+          automatedCredit <- automatedCredit * 0.8775
+     }
+     else if(distance$value <= 2500 & distance$value > 2000)
+     {
+          automatedCredit <- automatedCredit * 0.85
+     }
      # Calcul du prix
      price <- round(pmax(fixedCost*profitMargin*automatedCredit,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)),2)
      
