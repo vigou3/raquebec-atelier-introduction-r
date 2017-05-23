@@ -77,21 +77,23 @@ Grâce à la base de données [benchmark.csv](https://github.com/vigou3/raquebec
 1. Visualiser la distribution des prix en fonction du poids.
 2. Visualiser ensuite la distribution des prix en fonction de la distance.
 3. Visualiser maintenant la distribution des prix en fonction de poids et de la distance.
-4. Vous constatez qu'un modèle linéaire serait suffisant pour faire l'approximation.
-5. En utilisant la fonction *lm*, déterminer la droite de régression afin de déterminer les paramètres de la loi sous-jacente.
+4. Tester l'indépendances des variables à l'aide du test de la fonction *chisq.test* qui effectue le test de Chi carré.
+5. Vous constatez qu'un modèle linéaire serait suffisant pour faire l'approximation.
+6. En utilisant la fonction *lm*, déterminer la droite de régression afin de déterminer les paramètres de la loi sous-jacente.
+
 
 > Note:
 > Vous savez que vos compétiteurs utilisent principalement le poids et la distance pour déterminer le prix des livraisons.
 
 ### Question 5 - Ajustement des lois de distribution sur les données empiriques
 En reprenant les données de la compétition, vous êtes aussi en mesure d'extraire la distribution suivie par le poids des colis et des distances.
-1. Utiliser le paquetage *actuar* et la fonction *fitdistr* pour ajuster les distributions suivantes à la distribution empirique en fonction du poids.
+1. Utiliser le paquetage *actuar* et la fonction *optim* ou *fitdistr* pour ajuster les distributions suivantes à la distribution empirique en fonction du poids.
   * Loi Normale
   * Loi Gamma
   * Loi Log-normale
   * Loi Weibull
 2. Présenter les différentes distributions obtenues.
-3. Faire un choix de distribution
+3. Faire un choix de distribution à partir de la déviance.
 
 > Note:
 > Les paramètres initiaux de vos optimisations peuvent impacter le résultat de la fonction.

@@ -442,7 +442,7 @@ distChoice <- "LogNormal"
 library(XML)
 library(RCurl)
 library(rlist)
-theurl <- getURL(paste("file:///",path,"/Statement/MarkDown/CaseStudyStatementStudent.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
+theurl <- getURL(paste("file:///",path,"/Statement/MarkDown/CaseStudyStatement.html",sep=""),.opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
 lambdaTable <- as.data.frame(tables$"NULL")
 colnames(lambdaTable) <- c("Month","Avg3yrs")
