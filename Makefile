@@ -55,6 +55,9 @@ SCRIPTS = \
 	application.R \
 	controle.R \
 	extensions.R
+DATA = \
+
+
 AUXFILES = \
 	Fotolia_99831160.jpg \
 	by-sa.pdf \
@@ -89,8 +92,8 @@ release: create-release upload publish
 $(MASTER): $(MASTER:.pdf=.tex) $(RNWFILES:.Rnw=.tex) $(TEXFILES) $(SCRIPTS) $(AUXFILES)
 	$(TEXI2DVI) $(MASTER:.pdf=.tex)
 
-zip: $(MASTER) $(SCRIPTS)
-	zip -j $(MASTER) ${SCRIPTS}
+zip: $(MASTER) $(SCRIPTS) $(DATA)
+	zip -j $(MASTER) ${SCRIPTS} $(DATA)
 
 create-release :
 	@echo ----- Creating release on GitHub...
