@@ -19,3 +19,5 @@ missfont.log
 *.nav
 *.snm
 *.vrb
+
+**/Reference/leafletTrafic_files/
