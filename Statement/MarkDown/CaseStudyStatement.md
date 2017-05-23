@@ -6,7 +6,7 @@
 - [Description Sommaire](#description-sommaire)
 - [Mandat](#mandat)
 - [Énoncé](#-nonc-)
-  * [Question 1 - Extraction, traitement, visualisation et analyse des données](#question-1---extraction--traitement--visualisation-et-analyse-des-donn-es)
+  * [Question 1 - Importation, traitement, visualisation et analyse des données](#question-1---extraction--traitement--visualisation-et-analyse-des-donn-es)
   * [Question 2 - Création de fonctions utilitaires](#question-2---cr-ation-de-fonctions-utilitaires)
   * [Question 3 - Communication de vos résultats](#question-3---communication-de-vos-r-sultats)
   * [Question 4 - Analyse de la compétition](#question-4---analyse-de-la-comp-tition)

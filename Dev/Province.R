@@ -45,8 +45,8 @@ airportsCanada <- sqldf("
   order by a.airportID")
 airportsCanada <- data.frame(as.matrix(airportsCanada))
 
-# We keep the province, city and IATA for the dataset
-provinceData <- subset(airportsCanada, select = c(city, IATA, provMerged ))
+# We keep the province, and IATA for the dataset
+provinceData <- subset(airportsCanada, select = c(IATA, provMerged ))
 summary(provinceData)
 
 # install.packages("plyr")

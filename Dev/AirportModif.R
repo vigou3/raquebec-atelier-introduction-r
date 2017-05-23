@@ -20,6 +20,12 @@ colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "tzFormat","typeAirport","Source")
 
 
+# We fill the missing IATA for canada
+airports$IATA <- as.character(airports$IATA) 
+airports$IATA[is.na(airports$IATA)] <- substr(airports$ICAO[is.na(airports$IATA)],2,4) 
+airports$IATA <- as.factor(airports$IATA)
+airports <- subset(airports, select = -ICAO)
+
 # install.packages("sp")
 # install.packages("rgdal")
 library(sp)
