@@ -1,6 +1,6 @@
-### -*-Makefile-*- pour préparer R à Québec - Atelier d'introduction à R
+### -*-Makefile-*- pour préparer «Introduction à R - Atelier du colloque R à Québec 2017»
 ##
-## Copyright (C) 2017 Vincent Goulet
+## Copyright (C) 2017 Vincent Goulet, David Beauchemin, Samuel Cabral Cruz
 ##
 ## 'make pdf' crée les fichiers .tex à partir des fichiers .Rnw avec
 ## Sweave, place les bonnes URL vers les vidéos dans le code source et
@@ -17,36 +17,51 @@
 ##
 ## Auteur: Vincent Goulet
 ##
-## Ce fichier fait partie du projet R à Québec - Atelier d'introduction à R
+## Ce fichier fait partie du projet «Introduction à R - Atelier du
+## colloque R à Québec 2017»
 ## http://github.com/vigou3/raquebec-atelier-introduction-r
 
 
-## Document maître, archive et fichier contenant les URL vers les
-## vidéos explicatives dans la châine YouTube
+## Noms du document maître et de l'archive
 MASTER = raquebec-atelier-introduction-r.pdf
 CODE = raquebec-atelier-introduction-r-code.zip
 
-## Numéro de version et numéro ISBN extraits du fichier maître
+## Numéro de version extrait du fichier maître
 YEAR = $(shell grep "newcommand{\\\\year" ${MASTER:.pdf=.tex} \
 	| cut -d } -f 2 | tr -d {)
-VERSION = $(shell grep "newcommand{\\\\ednum" ${MASTER:.pdf=.tex} \
+MONTH = $(shell grep "newcommand{\\\\month" ${MASTER:.pdf=.tex} \
 	| cut -d } -f 2 | tr -d {)
-VERSIONSTR = $(shell grep "newcommand{\\\\edstr" ${MASTER:.pdf=.tex} \
-	| cut -d } -f 2 | tr -d {)
+VERSION = ${YEAR}.${MONTH}
 
-## Le document maître dépend de tous les fichiers .tex et des fichiers
-## .R mentionnés
-RNWFILES = $(wildcard *.Rnw)
+## Ensemble des sources du document.
+RNWFILES = \
+	bases.Rnw \
+	donnees.Rnw
 TEXFILES = \
 	couverture-avant.tex \
 	frontispice.tex \
 	licence.tex \
+	reference.tex \
 	presentation.tex \
+	application.tex \
+	controle.tex \
+	extensions.tex \
 	colophon.tex \
 	couverture-arriere.tex
-RFILES = \
+SCRIPTS = \
 	presentation.R \
-	bases.R
+	bases.R \
+	donnees.R \
+	application.R \
+	controle.R \
+	extensions.R
+AUXFILES = \
+	Fotolia_99831160.jpg \
+	by-sa.pdf \
+	by.pdf \
+	sa.pdf \
+	Chambers.jpg \
+	introduction-programmation-r.jpg \
 
 ## Outils de travail
 SWEAVE = R CMD SWEAVE --encoding="utf-8"
@@ -71,11 +86,11 @@ release: create-release upload publish
 %.tex: %.Rnw
 	$(SWEAVE) '$<'
 
-$(MASTER): $(MASTER:.pdf=.tex) $(RNWFILES:.Rnw=.tex) $(TEXFILES) $(RFILES)
+$(MASTER): $(MASTER:.pdf=.tex) $(RNWFILES:.Rnw=.tex) $(TEXFILES) $(SCRIPTS) $(AUXFILES)
 	$(TEXI2DVI) $(MASTER:.pdf=.tex)
 
-zip: $(RFILES)
-	zip -j $(CODE) ${RFILES}
+zip: $(MASTER) $(SCRIPTS)
+	zip -j $(MASTER) ${SCRIPTS}
 
 create-release :
 	@echo ----- Creating release on GitHub...

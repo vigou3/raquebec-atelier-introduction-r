@@ -1,0 +1,44 @@
+\section{Extensions du système de base}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Bibliothèques et paquetages}
+
+  \begin{itemize}
+  \item Fonctions, données et documentation réunies dans des
+    \alert{paquetages} (\emph{packages})
+  \item Paquetages réunis dans une \alert{bibliothèque}
+    (\emph{library})
+  \item Bibliothèque de base de R contient une trentaine de paquetages
+    dont certains sont chargés par défaut au démarrage
+  \item Fonction pour charger un paquetage: \texttt{library}
+  \end{itemize}
+
+  \begin{alertblock}{Astuce}
+    Créez-vous une bibliothèque personnelle tel qu'expliqué à
+    l'annexe~D de Goulet (2016).
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]
+  \frametitle{Ajout d'extensions}
+
+  \begin{itemize}
+  \item \emph{Comprehensive R Archive Network} (CRAN) dépôt central de
+    paquetages R
+    \begin{quote}
+      \url{https://cran.r-project.org}
+    \end{quote}
+  \item Installation automatisée depuis R avec
+    \texttt{install.packages}
+  \item Après installation, charger le paquetage avec \texttt{library}
+  \end{itemize}
+
+  \pause
+  \gotoR{extensions.R}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-engine: xetex
+%%% TeX-master: "raquebec-atelier-introduction-r"
+%%% End:

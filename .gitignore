@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+missfont.log
 
 *.log
 *.aux
@@ -12,9 +13,9 @@
 *.blg
 *.lot
 *.lof
-*.pdf
 *.bcf
 *.run.xml
 *.lol
-
-**leafletTrafic_files
+*.nav
+*.snm
+*.vrb

@@ -1,11 +1,27 @@
-\documentclass[aspectratio=54,10pt,xcolor=x11names]{beamer}
+%%% Copyright (C) 2017 Vincent Goulet, David Beauchemin, Samuel Cabral Cruz
+%%%
+%%% Ce fichier et tous les fichiers .tex ou .Rnw dont la racine est
+%%% mentionnée dans les commandes \include ci-dessous font partie du
+%%% projet «Introduction à R - Atelier du colloque R à Québec 2017»
+%%% http://github.com/vigou3/raquebec-atelier-introduction-r
+%%%
+%%% Cette création est mise à disposition selon le contrat
+%%% Attribution-Partage dans les mêmes conditions 4.0
+%%% International de Creative Commons.
+%%% http://creativecommons.org/licenses/by-sa/4.0/
+
+\documentclass[aspectratio=1610,10pt,xcolor=x11names]{beamer}
   \usepackage[french]{babel}
   \usepackage[autolanguage]{numprint}
   \usepackage[noae]{Sweave}
   \usepackage{fontawesome}
-  \usepackage{listings}
-  \usepackage{framed}           % env. leftbar
-  \usepackage[overlay,absolute]{textpos}
+  \usepackage{changepage}                % page licence
+  \usepackage{tabularx}                  % page licence
+  \usepackage{listings}                  % code source
+  \usepackage{framed}                    % env. leftbar
+  \usepackage[export]{adjustbox}         % cadre autour image
+  \usepackage[overlay,absolute]{textpos} % couvertures
+  \usepackage{metalogo}                  % logo \XeLaTeX
 
   %% =============================
   %%  Informations de publication
@@ -52,27 +68,39 @@
     basicstyle=\small\ttfamily\NoAutoSpacing,
     commentstyle=\color{comments}\slshape,
     keywordstyle=\mdseries,
-    showstringspaces=false,
-    backgroundcolor=\color{codebg},
-    frame=leftline,framerule=3pt}
+    escapeinside=`',
+    aboveskip=0pt,
+    belowskip=0pt,
+    showstringspaces=false}
 
   %% =========================
   %%  Nouveaux environnements
   %% =========================
 
-  %% Environnements de Sweave. Les environnements Sinput et Soutput
-  %% utilisent Verbatim (de fancyvrb). On les réinitialise pour
-  %% enlever la configuration par défaut de Sweave, puis on réduit
-  %% l'écart entre les blocs Sinput et Soutput. L'environnement Schunk
-  %% est complètement redéfini à partir de leftbar (de framed) pour
-  %% insérer un fond de couleur derrière les blocs de code source.
+  %% Environnements de Sweave.
+  %%
+  %% Les environnements Sinput et Soutput utilisent Verbatim (de
+  %% fancyvrb). On les réinitialise pour enlever la configuration par
+  %% défaut de Sweave, puis on réduit l'écart entre les blocs Sinput
+  %% et Soutput.
   \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
   \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
   \fvset{fontsize=\small,listparameters={\setlength{\topsep}{0pt}}}
+
+  %% L'environnement Schunk est complètement redéfini en un hybride
+  %% des environnements snugshade* et leftbar de framed.
+  \makeatletter
   \renewenvironment{Schunk}{%
-    \def\FrameCommand{\vrule width 3pt \colorbox{codebg}}%
-    \MakeFramed {\advance\hsize-\width \FrameRestore}}%
-    {\endMakeFramed}
+    \def\FrameCommand##1{\hskip\@totalleftmargin
+      \vrule width 3pt\colorbox{codebg}{\hspace{5pt}##1}%
+      % There is no \@totalrightmargin, so:
+      \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+    \MakeFramed {\advance\hsize-\width
+      \@totalleftmargin\z@ \linewidth\hsize
+      \advance\labelsep\fboxsep
+      \@setminipage}%
+  }{\par\unskip\@minipagefalse\endMakeFramed}
+  \makeatother
 
   %% =====================
   %%  Nouvelles commandes
@@ -85,20 +113,28 @@
   \newcommand{\link}[2]{\href{#1}{#2~\raisebox{-0.2ex}{\faExternalLink}}}
   \newcommand{\capsule}[2]{\href{#1}{\faYoutubePlay~#2}}
 
-  %% «Bouton» de la page de copyright
-  \newcommand{\browsebutton}{%
-    \setlength{\fboxrule}{0.5pt}%
-    \framebox[20mm][c]{%
+  \newcommand{\meta}[1]{\ensuremath\langle{\normalfont\itshape #1\/}\ensuremath\rangle}
+
+  %% Renvoi vers GitHub sur la page de copyright
+  \newcommand{\viewsource}[1]{%
+    \href{#1}{%
       \makebox[2.5mm]{\raisebox{-1pt}{\footnotesize\faGithub}}\;%
       {\sffamily Voir sur GitHub}}}
 
   %% Renvois vers les scripts R
   \newcommand{\gotoR}[1]{%
     \begin{center}
-      \setlength{\fboxrule}{0.5pt}%
-      \framebox[40mm][c]{%
+      \colorbox{mDarkTeal}{\color{white}
+      \makebox[40mm][c]{%
         \makebox[5mm]{\raisebox{-1pt}{\large\faChevronCircleDown}}\;%
-        {\ttfamily #1}}
+        {\ttfamily #1}}}
+    \end{center}}
+
+  %% Renvois vers vidéos YouTube
+  \newcommand{\video}[2]{%
+    \begin{center}
+      \href{#1}{%
+        \makebox[5mm]{\raisebox{-2pt}{\Large\faYoutubePlay}}\;{#2}}
     \end{center}}
 
   %%% =======
@@ -109,14 +145,31 @@
   %% arrière.
   \newlength{\banderougewidth} \newlength{\banderougeheight}
   \newlength{\bandeorwidth}    \newlength{\bandeorheight}
-  \newlength{\imageheight}
+  \newlength{\imageheight}     \newlength{\imagewidth}
   \newlength{\logoheight}
   \newlength{\gapwidth}
 
+  %\includeonly{couverture-avant}
+
 \begin{document}
 
+%% frontmatter
+\include{couverture-avant}
+\include{frontispice}
+\include{licence}
+\include{reference}
+
+%% mainmatter
 \include{presentation}
 \include{bases}
+\include{donnees}
+\include{application}
+\include{controle}
+\include{extensions}
+
+%% backmatter
+\include{colophon}
+\include{couverture-arriere}
 
 \end{document}
 
