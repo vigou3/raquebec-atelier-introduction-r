@@ -1,5 +1,3 @@
-![logo R à Québec](images/logo2gros.jpg "R à Québec 2017")
-
 ## Présentation
 
 [R à Québec 2017](http://raquebec.ulaval.ca/2017/) est le premier
@@ -45,3 +43,4 @@ travail:
 - David Beauchemin, étudiant au baccalauréat en actuariat à l'Université Laval.
 - Samuel Cabral Cruz, analyste en actuariat chez Desjardins Assurances Générales et étudiant au baccalauréat en génie lociciel à l'Université Laval.
 
+[![logo R à Québec](images/logo2gros.jpg "R à Québec 2017")](http://raquebec.ulaval.ca/2017/)
