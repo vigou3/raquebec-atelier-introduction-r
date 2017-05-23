@@ -51,12 +51,14 @@ a {
   // }
 }
 
-// .page-header h1 {
-//   margin: 0 auto 2rem auto;
-//   padding-left: 0.75rem;
-//   padding-right: 0.75rem;
-//   background: rgba(255, 255, 255, 0.5);
-// }
+.shaded {
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.5);
+
+  @include large {
+    max-width: 52rem;
+  }
+}
 
 .main-content {
   h1, h2, h3, h4, h5, h6 {
