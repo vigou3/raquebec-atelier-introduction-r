@@ -2,14 +2,14 @@
 # CaseStudyRQuebec2017
 # Authors : David Beauchemin & Samuel Cabral Cruz
 
-#### Setting working directory properly ####
+# Setting working directory properly 
 setwd("C:/Users/Samuel/Documents/ColloqueR/Dev")
 getwd()
 setwd("..")
 (path <- getwd())
 set.seed(31459)
 
-#### Question 1 - Data extraction, processing, visualization and analysis ####
+# Question 1 - Data extraction, processing, visualization and analysis 
 
 # 1.1 - Database extraction of airports.dat, and routes.dat.
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c("\\N",""))
@@ -212,7 +212,7 @@ airportsCanada <- sqldf("
   on a.IATA = b.IATA")
 airportsCanada <- data.frame(as.matrix(airportsCanada ))
 
-#1.11 - Create maps to visualize these indices using a bubble graph.
+# 1.11 - Create maps to visualize these indices using a bubble graph.
 TraficData <- subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.05)
 lon <- as.numeric(paste(TraficData$longitude))
 lat <- as.numeric(paste(TraficData$latitude))
@@ -265,5 +265,5 @@ mapTraffic$height <- 700
 library(htmlwidgets)
 saveWidget(mapTraffic, paste(path,"/Reference/leafletTrafic.html",sep = ""), selfcontained = TRUE)
 
-#addMarkers(data = subset(airportsCanada,IATA %in% c("YUL","YVR","YYZ","YQB")), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
+# addMarkers(data = subset(airportsCanada,IATA %in% c("YUL","YVR","YYZ","YQB")), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
 

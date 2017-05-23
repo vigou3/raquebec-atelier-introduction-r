@@ -2,11 +2,20 @@
 # CaseStudyRQuebec2017
 # Authors : David Beauchemin & Samuel Cabral Cruz
 
-#### Question 2 #####
-# Distance calculation function between two airports.
+# Question 2 :Functions creation
+
+#' Distance calculation function between two airports.
+#' 
+#' @param sourceIATA The IATA of the departure airport.
+#' @param destIATA The IATA of the arrival airport.
+#' @return A list of the distance in Km between sourceIATA and destIATA, the index of the airports and the unit.
+#' @examples
+#' airportsDist("YUL","YQB")
+#' airportsDist("YUL","YVR")
+#' 
+
 # install.packages("geosphere")
 library(geosphere)
-
 airportsDist <- function(sourceIATA,destIATA)
 {
   # Verification of the sourceIATA and destIATA
@@ -42,7 +51,16 @@ airportsDist("YPA","YQB")
 airportsDist("YUL","YQB")
 airportsDist("YUL","YQB")$value
 
-# Function to establish the estimated time of arrival
+#' Function to establish the estimated time of arrival
+#' 
+#' @param sourceIATA The IATA of the departure airport.
+#' @param destIATA The IATA of the arrival airport.
+#' @return A list of the arrival time at the destIATA airport, and the information relative to it.
+#' @examples
+#' arrivalTime("YUL","YQB")
+#' arrivalTime("YUL","YVR")
+#' 
+
 # install.packages("lubridate")
 library(lubridate)
 arrivalTime <- function(sourceIATA,destIATA)
@@ -73,6 +91,7 @@ arrivalTime("YUL", "YYZ")$value
 difftime(arrivalTime("YUL", "YVR")$value,Sys.time())
 difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
+
 # Import tax rates by province directly from the web
 #install.packages("XML")
 #install.packages("RCurl")
@@ -87,7 +106,19 @@ taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`
 colnames(taxRates) <- c("province","taxRate")
 taxRates
 
-# Shipping cost calculation function
+#' Shipping cost calculation function
+#' 
+#' @param sourceIATA The IATA of the departure airport.
+#' @param destIATA The IATA of the arrival airport.
+#' @param weight The weight of the shipping.
+#' @param percentCredit A double with a default value of 0.
+#' @param dollarCredit A double with a default value of 0.
+#' @return A list of the information for a shipping between the sourceIATA airport to the destIATA airport.
+#' @examples
+#' shippingCost("YUL","YQB")
+#' shippingCost("YUL","YVR")
+#' 
+
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {

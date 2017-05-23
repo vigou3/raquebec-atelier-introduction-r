@@ -14,6 +14,16 @@ empPDF <- function(x,delta=0.01)
 }
 
 # We built a general function for all kind of distribution. 
+
+#' Function of optimisation for fitting distribution.
+#' 
+#' @param dist The distribution name. 
+#' @param ... Kargs
+#' @return A list with the name of the best distribution fit and the parameters.
+#' @examples
+#' distFit("Normal", 1, 1)
+#' distFit("Gamma", 1, 1)
+#' 
 distFit <- function(dist,...)
 {
   dist = tolower(dist)
