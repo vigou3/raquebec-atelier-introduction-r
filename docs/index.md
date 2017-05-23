@@ -1,16 +1,16 @@
 ## Présentation
 
 [R à Québec 2017](http://raquebec.ulaval.ca/2017/) est le premier
-grand colloque annuel interdisciplinaire et francophone dédié à R en
-Amérique du Nord!
+grand colloque annuel interdisciplinaire et francophone dédié à
+[R](https://www.r-project.org) en Amérique du Nord.
 
 L'atelier *Introduction à R*, offert en marge du colloque, s'adresse
-aux personnes désirant s’initier à [R](https://www.r-project.org). Il
-est divisé en deux grandes parties: un exposé des concepts de base
-permettant de comprendre les fondements du **langage de
-programmation** R; une mise en situation permettant de découvrir
-quelques unes des nombreuses fonctionnalités de l'**environnement
-statistique**. Dans les deux cas, l'accent est mis sur la pratique.
+aux personnes désirant s’initier à R. Il est divisé en deux grandes
+parties: un exposé des concepts de base permettant de comprendre les
+fondements du **langage de programmation** R; une mise en situation
+permettant de découvrir quelques unes des nombreuses fonctionnalités
+de l'**environnement statistique**. Dans les deux cas, l'accent est
+mis sur la pratique.
 
 ## Thèmes abordés
 
