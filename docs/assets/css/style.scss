@@ -28,7 +28,7 @@ a {
 }
 
 .page-header {
-  color: #000;
+  color: #23373b;
   background: #D1DBF2;
   background-image: url('../../images/Fotolia_99831160.jpg');
   background-repeat: no-repeat;
@@ -38,17 +38,17 @@ a {
   background-size: cover;
   background-position: center;
 
-  @include large {
-    padding: 8rem 6rem 2rem 6rem;
-  }
+  // @include large {
+  //   padding: 8rem 6rem 2rem 6rem;
+  // }
 
-  @include medium {
-    padding: 6rem 4rem 2rem 4rem;
-  }
+  // @include medium {
+  //   padding: 6rem 4rem 2rem 4rem;
+  // }
 
-  @include small {
-    padding: 2.5rem 1rem 1.5rem 1rem;
-  }
+  // @include small {
+  //   padding: 2.5rem 1rem 1.5rem 1rem;
+  // }
 }
 
 // .page-header h1 {
