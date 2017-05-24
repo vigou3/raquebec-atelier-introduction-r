@@ -13,12 +13,12 @@
 set.seed(31459)
 
 ## Importation des données dans l'espace de travail.
-airports <- read.csv(paste(path,"/Reference/AirportModif.csv",sep=""),
+airports <- read.csv(paste(path,"/data/AirportModif.csv",sep=""),
                      comment.char = "#",
                      as.is = c(2, 3, 5),
                      na.strings = c("\\N", ""),
                      fileEncoding = "UTF-8")
-province <- read.csv(paste(path,"/Reference/province.csv",sep=""),
+province <- read.csv(paste(path,"/data/province.csv",sep=""),
                      comment.char = "#",
                      as.is = 1,
                      na.strings = c("\\N", ""),
@@ -151,8 +151,8 @@ distance <- rlnorm(1000, 5, 1.1)
 cost <- weight * 0.7 + distance * 0.02
 
 pairs(~ cost + weight + distance)
-# install.packages("plot3D")
-library("plot3D")
+# install.packages("rgl")
+library("rgl")
 plot3d(weight, distance, cost)
 
 
@@ -238,3 +238,4 @@ distanceSimul <- rlnorm(100, 5, 1.1)
 ###
 ###   coût = poids * 0.7 + distance * 0.02
 cost <- weightSimul * 0.7 + distanceSimul * 0.02
+
