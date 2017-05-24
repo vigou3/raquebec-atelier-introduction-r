@@ -1,3 +1,11 @@
+> Ceci est le fichier `README.md` fourni avec la documentation de
+> l'atelier *Introduction à R* du colloque
+> [R à Québec 2017](http://raquebec.ulaval.ca/2017/).
+>
+> La
+> [page du projet](https://vigou3.github.io/raquebec-atelier-introduction-r)
+> fournit de l'information plus détaillée sur l'atelier.
+
 # Introduction à R - Atelier du colloque R à Québec 2017
 
 La présente archive contient le matériel destiné aux participants à
@@ -26,13 +34,19 @@ Vincent Goulet <vincent.goulet@act.ulaval.ca>
 - `LICENSE`: contrat de licence Creative Commons Attribution-ShareAlike 4.0 International;
 - `raquebec-atelier-introduction-r.pdf`: diapositives de la formation;
 - `*.R`: fichiers de scripts R pour les démonstrations et les exercices;
-- `*.csv`: fichiers de données pour les démonstrations et les exercices.
+- `data/*.csv`: fichiers de données pour les démonstrations et les exercices.
 
 ## Code source complet
 
 [Voir dans GitHub](https://github.com/vigou3/raquebec-atelier-introduction-r/)
 
 ## Historique des versions
+
+### 0.9a (2017-05-24)
+
+- Jeux de données placés dans un sous-répertoire `data` pour
+  compatibilité avec les expressions d'importation de données du
+  fichier `etude.R`.
 
 ### 0.9 (2017-05-24)
 
