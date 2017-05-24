@@ -1,6 +1,6 @@
 ### Emacs: -*- coding: utf-8; fill-column: 62; comment-column: 27; -*-
 ##
-## Copyright (C) 2017 Vincent Goulet, David Beauchemin, Samuel Cabral Cruz
+## Copyright (C) 2017 Vincent Goulet
 ##
 ## Ce fichier fait partie du projet «Introduction à R - Atelier
 ## du colloque R à Québec 2017»
