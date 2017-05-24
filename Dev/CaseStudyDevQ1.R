@@ -148,7 +148,8 @@ summary(routesCanada$stops)
 routesCanada <- subset(routesCanada, select = -c(codeshare, stops))
 summary(routesCanada)
 
-# 1.6 - Create a map showing the different airports on a map of Canada. install.packages("ggmap")
+# 1.6 - Create a map showing the different airports on a map of Canada. 
+# install.packages("ggmap")
 library(ggmap)
 map <- get_map(location = "Canada", zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
@@ -179,7 +180,7 @@ latEnd <- as.numeric(paste(routesCoord$destLat))
 routesCoord <- as.data.frame(cbind(lonBeg,latBeg,lonEnd,latEnd))
 (mapRoutes <- mapPoints + geom_segment(data=routesCoord,aes(x=lonBeg,y=latBeg,xend=lonEnd,yend=latEnd),alpha=0.5))
 
-# Calculate an airport ridership index based on the number of incoming routes.
+# 1.8 Calculate an airport ridership index based on the number of incoming routes.
 arrivalFlights <- table(routesCanada$destinationAirport)
 departureFlights <- table(routesCanada$sourceAirport)
 totalFlights <- arrivalFlights + departureFlights
@@ -213,7 +214,7 @@ airportsCanada <- sqldf("
   on a.IATA = b.IATA")
 airportsCanada <- data.frame(as.matrix(airportsCanada ))
 
-# 1.11 - Create maps to visualize these indices using a bubble graph.
+# 1.9 - Create maps to visualize these indices using a bubble graph.
 TraficData <- subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.05)
 lon <- as.numeric(paste(TraficData$longitude))
 lat <- as.numeric(paste(TraficData$latitude))
@@ -226,7 +227,8 @@ mapPoints <-
   mapPoints + 
   scale_size_continuous(range = c(0, 20),name = "Trafic Index"))
 
-# install.package("leaflet")
+#  Markers map of the data
+# install.packages("leaflet")
 library(leaflet)
 url <- "http://hiking.waymarkedtrails.org/en/routebrowser/1225378/gpx"
 download.file(url, destfile = paste(path,"/Reference/worldRoutes.gpx",sep=""), method = "wget")
