@@ -42,9 +42,9 @@ nbAirportCity <- table(airportsCanada$city)
 
 ## Exercice 3 ####
 # 3.1 À l'aide de la fonction R lenght, déterminer le nombre de IATA manquant dans airportsCanada.
-length(airportsCanada$IATA[is.na(airportsCanada$IATA)])
-# 3.2 Faire le même exercice mais avec la fonction R sum.
 sum(is.na(airportsCanada$IATA))
+# 3.2 Faire le même exercice mais avec la fonction R sum.
+length(airportsCanada$IATA[is.na(airportsCanada$IATA)])
 
 ## Exercice 4 ####
 # À l'aide de la fonction R merge, joindre les aéroports canadien à leur province adéquate par le prédicat IATA.
