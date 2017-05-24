@@ -8,6 +8,8 @@
 \usepackage{graphicx}
 \usepackage{fontawesome}
 \usepackage{caption}
+\usepackage{multicol}
+\usepackage{tabularx}
 \usepackage{enumitem}
 \usepackage{chngcntr}
 \usepackage[dvipsnames]{xcolor}
@@ -33,13 +35,14 @@
 				% Title
 				{\large\textit{Atelier d'introduction à R}}\\[4\baselineskip]
 				% Author name
-				{\Large\textsc{Beauchemin, David}} \\[\baselineskip]
-				{\Large\textsc{Cabral Cruz, Samuel}} \\[\baselineskip]
-				{\Large\textsc{Goulet, Vincent}} \\[4\baselineskip]
+				{\Large\textsc{Cabral Cruz, Samuel}} \\[2\baselineskip]
+				{\large \normalfont{Avec la collaboration de}} \\[\baselineskip]
+				{\large\textsc{Beauchemin, David}} \\[\baselineskip]
+				{\large\textsc{Goulet, Vincent}} \\[4\baselineskip]
 				% Association
 				{\large {Dans le cadre du colloque R à Québec}} \\[\baselineskip]
 				{\large {25 mai 2017}} 
-				\vspace{0.4\textheight}}}\endgroup}
+				\vspace{0.35\textheight}}}\endgroup}
 
 % Default Addition of Pictures
 \graphicspath{{./fig/}}
@@ -116,6 +119,8 @@
 	\clearpage\thispagestyle{empty}
 	\titlePage
 \end{titlepage}
+\newpage
+\input{tex/license}
 \tableofcontents
 \listoffigures
 \addcontentsline{toc}{chapter}{Table des figures}
@@ -152,8 +157,9 @@
 	\input{tex/part4}
 
 \section{Ajustement de distributions statistiques sur données empiriques}
+	\input{tex/part5}
 
-\section{Simulation et analyse de rentabilité}
+\section{Calcul stochastique en R}
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}

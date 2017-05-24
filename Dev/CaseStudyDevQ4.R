@@ -3,7 +3,7 @@
 ## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
 ##
 ## This file is part of the project 
-## «Introduction à R - Atelier du colloque R à Québec 2017»
+## "Introduction a R - Atelier du colloque R a Quebec 2017"
 ## http://github.com/vigou3/raquebec-atelier-introduction-r
 ##
 ## The creation is made available according to the license
