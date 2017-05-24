@@ -13,12 +13,12 @@
 set.seed(31459)
 
 ## Importation des données dans l'espace de travail.
-airports <- read.csv("Reference/AirportModif.csv",
+airports <- read.csv("data/AirportModif.csv",
                      comment.char = "#",
                      as.is = c(2, 3, 5),
                      na.strings = c("\\N", ""),
                      fileEncoding = "UTF-8")
-province <- read.csv("Reference/province.csv",
+province <- read.csv("data/province.csv",
                      comment.char = "#",
                      as.is = 1,
                      na.strings = c("\\N", ""),
@@ -27,7 +27,7 @@ province <- read.csv("Reference/province.csv",
 ## Exercice 1
 
 ### 1.1 Extraire les données des aéroports canadiens par indicage du
-###     Reference frame
+###     data frame
 airportsCanada <- airports[airports$country=="Canada", ]
 
 ### 1.2 Extraire les données des aéroports canadiens à l'aide de la
@@ -117,7 +117,7 @@ shippingCost(100, 31)
 ### 7.1 Dessiner un nuage de points de la fréquence des routes
 ###     aériennes entrantes pour chaque aéroport à l'aide de la
 ###     fonction 'plot'.
-plot(airports$totalFlights)
+plot(airportsCanada$totalFlights)
 
 ### 7.2 Représenter la distribution de fréquence du nombre de routes
 ###     aériennes entrantes à d'un histograme.
@@ -131,12 +131,16 @@ plot(ecdf(airports$totalFlights))
 ## Exercice 8
 
 ### Tracer une courbe du coût d'un envoi. Le titre du graphique doit
-### être «Coût d'envoi» et la légende de l'ordonnée, «Coût».
+### être «Coût d'envoi», la légende de l'ordonnée «Coût» et la
+### légenre de l'abscisse, «Distance».
 ###
 ### Utiliser les données simulées suivantes.
-cost <- sort(runif(100, min = 5, max = 100))
+cost <- runif(100, min = 5, max = 50)
+distance <- rlnorm(100, 2, 1.1)
 
-plot(cost, main = "Coût d'envoi", ylab = "Coût")
+plot(sort(distance), sort(cost),
+     main = "Coût d'envoi",
+     ylab = "Coût", xlab = "Distance")
 
 
 ## Exercice 9
@@ -151,6 +155,7 @@ distance <- rlnorm(1000, 5, 1.1)
 cost <- weight * 0.7 + distance * 0.02
 
 pairs(cbind(weight, distance, cost))
+
 
 ## Exercice 10
 
@@ -189,12 +194,12 @@ optim(c(1, 1), loglik, x = cost)
 ### des colis à l'aide de la fonction 'fitdistr' du paquetage MASS.
 ###
 ### Importer et utiliser les données suivantes.
-compReference <- read.csv("Reference/benchmark.csv")
-colnames(compReference) <- c("weight", "distance", "cost")
+compData <- read.csv("data/benchmark.csv")
+colnames(compData) <- c("weight", "distance", "cost")
 
 library("MASS")
-(fit.gamma <- fitdistr(compReference$weight, "gamma"))
-(fit.lnorm <- fitdistr(compReference$weight, "lognormal"))
+(fit.gamma <- fitdistr(compData$weight, "gamma"))
+(fit.lnorm <- fitdistr(compData$weight, "lognormal"))
 
 
 ## Exercice 13

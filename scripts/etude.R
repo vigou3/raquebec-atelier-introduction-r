@@ -119,11 +119,12 @@ listeIATA <- function(depart, arrival)
 ## Exercice 8
 
 ### Tracer une courbe du coût d'un envoi. Le titre du graphique doit
-### être «Coût d'envoi» et la légende de l'ordonnée, «Coût».
+### être «Coût d'envoi», la légende de l'ordonnée «Coût» et la
+### légenre de l'abscisse, «Distance».
 ###
 ### Utiliser les données simulées suivantes.
-cost <- sort(runif(100, min = 5, max = 100))
-
+cost <- runif(100, min = 5, max = 50)
+distance <- rlnorm(100, 2, 1.1)
 
 
 ## Exercice 9
