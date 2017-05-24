@@ -30,23 +30,31 @@ colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "tzFormat","typeAirport","Source")
 
 
-# We fill the missing IATA for canada
-airports$IATA <- as.character(airports$IATA) 
-airports$IATA[is.na(airports$IATA)] <- substr(airports$ICAO[is.na(airports$IATA)],2,4) 
-airports$IATA <- as.factor(airports$IATA)
-airports <- subset(airports, select = -ICAO)
-
-
 
 # Adding the number of arrivalFlights for each airports
-routesCanada <- read.csv(paste(path,"/Reference/RoutesModif.csv",sep=""),  na.strings=c("\\N",""), 
-                         fileEncoding = "UTF-8", comment = "#")
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", 
+                   header = FALSE, na.strings=c("\\N",""))
+colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
+                      "destinationAirport","destinationAirportID","codeshare",
+                      "stops","equipment")
+# Only for Canada airports
+airportsCanada <- subset(airports,country == "Canada")
+# install.packages("sqldf")
+library(sqldf)
+routesCanada <- sqldf("
+  select *
+  from routes
+  where sourceAirportID in (select distinct airportID
+                            from airportsCanada)
+    and destinationAirportID in (select distinct airportID
+                                 from airportsCanada)")
+routesCanada  <- data.frame(as.matrix(routesCanada ))
 
 arrivalFlights <- table(routesCanada$destinationAirport)
 arrivalFlights <- data.frame(arrivalFlights)
 colnames(arrivalFlights) <- c("IATA","totalFlights")
 # On joint les données sur l'achalandage aux aéroports canadiens appropriés
-airports<- merge(airportsCanada, arrivalFlights, by.x = "IATA", by.y = "IATA")
+airports<- merge(airports, arrivalFlights, by.x = "IATA", by.y = "IATA", all.x = TRUE )
 
 
 
