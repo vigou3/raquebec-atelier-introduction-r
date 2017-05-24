@@ -1,14 +1,17 @@
-#
-# This is the main code for the Case Study R à Québec 2017
-#
-# Author : David Beauchemin & Samuel Cabral Cruz
-#
+### RStudio: -*- coding: utf-8 -*-
+##
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
+##
+## This file is part of the project 
+## «Introduction à R - Atelier du colloque R à Québec 2017»
+## http://github.com/vigou3/raquebec-atelier-introduction-r
+##
+## The creation is made available according to the license
+## Attribution-Sharing in the same conditions 4.0
+## of Creative Commons International
+## http://creativecommons.org/licenses/by-sa/4.0/
 
 #### Question 4 ####
-#
-# Need the dataset from question 1
-#
-
 # Import data of the competition
 compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=""))
 View(compData)
@@ -47,8 +50,9 @@ plot3d(compData$weight,compData$distance,compData$price)
 # Chi's Square Test of Independency between the two variables
 weightsBinded <- as.numeric(cut(compData$weight,25))
 distancesBinded <- as.numeric(cut(compData$distance,25))
-(contingencyTable <- table(weightsBinded,distancesBinded))
-(contingencyTable <- rbind(contingencyTable[1:4,],colSums(contingencyTable[5:18,])))
+contingencyTable <- table(weightsBinded,distancesBinded)
+chisq.test(contingencyTable)
+contingencyTable <- rbind(contingencyTable[1:4,],colSums(contingencyTable[5:18,]))
 (contingencyTable <- cbind(contingencyTable[,1:14],rowSums(contingencyTable[,15:24])))
 independencyTest <- chisq.test(contingencyTable)
 head(independencyTest$expected)
@@ -59,8 +63,7 @@ cor.test(compData$weight,compData$distance,method = "pearson")
 
 # Linear model 
 # we assume the same profit margin to simplify the situation
-# We keep an intercept since we have a fixe cost
-
+# We keep an intercept since we have a fixed cost
 profitMargin <- 1.12
 avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
 compModel <- lm(price/(profitMargin*avgTaxRate) ~ distance + weight, compData)

@@ -1,19 +1,29 @@
-#
-# This is the main code for the Case Study R à Québec 2017
-#
-# Author : David Beauchemin & Samuel Cabral Cruz
-#
+### RStudio: -*- coding: utf-8 -*-
+##
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
+##
+## This file is part of the project 
+## «Introduction à R - Atelier du colloque R à Québec 2017»
+## http://github.com/vigou3/raquebec-atelier-introduction-r
+##
+## The creation is made available according to the license
+## Attribution-Sharing in the same conditions 4.0
+## of Creative Commons International
+## http://creativecommons.org/licenses/by-sa/4.0/
+# Question 2 :Functions creation
 
-#### Question 2 #####
-#
-# Need the dataset from question 1
-#
+#' Distance calculation function between two airports.
+#' 
+#' @param sourceIATA The IATA of the departure airport.
+#' @param destIATA The IATA of the arrival airport.
+#' @return A list of the distance in Km between sourceIATA and destIATA, the index of the airports and the unit.
+#' @examples
+#' airportsDist("YUL","YQB")
+#' airportsDist("YUL","YVR")
+#' 
 
-
-# Distance calculation function between two airports.
 # install.packages("geosphere")
 library(geosphere)
-
 airportsDist <- function(sourceIATA,destIATA)
 {
   # Verification of the sourceIATA and destIATA
@@ -49,7 +59,16 @@ airportsDist("YPA","YQB")
 airportsDist("YUL","YQB")
 airportsDist("YUL","YQB")$value
 
-# Function to establish the estimated time of arrival
+#' Function to establish the estimated time of arrival
+#' 
+#' @param sourceIATA The IATA of the departure airport.
+#' @param destIATA The IATA of the arrival airport.
+#' @return A list of the arrival time at the destIATA airport, and the information relative to it.
+#' @examples
+#' arrivalTime("YUL","YQB")
+#' arrivalTime("YUL","YVR")
+#' 
+
 # install.packages("lubridate")
 library(lubridate)
 arrivalTime <- function(sourceIATA,destIATA)
@@ -80,6 +99,7 @@ arrivalTime("YUL", "YYZ")$value
 difftime(arrivalTime("YUL", "YVR")$value,Sys.time())
 difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 
+
 # Import tax rates by province directly from the web
 #install.packages("XML")
 #install.packages("RCurl")
@@ -94,7 +114,19 @@ taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`
 colnames(taxRates) <- c("province","taxRate")
 taxRates
 
-# Shipping cost calculation function
+#' Shipping cost calculation function
+#' 
+#' @param sourceIATA The IATA of the departure airport.
+#' @param destIATA The IATA of the arrival airport.
+#' @param weight The weight of the shipping.
+#' @param percentCredit A double with a default value of 0.
+#' @param dollarCredit A double with a default value of 0.
+#' @return A list of the information for a shipping between the sourceIATA airport to the destIATA airport.
+#' @examples
+#' shippingCost("YUL","YQB")
+#' shippingCost("YUL","YVR")
+#' 
+
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
@@ -201,5 +233,3 @@ shippingCost("YUL", "YVR", 1)
 shippingCost("YUL", "YQB", 1)
 shippingCost("YUL", "YVR", 30)
 shippingCost("YUL", "YQB", 30)
-
-

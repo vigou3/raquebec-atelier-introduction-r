@@ -1,15 +1,17 @@
-#
-# This is the main code for the Case Study R à Québec 2017
-#
-# Author : David Beauchemin & Samuel Cabral Cruz
-#
+### RStudio: -*- coding: utf-8 -*-
+##
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
+##
+## This file is part of the project 
+## «Introduction à R - Atelier du colloque R à Québec 2017»
+## http://github.com/vigou3/raquebec-atelier-introduction-r
+##
+## The creation is made available according to the license
+## Attribution-Sharing in the same conditions 4.0
+## of Creative Commons International
+## http://creativecommons.org/licenses/by-sa/4.0/
 
 #### Question 5 ####
-#
-# Need the dataset from question 1
-#
-
-
 # install.packages("actuar")
 library("actuar")
 
@@ -17,10 +19,20 @@ distName <- c("Normal","Gamma","LogNormal","Weibull","Pareto","InvGaussian")
 empCDF <- ecdf(compData$weight)
 empPDF <- function(x,delta=0.01)
 {
-  (empCDF(x)-empCDF(x-delta))/delta
+  (empCDF(x+delta/2)-empCDF(x-delta/2))/delta
 }
 
 # We built a general function for all kind of distribution. 
+
+#' Function of optimisation for fitting distribution.
+#' 
+#' @param dist The distribution name. 
+#' @param ... Kargs
+#' @return A list with the name of the best distribution fit and the parameters.
+#' @examples
+#' distFit("Normal", 1, 1)
+#' distFit("Gamma", 1, 1)
+#' 
 distFit <- function(dist,...)
 {
   dist = tolower(dist)
@@ -95,7 +107,7 @@ plot(function(x) empCDF(x), xlim = c(0,15), main = "", xlab = "weight (Kg)", yla
 invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("p",law[i],sep = ""))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
 hist(compData$weight, xlim = c(0,15), main = "", xlab = "weight (Kg)", breaks = 300,freq = FALSE)
 invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("d",law[i],sep = ""))),c(list(x), as.vector(resultDistFitting[c(1:2),i]))), add = TRUE, lwd = 3, col = col[i])))
-legend(x="right",distName, inset = 0.1, col = col, pch = 20, pt.cex = 2, cex = 1, ncol = 1, bty = "n", text.width = 2, title = "Distribution")
+legend(x="right", y = "center",distName, inset = 0.1, col = col, pch = 20, pt.cex = 2, cex = 1, ncol = 1, bty = "n", text.width = 2, title = "Distribution")
 mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE)
 
 # We thus choose the LogNormal distribution which possesses the smallest deviance and the best fit.
