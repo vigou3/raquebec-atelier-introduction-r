@@ -25,6 +25,7 @@ mis sur la pratique.
 - Extensions pas le biais de paquetages.
 - Importation et manipulation de jeux de données.
 - Création et annotation de graphiques.
+- Procédures statistiques standards.
 
 ## Pré-requis pour la formation
 
@@ -34,7 +35,7 @@ travail:
 
 - la plus récente version de [R](https://cran.r-project.org/);
 - la plus récente version de [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/#download); 
-- la [documentation]() de la formation (décompresser l'archive `.zip` dans un dossier quelconque).
+- la [documentation]({{ site.github.releases_url }}/download/v0.9/raquebec-atelier-introduction-r.zip) de la formation (décompresser l'archive `.zip` dans un dossier quelconque).
 
 
 ## Auteurs et animateurs
