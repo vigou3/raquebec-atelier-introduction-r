@@ -8,9 +8,9 @@
 - [Énoncé](#-nonc-)
   * [Étape 1 - Importation, traitement, visualisation et analyse des données](#question-1---extraction--traitement--visualisation-et-analyse-des-donn-es)
   * [Étape 2 - Création de fonctions utilitaires](#question-2---cr-ation-de-fonctions-utilitaires)
-  * [Étape 3 - Communication de vos résultats](#question-3---communication-de-vos-r-sultats)
+  * [Étape 3 - Communication des résultats](#question-3---communication-de-vos-r-sultats)
   * [Étape 4 - Analyse de la compétition](#question-4---analyse-de-la-comp-tition)
-  * [Étape 5 - Ajustement des lois de distribution sur données empiriques](#question-5---ajustement-des-lois-de-distribution-sur-donn-es-empiriques)
+  * [Étape 5 - Ajustement des lois de distribution sur les données empiriques](#question-5---ajustement-des-lois-de-distribution-sur-donn-es-empiriques)
   * [Étape 6 - Simulation et analyse de rentabilité](#question-6---simulation-et-analyse-de-rentabilit-)
 - [Auteurs](#auteurs)
 - [Liens utiles](#liens-utiles)
@@ -27,8 +27,8 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 
 ## Énoncé
 
-### Question 1 - Importation, traitement, visualisation et analyse des données
-1. Extraire les bases de données [**airports.dat**]() et [**routes.dat**]().
+### Étape 1 - Importation, traitement, visualisation et analyse des données
+1. Importer les bases de données [**airports.dat**]() et [**routes.dat**]().
 2. Attribuer des noms aux différentes colonnes des données selon l'information disponible sur [OpenFlights](https://openflights.org/data.html).
 3. Nettoyer le jeu de données en ne conservant que les données relatives au Canada.
 4. Extraire des informations générales sur la distribution des variables présente dans le jeu de données et identifier les données manquantes.
@@ -41,7 +41,7 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 > Note:
 > Les données disponibles avec le code source on été simplifier, les données d'origines sont disponible en référence.
 
-### Question 2 - Création des fonctions utilitaires
+### Étape 2 - Création des fonctions utilitaires
 1. Écrivez le code source de la fonction **airportsDist(sourceIATA, destIATA)** qui permettra de calculer la distance par vol d'oiseau entre deux aéroports.
 2. Écrivez le code source de la fonction **arrivalTime(sourceIATA, destIATA)** qui permettra de calculer l'heure d'arrivée dans la ville de destination d'un colis qui serait posté immédiatement.
 3. Écrivez le code source de la fonction **shippingCost(sourceIATA, destIATA, weight, \*percentCredit, \*dollarCredit)** qui permettra de tarifer la livraison d'un colis donné en fonction de son poids, sa provenance et sa destination, et en tenant compte des frais fixes, des taxes (variant par province), de la marge de profits, des rabais applicables (% et $) ainsi que des normes suivantes:
@@ -65,26 +65,26 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 * Faites en sorte que votre fonction accomplisse la vérification des conditions et renvoie un message d'aide pour remédier à la situation.
 * Votre fonction devrait être complètement paramétrable sans nécessairement exiger la définition de tous les paramètres afin de permettre son utilisation. Pensez donc à définir des valeurs par défaut aux arguments que vous jugerez optionnels.
 
-### Question 3 - Communication de vos résultats
-1. À partir de la fonction **shippingCost**, créer des chartes graphiques permettant d'analyser la tarification d'un trajet en fonction de son **poids** pour les trajets suivants:
+### Étape 3 - Communication de vos résultats
+À partir de la fonction **shippingCost**, créer des chartes graphiques permettant d'analyser la tarification d'un trajet en fonction de son **poids** pour les trajets suivants:
   * Montréal (YUL) - Québec (YQB)
   * Montréal (YUL) - Vancouver (YVR)
   * Montréal (YUL) - Toronto (YYZ)
   * Montréal (YUL) - Calgary (YYC)
 
-### Question 4 - Analyse de la compétition
+### Étape 4 - Analyse de la compétition
 Grâce à la base de données [benchmark.csv](https://github.com/vigou3/raquebec-intro/blob/master/Reference/benchmark.csv), vous serez en mesure d'extrapoler grâce à des techniques statistiques la tarification de la compétition.
 1. Visualiser la distribution des prix en fonction du poids.
 2. Visualiser ensuite la distribution des prix en fonction de la distance.
 3. Visualiser maintenant la distribution des prix en fonction de poids et de la distance.
 4. Tester l'indépendances des variables à l'aide du test de la fonction *chisq.test* qui effectue le test de Chi carré.
-5. Vous constatez qu'un modèle linéaire serait suffisant pour faire l'approximation.
-6. En utilisant la fonction *lm*, déterminer la droite de régression afin de déterminer les paramètres de la loi sous-jacente.
+5. En utilisant la fonction *lm*, déterminer la droite de régression afin de déterminer les paramètres de la loi sous-jacente.
+6. Visualiser le modèle de régression à l'aide de la fonction *plot*.
 
 > Note:
 > Vous savez que vos compétiteurs utilisent principalement le poids et la distance pour déterminer le prix des livraisons.
 
-### Question 5 - Ajustement des lois de distribution sur les données empiriques
+### Étape 5 - Ajustement des lois de distribution sur les données empiriques
 En reprenant les données de la compétition, vous êtes aussi en mesure d'extraire la distribution suivie par le poids des colis et des distances.
 1. Utiliser le paquetage *actuar* ainsi que la fonction *optim* pour ajuster les distributions suivantes à la distribution empirique en fonction du poids.
   * Loi Normale
@@ -97,7 +97,7 @@ En reprenant les données de la compétition, vous êtes aussi en mesure d'extra
 > Note:
 > Les paramètres initiaux de vos optimisations peuvent impacter le résultat de la fonction.
 
-### Question 6 - Simulation et analyse de rentabilité
+### Étape 6 - Simulation et analyse de rentabilité
 Encore une fois, pour le bureau de Montréal, qui est inquiet que la nouvelle tarification nous fasse perdre des parts de marché qui sont actuellement de 15%. On vous demande de faire une analyse de rentabilité. Pour ce faire, vous décidez donc d'utiliser des techniques stochastiques afin de simuler un bassin de clients au cours de la prochaine année.
 1. Simuler le nombre de colis envoyés au cours de chacun des prochains mois à l'aide d'une distribution Poisson. En raison de la saisonnalité, le nombre de colis moyens envoyés par mois au cours des trois dernières années était:
 |   Mois    | Nb Colis (Avg. 3yrs) |
