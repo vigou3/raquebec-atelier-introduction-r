@@ -1,6 +1,4 @@
-### RStudio: -*- coding: utf-8 -*-
-##
-## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz
 ##
 ## Ce fichier fait partie du projet «Introduction à R - Atelier
 ## du colloque R à Québec 2017»
@@ -11,141 +9,204 @@
 ## International de Creative Commons.
 ## http://creativecommons.org/licenses/by-sa/4.0/
 
-#
-# caseStudyStudentExercice
-#
-
 #### Setting working directory properly ####
 getwd()
-setwd("..")    
+setwd("..")
 (path <- getwd())
 set.seed(31459)
 
-#### Import data ####
-airports <- read.csv(paste(path,"/Reference/AirportModif.csv",sep=""), comment = "#",
-                     as.is = c(2, 3, 5), na.strings=c("\\N",""), fileEncoding = "UTF-8")
-province <- read.csv(paste(path,"/Reference/province.csv",sep=""), na.strings=c("\\N",""), 
-                     as.is = 1, fileEncoding = "UTF-8", comment = "#")
+## Importation des données dans l'espace de travail.
+airports <- read.csv("Reference/AirportModif.csv",
+                     comment.char = "#",
+                     as.is = c(2, 3, 5),
+                     na.strings = c("\\N", ""),
+                     fileEncoding = "UTF-8")
+province <- read.csv("Reference/province.csv",
+                     comment.char = "#",
+                     as.is = 1,
+                     na.strings = c("\\N", ""),
+                     fileEncoding = "UTF-8")
 
-## Exercice 1 ####
-# 1.1 À l'aide de l'indicage extraire toutes les aéroports canadiens.
+## Exercice 1
 
-
-# 1.2 À l'aide de la fonction R subset, extraire les aéroports canadiens.
-
-
-
-## Exercice 2 ####
-# 2.1 À l'aide de la fonction R table, créé une table du nombre d'aéroports par ville.
-
-
-# 2.2 Déterminer les villes avec le plus d'aéroport au Canada à l'aide de la fonction R sort.
+### 1.1 Extraire les données des aéroports canadiens par indicage du
+###     data frame
 
 
-## Exercice 3 ####
-# 3.1 À l'aide de la fonction R lenght, déterminer le nombre de IATA manquant dans airportsCanada.
+### 1.2 Extraire les données des aéroports canadiens à l'aide de la
+###     fonction 'subset'.
 
 
-# 3.2 Faire le même exercice mais avec la fonction R sum.
+
+## Exercice 2
+
+### 2.1 À partir des données des aéroports canadiens, créer un tableau
+###     de fréquence du nombre d'aéroports par ville à l'aide de la
+###     fonction 'table'.
 
 
-## Exercice 4 ####
-# À l'aide de la fonction R merge, joindre les aéroports canadien à leur province adéquate par le prédicat IATA.
+### 2.2 Déterminer les cinq villes canadiennes comptant le plus
+###     d'aéroports.
 
 
-## Exercice 5 ####
-# Écrire une fonction qui prend en argument un IATA de départ et un IATA d'arriver et qui 
-# retourne dans une liste les informations suivantes:
-# Le sourceIATA
-# Le destIATA
-# À l'aide de la fonction R paste retourner la concaténation des deux chaines de caractère
-listeIATA <- function(sourceIATA, destIATA)
+
+## Exercice 3
+
+### 3.1 Déterminer le nombre de codes IATA manquant dans les données
+###     des aéroports canadiens à l'aide de la fonction 'sum'.
+
+
+### 3.2 Répéter l'exercice 3.1 avec la fonction 'length'.
+
+
+
+## Exercice 4
+
+### Ajouter le code de province aux données d'aéroports canadiens en
+### les fusionnant avec les données 'province' par le prédicat IATA.
+### Utiliser la fonction 'merge'.
+
+
+
+## Exercice 5
+
+### Écrire une fonction 'listeIATA' qui prend en arguments un code
+### IATA de départ et un code IATA d'arrivée, et qui retourne dans une
+### liste les informations suivantes:
+###
+### 1. 'depart', le code IATA de départ;
+### 2. 'arrival', le code IATA d'arrivée;
+### 3. 'route', une chaine de caractères formée des deux codes IATA
+###    séparés par un trait d'union.
+###
+### Utiliser la fonction 'paste' pour créer la chaine de caractères.
+listeIATA <- function(depart, arrival)
 {
 
 }
 
 
-## Exercice 6 ####
-# Écrire une fonction qui prend en argument une distance et un poids et qui retourne le prix de la 
-# livraison selon la formule suivante : prix = poids * indicePoids + distance * indiceDistance.
-# De plus, assurer vous que le poids ne dépasse pas les 30 Kg, afficher le message suivant:
-# "Le poids doit être inférieur à 30 Kg".
-# Notes: l'indice de poids est de 0.7 et l'indice de distance est de 0.02
-coutLivraison <- function(distance, poids)
-{
-     
-}
 
-## Exercices 7 ####
+## Exercice 6
 
-# 7.1 À l'aide de la fonction R plot dessiner un nuage de point de la fréquence des voies aériennes 
-# entrantes pour chaque aéroport
-
-
-# 7.2 À l'aide de la fonction R hist dessiner un histograme à bande.
+### Écrire une fonction 'shippingCost' qui prend en argument une
+### distance et un poids, et qui retourne le coût de la livraison selon
+### la formule suivante:
+###
+###   coût = poids * indicePoids + distance * indiceDistance.
+###
+### Utiliser un indice de poids de 0.7 et un indice de distance de
+### 0.02.
+###
+### La fonction devrait afficher un message d'erreur lorsque le poids
+### dépasse 30 kg.
 
 
-# 7.3 À l'aide de la fonction R ecdf ainsi que de la fonction R plot dessiner la fonction de 
-# répartition.
 
-## Exercices 8 ####
-# À l'aide de la fonction R plot dessiner la courbe des prix. De plus, votre graphique doit comporter
-# les informations suivantes:
-# Titre du graphique : "Courbe des prix"
-# Titres de l'axe des y (verticale) : Prix
-# Données à votre disposition :
-données <- sort(runif(100, min = 5, max = 100))
+## Exercice 7
 
-## Exercices 9 ####
-# À l'aide de la fonction R plot3d dessiner un graphique du prix et de la distance par rapport au prix.
-# Autrement dit, le poids en x, la distance en y et le prix en z. 
-# Données à votre disposition:
-poids <- runif(1000, 1, 30)
+### 7.1 Dessiner un nuage de points de la fréquence des routes
+###     aériennes entrantes pour chaque aéroport à l'aide de la
+###     fonction 'plot'.
+
+
+### 7.2 Représenter la distribution de fréquence du nombre de routes
+###     aériennes entrantes à d'un histograme.
+
+
+### 7.3 Tracer la fonction de répartition empirique du nombre de
+###     routes aériennes entrantes. Utiliser la fonction 'ecdf'.
+
+
+
+## Exercices 8
+
+### Tracer une courbe du coût d'un envoi. Le titre du graphique doit
+### être «Coût d'envoi» et la légende de l'ordonnée, «Coût».
+###
+### Utiliser les données simulées suivantes.
+cost <- sort(runif(100, min = 5, max = 100))
+
+
+
+## Exercices 9
+
+### Tracer un graphique du coût d'un envoi en fonction du poids du
+### colis et de la distance à parcourir. Utiliser la fonction
+### 'plot3d'.
+###
+### Utiliser les données simulées suivantes.
+weight <- runif(1000, 1, 30)
 distance <- rlnorm(1000, 5, 1.1)
-prix <- rgamma(1000, 35, 1)
+cost <- rgamma(1000, 35, 1)
 
-## Exercice 10 ####
-# À l'aide de la fonction R lm déterminer une droite de régression du prix ~ (en fonction de) 
-# la distance et du poids.
-# Données à votre disposition:
-poids <- runif(1000, 1, 30)
+
+
+## Exercice 10
+
+### Calculer un modèle de régression liant le coût d'un envoi au poids
+### du colis et à la distance à parcourir.
+###
+### Utiliser les données simulées suivantes.
+weight <- runif(1000, 1, 30)
 distance <- rlnorm(1000, 5, 1.1)
-prix <- rgamma(1000, 35, 1)
+cost <- rgamma(1000, 35, 1)
+
+
 
 ## Exercices 11 ####
-# À l'aide de la fonction R optim, déterminer les paramètres de la fonction de densité des prix. 
-# Autrement dit, on cherche à optimiser la fonction : - sum ( log(dgamma(prix, param1, param2))).
-# Données à votre disposition:
-prix <- rgamma(1000, 35, 1)
 
-fct <- function(prix, param)
-{
-     
-}
-
-## Exercices 12 ####
-# À l'aide de la fonction R fitdistr du package MASS, déterminer les paramètres des densités 
-# "lognormal" et "gamma" par rapport au poids.
-# Données à votre disposition :
-compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep="" ))
-colnames(compData) <- c("weight","distance","price")
-# install.packages("MASS")
-library("MASS")
-
-## Exercices 13 ####
-# À l'aide de la fonction R sample simuler la destination de 100 envoie de colis à partir de "YUL".
-# Données à votre diposition:
-aeroports <- c("YYZ", "YQZ", "YKZ", "YYC", "YWF", "YAM", "YBC", "YPA", "YOW", "YZR", "YQY")
-frequence <- c(4, 23, 12,  7, 22, 18, 12,  7, 18,  6,  2)
-
-## Exercices 14 ####
-# À l"aide des fonctions R runif et rlnorm simuler des poids et des distances de 100 envoie des colis
-# à partir de "YUL" et affecter les simulations aux variables respectives poidsSimul et distancesSimul.
-# Notes: 
-# - Pour la simulation runif utiliser les paramètres 1 et 30.
-# - Pour la simulation rlnorm utiliser les paramètres 5 et 1.1.
+### Ajuster une loi gamma à la distribution des coûts par la méthode
+### du maximum de vraisemblance. Utiliser la fonction 'optim' pour
+### minimiser la log-vraisemblance négative
+###
+###  - sum(log(dgamma(x, shape, rate))).
+###
+### Utiliser les données simulées suivantes.
+cost <- rgamma(1000, 35, 1)
 
 
-## Exercices 15 ####
-# À l'aide des données simulées précédaments déterminer le prix pour chacun des envoies de colis.
-# Utiliser la fonction de prix suivantes : Prix = poids * 0.7 + distance * 0.02
+
+## Exercices 12
+
+### Ajuster des lois gamma et log-normale à la distribution des poids
+### des colis à l'aide de la fonction 'fitdistr' du paquetage MASS.
+###
+### Importer et utiliser les données suivantes.
+compData <- read.csv("Reference/benchmark.csv")
+colnames(compData) <- c("weight", "distance", "cost")
+
+
+
+## Exercices 13
+
+### Simuler, à l'aide la fonction 'sample', la destination de 100
+### envois de colis à partir de l'aéroport Montréal-Trudeau (YUL) en
+### tenant compte de la fréquence relative des différentes routes
+### aériennes.
+###
+### Utiliser les données suivantes.
+aeroports <- c("YYZ", "YQZ", "YKZ", "YYC", "YWF", "YAM",
+               "YBC", "YPA", "YOW", "YZR", "YQY")
+freq <- c(4, 23, 12,  7, 22, 18, 12,  7, 18,  6,  2)
+
+## Exercices 14
+
+### Simuler les poids et les distances à parcourir de 100 envois de
+### colis à partir de l'aéroport Montréal-Trudeau (YUL).
+###
+### La distribution des poids est une loi uniforme sur l'intervalle
+### (1, 30). Celle des distances est une loi log-normale de paramètres
+### 5 et 1.1.
+###
+### Conserver les valeurs simulées dans des objets weightSimul et
+### distanceSimul.
+
+
+
+## Exercices 15
+
+### Déterminer le coût de chacun des envois pour les données simulées
+### précédemment à partir de la fonction de coût suivante:
+###
+###   coût = poids * 0.7 + distance * 0.02
