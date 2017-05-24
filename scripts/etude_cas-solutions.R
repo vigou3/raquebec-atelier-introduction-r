@@ -9,19 +9,16 @@
 ## International de Creative Commons.
 ## http://creativecommons.org/licenses/by-sa/4.0/
 
-#### Setting working directory properly ####
-getwd()
-setwd("..")
-(path <- getwd())
+## Initialisation de l'amorce du générateur de nombres aléatoires.
 set.seed(31459)
 
 ## Importation des données dans l'espace de travail.
-airports <- read.csv("Reference/AirportModif.csv",
+airports <- read.csv("data/AirportModif.csv",
                      comment.char = "#",
                      as.is = c(2, 3, 5),
                      na.strings = c("\\N", ""),
                      fileEncoding = "UTF-8")
-province <- read.csv("Reference/province.csv",
+province <- read.csv("data/province.csv",
                      comment.char = "#",
                      as.is = 1,
                      na.strings = c("\\N", ""),
@@ -193,7 +190,7 @@ optim(c(1, 1), loglik, x = cost)
 ### des colis à l'aide de la fonction 'fitdistr' du paquetage MASS.
 ###
 ### Importer et utiliser les données suivantes.
-compData <- read.csv("Reference/benchmark.csv")
+compData <- read.csv("data/benchmark.csv")
 colnames(compData) <- c("weight", "distance", "cost")
 
 library("MASS")
