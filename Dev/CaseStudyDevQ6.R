@@ -92,3 +92,7 @@ text(v+0.75,0.3,as.character(round(v,2)))
 abline(v = v <- mean(weightSales),col = "red", lwd = 2)
 text(v - 0.75,0.3,round(v,2),col = "red")
 
+sample(airportsCanada$altitude,size = 10, replace = TRUE)
+probs = airportsCanada$altitude/sum(airportsCanada$altitude)
+sample(airportsCanada$altitude,size = 10, replace = TRUE,prob = probs)
+sample(unique(as.character(paste(airportsCanada$name))),size = 10,replace = FALSE)
