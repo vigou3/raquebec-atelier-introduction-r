@@ -23,7 +23,7 @@
 
 
 ## Noms du document maître et de l'archive
-SLIDES = diapos/raquebec-atelier-introduction-r.pdf
+SLIDES = slides/raquebec-atelier-introduction-r.pdf
 CASESTUDY = 
 ARCHIVE = raquebec-atelier-introduction-r.zip
 
