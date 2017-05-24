@@ -1,21 +1,33 @@
-# coding: utf-8
-# CaseStudyRQuebec2017
-# Authors : David Beauchemin & Samuel Cabral Cruz
+### RStudio: -*- coding: utf-8 -*-
+##
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
+##
+## This file is part of the project 
+## «Introduction à R - Atelier du colloque R à Québec 2017»
+## http://github.com/vigou3/raquebec-atelier-introduction-r
+##
+## The creation is made available according to the license
+## Attribution-Sharing in the same conditions 4.0
+## of Creative Commons International
+## http://creativecommons.org/licenses/by-sa/4.0/
 
-# Setting working directory properly 
+#### Setting working directory properly ####
 setwd("C:/Users/Samuel/Documents/ColloqueR/Dev")
 getwd()
 setwd("..")
 (path <- getwd())
 set.seed(31459)
 
-# Question 1 - Data extraction, processing, visualization and analysis 
+#### Data extraction, cleaning, visualization and analysis #### 
 
-# 1.1 - Database extraction of airports.dat, and routes.dat.
-airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c("\\N",""))
-routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", header = FALSE, na.strings=c("\\N",""))
+# Extraction of airports.dat and routes.dat
+airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat",
+                     header = FALSE, na.strings=c("\\N",""))
+routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", 
+                   header = FALSE, na.strings=c("\\N",""))
 
-# 1.2 - Coloumns names assignation  base on the information available on the website.
+# Coloumns names assignation based on the information available on the website
+# https://openflights.org/data.html
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "latitude", "longitude", "altitude", "timezone", "DST",
                         "tzFormat","typeAirport","Source")
@@ -23,44 +35,34 @@ colnames(routes) <- c("airline","airlineID","sourceAirport","sourceAirportID",
                       "destinationAirport","destinationAirportID","codeshare",
                       "stops","equipment")
 
+# Filtering the observations relative to Canadian airports
+airportsCanada <- subset(airports,country == "Canada")
 
-# 1.3 - Keeping the Canada information of the dataset
-airportsCanada <- airports[airports$country=="Canada",]
-airportsCanada2 <- subset(airports,country == "Canada")
-all.equal(airportsCanada,airportsCanada2)
-
-# 1.4 - Extraction of the genreral information about the distributions of the variables in the dataset and 
-# understanding of the signification of those variables and the different modalities they can take.
-
-# Those are the principal R function to easely visualize information.
+# Extraction of genreral information about the variables contained in the dataset
 View(airportsCanada)
-head(airportsCanada)
 summary(airportsCanada)
-nbAirportCity <- table(airportsCanada$city) 
-(nbAirportCity <- sort(nbAirportCity,decreasing=TRUE))[1:10]
+nbAirportCity <- table(airportsCanada$city)
+(nbAirportCity <- head(sort(nbAirportCity,decreasing=TRUE)))
 
-# The relevance of the data.
-# 1.5 - Correct the modalities of the variables and make a selection of those wo seem useful for the rest of the treatment. 
-# We observe that the variables typeAirport and Source are useless in our situation since we only use information on air transport. 
-# A similar reasoning is applicable for the country variable which will only have the modality Canada.
+# Variable selection 
+# We will not use the typeAirport and Source variables since we only want to analyse air transport market
+# We can also discard the country variable because we already filtered on Canadian airports
 airportsCanada <- subset(airportsCanada, select = -c(country, typeAirport, Source ))
 
-# As seen in the sumary, we dont have the IATA for 27 airports.
-airportsCanada[is.na(airportsCanada$IATA),c("airportID","name","IATA","ICAO")]
+# As seen in the summary, we do not have the IATA code of 27 airports
 subset(airportsCanada, is.na(IATA), select = c("airportID","name","IATA","ICAO"))
 
-# The first option, is to simply ignore these airports in the rest of the analysis.
-# However, all these airports have a well-defined ICAO code which will allow a default value to be assigned.
-# Since 82% of the IACA is the last three caracters of the ICAO, we will simply use the derivate IATA from the ICAO.
-sum(airportsCanada$IATA==substr(airportsCanada$ICAO,2,4),na.rm = TRUE)/sum(!is.na(airportsCanada$IATA))
-
-# We are now able to fill the missing IATA and we will delete the ICAO since it will be useless.
-airportsCanada$IATA <- as.character(airportsCanada$IATA) 
-# We fill the NA with the substring ICAO.
-airportsCanada$IATA[is.na(airportsCanada$IATA)] <- substr(airportsCanada$ICAO[is.na(airportsCanada$IATA)],2,4) 
-airportsCanada$IATA <- as.factor(airportsCanada$IATA)
+# 82% of the time, the IATA code corresponds to the last three characters of the ICAO code
+# We will use this relationship to assign default value for missing IATA codes
+IATA <- as.character(airportsCanada$IATA)
+ICAO <- as.character(airportsCanada$ICAO)
+i <- is.na(IATA)
+sum(IATA == substr(ICAO,2,4),na.rm = TRUE)/sum(!i)
+IATA[i] <- substr(ICAO[i],2,4)
+airportsCanada$IATA <- as.factor(IATA)
+summary(airportsCanada)
+# We will not need the ICAO code anymore
 airportsCanada <- subset(airportsCanada, select = - ICAO)
-View(airportsCanada)
 
 # Finaly, we are missing more than fifty time zone.
 missingTZ <- airportsCanada[is.na(airportsCanada$timezone),]
@@ -138,6 +140,7 @@ routesCanada[is.na(routesCanada$airlineID),]
 unique(routesCanada$airlineID)
 unique(routesCanada[is.na(routesCanada$airlineID),]$airline)
 summary(routesCanada$stops)
+
 # As we can see, there are only two flights that are not direct.
 # For the sake of simplicity, we will consider all flights as direct flights.
 # Moreover, the notion of codeshare will not be useful since the delivery of 
@@ -146,13 +149,12 @@ summary(routesCanada$stops)
 routesCanada <- subset(routesCanada, select = -c(codeshare, stops))
 summary(routesCanada)
 
-# 1.6 - Create a map showing the different airports on a map of Canada.
-# install.packages("ggmap")
+# 1.6 - Create a map showing the different airports on a map of Canada. install.packages("ggmap")
 library(ggmap)
 map <- get_map(location = "Canada", zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
 lat <- as.numeric(paste(airportsCanada$latitude))
-airportsCoord <- as.data.frame(cbind(lon, lat))
+airportsCoord <- as.data.frame(lon, lat)
 (mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5))
 
 # 1.7 - Create a second map showing all possible routes between these different airports.
@@ -251,10 +253,12 @@ icons <- awesomeIcons(icon = "paper-plane",
 # Combinaison of the different components in order to create a standalone map
 (mapTraffic <- leaflet(worldRoutes) %>%
     addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
-    addCircleMarkers(stroke = FALSE,data = TraficData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
+    addCircleMarkers(stroke = FALSE,data = TraficData, 
+                     ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)),
                      color = "black", fillColor = "green",
                      radius = ~as.numeric(paste(combinedIndex))*30, opacity = 0.5) %>%
-    addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = descriptions,icon=icons))
+    addAwesomeMarkers(data = markersData, ~as.numeric(paste(longitude)), 
+                      ~as.numeric(paste(latitude)), popup = descriptions,icon=icons))
 
 # Resizing of the map
 mapTraffic$width <- 874
@@ -265,5 +269,6 @@ mapTraffic$height <- 700
 library(htmlwidgets)
 saveWidget(mapTraffic, paste(path,"/Reference/leafletTrafic.html",sep = ""), selfcontained = TRUE)
 
-# addMarkers(data = subset(airportsCanada,IATA %in% c("YUL","YVR","YYZ","YQB")), ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
+# addMarkers(data = subset(airportsCanada,IATA %in% c("YUL","YVR","YYZ","YQB")), 
+# ~as.numeric(paste(longitude)), ~as.numeric(paste(latitude)), popup = ~IATA) %>%
 
