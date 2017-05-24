@@ -128,14 +128,14 @@ cost <- sort(runif(100, min = 5, max = 100))
 
 ## Exercices 9
 
-### Tracer un graphique du coût d'un envoi en fonction du poids du
-### colis et de la distance à parcourir. Utiliser la fonction
-### 'plot3d'.
+### Tracer une série de graphiques des relations deux à deux entre le
+### coût d'un envoi, poids du colis et la distance à parcourir.
+### Utiliser pour ce faire la fonction 'pairs'.
 ###
 ### Utiliser les données simulées suivantes.
 weight <- runif(1000, 1, 30)
 distance <- rlnorm(1000, 5, 1.1)
-cost <- rgamma(1000, 35, 1)
+cost <- weight * 0.7 + distance * 0.02
 
 
 
@@ -151,7 +151,7 @@ cost <- rgamma(1000, 35, 1)
 
 
 
-## Exercices 11 ####
+## Exercices 11
 
 ### Ajuster une loi gamma à la distribution des coûts par la méthode
 ### du maximum de vraisemblance. Utiliser la fonction 'optim' pour

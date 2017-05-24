@@ -13,12 +13,12 @@
 set.seed(31459)
 
 ## Importation des données dans l'espace de travail.
-airports <- read.csv("data/AirportModif.csv",
+airports <- read.csv("Reference/AirportModif.csv",
                      comment.char = "#",
                      as.is = c(2, 3, 5),
                      na.strings = c("\\N", ""),
                      fileEncoding = "UTF-8")
-province <- read.csv("data/province.csv",
+province <- read.csv("Reference/province.csv",
                      comment.char = "#",
                      as.is = 1,
                      na.strings = c("\\N", ""),
@@ -27,7 +27,7 @@ province <- read.csv("data/province.csv",
 ## Exercice 1
 
 ### 1.1 Extraire les données des aéroports canadiens par indicage du
-###     data frame
+###     Reference frame
 airportsCanada <- airports[airports$country=="Canada", ]
 
 ### 1.2 Extraire les données des aéroports canadiens à l'aide de la
@@ -141,17 +141,16 @@ plot(cost, main = "Coût d'envoi", ylab = "Coût")
 
 ## Exercices 9
 
-### Tracer un graphique du coût d'un envoi en fonction du poids du
-### colis et de la distance à parcourir. Utiliser la fonction
-### 'plot3d'.
+### Tracer une série de graphiques des relations deux à deux entre le
+### coût d'un envoi, poids du colis et la distance à parcourir.
+### Utiliser pour ce faire la fonction 'pairs'.
 ###
 ### Utiliser les données simulées suivantes.
 weight <- runif(1000, 1, 30)
 distance <- rlnorm(1000, 5, 1.1)
-cost <- rgamma(1000, 35, 1)
+cost <- weight * 0.7 + distance * 0.02
 
-plot3d(weight, distance, cost)
-
+pairs(cbind(weight, distance, cost))
 
 ## Exercice 10
 
@@ -168,7 +167,7 @@ summary(fit)
 plot(fit)
 
 
-## Exercices 11 ####
+## Exercices 11
 
 ### Ajuster une loi gamma à la distribution des coûts par la méthode
 ### du maximum de vraisemblance. Utiliser la fonction 'optim' pour
@@ -190,12 +189,12 @@ optim(c(1, 1), loglik, x = cost)
 ### des colis à l'aide de la fonction 'fitdistr' du paquetage MASS.
 ###
 ### Importer et utiliser les données suivantes.
-compData <- read.csv("data/benchmark.csv")
-colnames(compData) <- c("weight", "distance", "cost")
+compReference <- read.csv("Reference/benchmark.csv")
+colnames(compReference) <- c("weight", "distance", "cost")
 
 library("MASS")
-(fit.gamma <- fitdistr(compData$weight, "gamma"))
-(fit.lnorm <- fitdistr(compData$weight, "lognormal"))
+(fit.gamma <- fitdistr(compReference$weight, "gamma"))
+(fit.lnorm <- fitdistr(compReference$weight, "lognormal"))
 
 
 ## Exercices 13
