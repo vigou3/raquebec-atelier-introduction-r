@@ -18,7 +18,6 @@ setwd("..")
 (path <- getwd())
 set.seed(31459)
 
-#### Data extraction, cleaning, visualization and analysis #### 
 
 # Extraction of airports.dat and routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat",
@@ -26,7 +25,7 @@ airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/mas
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", 
                    header = FALSE, na.strings=c("\\N",""))
 
-# Coloumns names assignation based on the information available on the website
+# Columns names assignation based on the information available on the website
 # https://openflights.org/data.html
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "latitude", "longitude", "altitude", "timezone", "DST",
@@ -67,10 +66,8 @@ airportsCanada <- subset(airportsCanada, select = - ICAO)
 # Finaly, we are missing more than fifty time zone.
 missingTZ <- airportsCanada[is.na(airportsCanada$timezone),]
 
-# Since the TZ depend only on the geographical position, two options are available to us : 
-# 1) Deduce the information from other close airport;
-# 2) Locate the real time zone by mapping tools.
-# We will use the second option which may seem more complex but with the proper tools become more easy and accurate.
+# Since the TZ depend only on the geographical position we will locate the real time zone
+# by mapping tools.
 
 # install.packages("sp")
 # install.packages("rgdal")
@@ -83,9 +80,7 @@ proj4string(sppts) <- CRS("+proj=longlat")
 sppts <- spTransform(sppts, proj4string(tz_world.shape))
 merged_tz <- cbind(unknown_tz,over(sppts,tz_world.shape))
 
-# We can also note that we only have information derived from the province in which each airport is located with the city.
-# Since we want to apply taxes by province in our situation, we will need a better data to access this informaiton. 
-# We will again use mapping techniques to extract the province as a function of the x and y coordinates.
+# To retrieved the province of each airport, we will used the same mapping tools
 prov_terr.shape <- readOGR(dsn=paste(path,"/Reference/prov_terr",sep=""),layer="gpr_000b11a_e")
 unknown_prov <- airportsCanada[,c("airportID","city","longitude","latitude")]
 sppts <- SpatialPoints(unknown_prov[,c("longitude","latitude")])
@@ -109,7 +104,8 @@ airportsCanada <- sqldf("
 airportsCanada <- data.frame(as.matrix(airportsCanada))
 
 # Since the timezone, DST and city are now useless, we remove them from the dataset.
-# Plus, we withdraw tzFormat because it's incomplet and we will use the tzmerge data to replace will a complete data. 
+# Since we have a complete data for the tz, we detele the txFormat and will replace it with 
+# tzmerge
 airportsCanada <- subset(airportsCanada, select = -c(timezone, DST, tzFormat, city ))
 summary(airportsCanada)
 
@@ -141,15 +137,12 @@ unique(routesCanada$airlineID)
 unique(routesCanada[is.na(routesCanada$airlineID),]$airline)
 summary(routesCanada$stops)
 
-# As we can see, there are only two flights that are not direct.
-# For the sake of simplicity, we will consider all flights as direct flights.
-# Moreover, the notion of codeshare will not be useful since the delivery of 
-# merchandise can be done as much through an air agency as by private flight.
-# In conclusion, we get rid of these variables.
+# Since almost all routes are straight routes, we dont need the codeshare, and stops variables.
 routesCanada <- subset(routesCanada, select = -c(codeshare, stops))
 summary(routesCanada)
 
-# 1.6 - Create a map showing the different airports on a map of Canada. install.packages("ggmap")
+# Create a map showing the different airports
+# install.packages("ggmap")
 library(ggmap)
 map <- get_map(location = "Canada", zoom = 3)
 lon <- as.numeric(paste(airportsCanada$longitude))
@@ -157,7 +150,7 @@ lat <- as.numeric(paste(airportsCanada$latitude))
 airportsCoord <- as.data.frame(lon, lat)
 (mapPoints <- ggmap(map) + geom_point(data=airportsCoord,aes(lon,lat),alpha=0.5))
 
-# 1.7 - Create a second map showing all possible routes between these different airports.
+# Create a second map showing all possible routes between these different airports.
 summary(routesCanada)
 summary(airportsCanada)
 routesCoord <- sqldf("
@@ -214,7 +207,7 @@ airportsCanada <- sqldf("
   on a.IATA = b.IATA")
 airportsCanada <- data.frame(as.matrix(airportsCanada ))
 
-# 1.11 - Create maps to visualize these indices using a bubble graph.
+# Create maps to visualize these indices using a bubble graph.
 TraficData <- subset(airportsCanada,as.numeric(paste(combinedIndex)) > 0.05)
 lon <- as.numeric(paste(TraficData$longitude))
 lat <- as.numeric(paste(TraficData$latitude))
@@ -227,7 +220,9 @@ mapPoints <-
   mapPoints + 
   scale_size_continuous(range = c(0, 20),name = "Trafic Index"))
 
-# install.package("leaflet")
+#  Map with markers of some airports
+# The markers include the IATA, the aiport name, the longitute and the latitude
+# install.packages("leaflet")
 library(leaflet)
 url <- "http://hiking.waymarkedtrails.org/en/routebrowser/1225378/gpx"
 download.file(url, destfile = paste(path,"/Reference/worldRoutes.gpx",sep=""), method = "wget")

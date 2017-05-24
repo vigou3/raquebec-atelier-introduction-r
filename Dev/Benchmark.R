@@ -1,6 +1,15 @@
-# coding: utf-8
-# CaseStudyRQuebec2017
-# Authors : David Beauchemin & Samuel Cabral Cruz
+### RStudio: -*- coding: utf-8 -*-
+##
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
+##
+## This file is part of the project 
+## «Introduction à R - Atelier du colloque R à Québec 2017»
+## http://github.com/vigou3/raquebec-atelier-introduction-r
+##
+## The creation is made available according to the license
+## Attribution-Sharing in the same conditions 4.0
+## of Creative Commons International
+## http://creativecommons.org/licenses/by-sa/4.0/
 
 # Source code for the creation of the benchmark.csv file
 
@@ -72,4 +81,6 @@ min(totalCost)
 # Export to csv format
 (dataExport <- cbind(weights,distances,totalCost))
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
-write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=''),row.names = FALSE, fileEncoding = "UTF-8")
+
+write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8")
+
