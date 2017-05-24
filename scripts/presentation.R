@@ -110,6 +110,12 @@ round(m %*% solve(m))    # l'arrondi donne la matrice identité
 ## Consulter la rubrique d'aide de la fonction 'solve'.
 ?solve
 
+## Une «vignette» est un document de référence en format PDF
+## plus détaillé qu'une rubrique d'aide et qui aborde
+## habituellement tout un sujet plutôt qu'un objet à la fois.
+vignette()                 # liste des vignettes
+vignette("adjcurve")       # vignette du paquetage survival
+
 ## Liste des objets dans l'espace de travail.
 ls()
 
