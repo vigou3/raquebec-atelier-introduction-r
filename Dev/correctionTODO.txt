@@ -1,0 +1,2 @@
+vérifier as.factor dans le caseStudy
+verifier les if else de la question 2 -erreur

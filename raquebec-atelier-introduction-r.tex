@@ -61,6 +61,11 @@
   %% Paramétrage de babel pour les guillemets
   \frenchbsetup{og=«, fg=»}
 
+  %% Redéfinition de \partname à la suite de babel pour éviter de se
+  %% retrouver avec «Première partie I».
+  \addto\extrasfrench{%
+    \renewcommand{\partname}{Partie}}
+
   %% Sections de code source
   \lstloadlanguages{R}
   \lstset{language=R,
@@ -159,6 +164,9 @@
 \include{licence}
 \include{reference}
 
+\part{Programmation en R}
+\frame{\partpage}
+
 %% mainmatter
 \include{presentation}
 \include{bases}
@@ -166,6 +174,10 @@
 \include{application}
 \include{controle}
 \include{extensions}
+
+\part{Analyse statistique}
+\frame{\partpage}
+
 
 %% backmatter
 \include{colophon}
