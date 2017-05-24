@@ -55,13 +55,11 @@ airportsCanada<- merge(airportsCanada, province, by.x = "IATA", by.y = "IATA")
 # Le sourceIATA
 # Le destIATA
 # À l'aide de la fonction R paste, la concaténation des deux chaines de caractère
-listeIATA <- function(sourceIATA, destIATA)
+listeIATA <- function(depart, arrival)
 {
-     listeIATA <- list()
-     listeIATA$source <- sourceIATA
-     listeIATA$dest <- destIATA
-     listeIATA$conca <- paste(sourceIATA, destIATA)
-     listeIATA
+    list(depart = depart,
+         arrival = arrival,
+         route = paste(depart, arrival, sep = "-"))
 }
 listeIATA("YUL", "YYQ")
 
@@ -71,17 +69,14 @@ listeIATA("YUL", "YYQ")
 # De plus, assurer vous que le poids ne dépasse pas les 30 Kg, afficher le message suivant:
 # "Le poids doit être inférieur à 30 Kg".
 # Notes: l'indice de poids est de 0.7 et l'indice de distance est de 0.02
-coutLivraison <- function(distance, poids)
+shippingCost <- function(distance, weight)
 {
-     if(poids > 30)
+     if (weight > 30)
      {
-          stop("Le poids doit être inférieur à 30 Kg")
+         stop("maximum allowed weight is 30 kg")
      }
-     indicePoids <- 0.7
-     indiceDistance <- 0.02
 
-     prix <- poids * indicePoids + distance * indiceDistance
-     prix
+     0.7 * weight + 0.02 * distance
 }
 coutLivraison(1, 10)
 coutLivraison(100, 31)
