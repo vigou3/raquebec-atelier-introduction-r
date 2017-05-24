@@ -53,7 +53,7 @@ REPOSURL = https://api.github.com/repos/vigou3/raquebec-atelier-introduction-r
 OAUTHTOKEN = ${shell cat ~/.github/token}
 
 
-all: doc
+all: zip
 
 .PHONY: tex pdf zip release create-release upload publish clean
 
@@ -69,7 +69,7 @@ create-release :
 	@echo ----- Creating release on GitHub...
 	if [ -e relnotes.in ]; then rm relnotes.in; fi
 	touch relnotes.in
-	# git commit -a -m "Version ${VERSION}" && git push
+	git commit -a -m "Version ${VERSION}" && git push
 	awk 'BEGIN { ORS=" "; print "{\"tag_name\": \"v${VERSION}\"," } \
 	      /^$$/ { next } \
 	      /^## Historique/ { state=0; next } \
@@ -81,8 +81,8 @@ create-release :
 	      state==1 { printf "%s\\n", $$0 } \
 	      END { print "\"draft\": false, \"prerelease\": false}" }' \
 	      README.md >> relnotes.in
-	# curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
-	# rm relnotes.in
+	curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
+	rm relnotes.in
 	@echo ----- Done creating the release
 
 upload :
@@ -92,12 +92,12 @@ upload :
 	                                    { print substr($$4, 2, length) }'))
 	@echo ${upload_url}
 	@echo ----- Uploading PDF and archive to GitHub...
-	# curl -H 'Content-Type: application/zip' \
-	#      -H 'Authorization: token ${OAUTHTOKEN}' \
-	#      --upload-file ${MASTER} \
-        #      -i "${upload_url}?&name=${MASTER}" \
-	#      --upload-file ${CODE} \
-        #      -i "${upload_url}?&name=${CODE}" -s
+	curl -H 'Content-Type: application/zip' \
+	     -H 'Authorization: token ${OAUTHTOKEN}' \
+	     --upload-file ${MASTER} \
+             -i "${upload_url}?&name=${MASTER}" \
+	     --upload-file ${CODE} \
+             -i "${upload_url}?&name=${CODE}" -s
 	@echo ----- Done uploading files
 
 publish :
@@ -109,8 +109,8 @@ publish :
 	sed -e 's/<VERSION>/${VERSION}/g' \
 	    -e 's/<ARCHIVE>/${ARCHIVE}/' \
 	    _layouts/default.html.in > _layouts/default.html
-	# git commit -a -m "Mise à jour de la page web pour l'édition ${VERSION}" && \
-	# git push
+	git commit -a -m "Mise à jour de la page web pour l'édition ${VERSION}" && \
+	git push
 	@echo ----- Done publishing
 
 clean:
