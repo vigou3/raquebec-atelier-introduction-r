@@ -1,6 +1,6 @@
 Quand bien même que la génération de nombres aléatoires ai déjà été abordée à la \autoref{sec:statsTools}, il serait incorrect de s'simaginer que les capacités statistiques de R s'arrête là. R est un excellent langage pour faire du calcul stochastique. Qui dit calcul stochastique dit aussi estimation par simulation d'un grand nombre d'observations pour estimer le comportement d'un phénomène difficilement quantifiable de manière déterministe. \\
 
-La première fonction à connaître lorsque nous abordons une analyse de ce genre est la fonction \texttt{sample}. Cette dernière sera utile dans les cas où nous cherchons à faire une pige aléatoire de taille quelconque (\texttt{size}) sur un ensemble de valeurs fourni par un vecteur. Il sera possible de préciser si nous voulons faire une pige avec ou sans remise avec l'argument \texttt{replace} ainsi la probabilité que chaque valeur survienne grâce à \texttt{prob}. Un aspect fort intéressant de cette fonction et sa capacité de faire des piges sur des valeurs textuelles. Le \autoref{src:sample} fait une revue de l'utilisation de la fonction \texttt{sample}. Lors deux deuxième appel de la fonction, nous remarquons la génértion de valeurs beaucoup plus élevées par rapport au premier appel. Toutefois, la seule différence a été de modifier la valeur de l'argument \texttt{prob} pour y assigner le poids relatif de l'altitude sur l'ensemble des altitudes favorisant ainsi les valeurs plus extrêmes. Le troisième appel expose, quant à lui, la capacité de travailler avec un vecteur de valeurs textuelles. \\
+La première fonction à connaître lorsque nous abordons une analyse de ce genre est la fonction \texttt{sample} \cite{Rfunction:sample}. Cette dernière sera utile dans les cas où nous cherchons à faire une pige aléatoire de taille quelconque (\texttt{size}) sur un ensemble de valeurs fourni par un vecteur. Il sera possible de préciser si nous voulons faire une pige avec ou sans remise avec l'argument \texttt{replace} ainsi la probabilité que chaque valeur survienne grâce à \texttt{prob}. Un aspect fort intéressant de cette fonction et sa capacité de faire des piges sur des valeurs textuelles. Le \autoref{src:sample} fait une revue de l'utilisation de la fonction \texttt{sample}. Lors du deuxième appel de la fonction, nous remarquons la génération de valeurs beaucoup plus élevées par rapport au premier appel. Toutefois, la seule différence a été de modifier la valeur de l'argument \texttt{prob} pour y assigner le poids relatif de l'altitude sur l'ensemble des altitudes favorisant ainsi les valeurs extrêmes. Le troisième appel expose, quant à lui, la capacité de travailler avec un vecteur de valeurs textuelles. \\
 
 \begin{lstlisting}[caption = Pige aléatoire sur support vectoriel,label=src:sample]
 > sample(airportsCanada$altitude,size = 10, replace = TRUE)
@@ -24,14 +24,14 @@ La première fonction à connaître lorsque nous abordons une analyse de ce genr
 En inspectant le \autoref{src:CaseStudyDevQ6}, nous constatons la structure fonctionnelle et imbriquée du processus entrepris. Il sera fortement conseillé de procéder ainsi pour différentes raisons:
 
 \begin{itemize}
-	\item Augmenter la clareté du processus de simulation
-	\item Faciliter le débogage lors du développement
-	\item Possibilité de facilement ajouter et retirer des blocs au casse-tête de simulation
-	\item Identification simplifiée des parties limitantes et coûteuses en temps de calcul pour des fins d'optimisation
-	\item Permettre la production d'une nouvelle itération par l'appel d'une fonction mère possédant idéalement aucun argument
+	\item Augmenter la clarté du processus de simulation;
+	\item Faciliter le débogage lors du développement;
+	\item Possibilité de facilement ajouter et retirer des blocs au casse-tête de simulation;
+	\item Identification simplifiée des parties limitantes et coûteuses en temps de calcul pour des fins d'optimisation;
+	\item Permettre la production d'une nouvelle itération par l'appel d'une fonction mère ne possédant idéalement aucun argument.
 \end{itemize}
 
-Ce ne sera qu'en présence de cette structure que la fonction \texttt{replicate} prendra tout son sens. À l'aide de cette fonction, nous pourrons commodément contrôler le nombre de répliques effecutées. Dans le \autoref{src:replicate}, nous avons justement pris cette fonctionnalité pour reproduire à 6 reprises la génération de nombres aléatoires suivant une loi $Norm(\mu := 3, \sigma := 4)$.
+Ce ne sera qu'en présence de cette structure que la fonction \texttt{replicate} prendra tout son sens. À l'aide de cette fonction, nous pourrons commodément contrôler le nombre de répliques effectuées. Dans le \autoref{src:replicate}, nous avons justement pris cette fonctionnalité pour reproduire à 6 reprises la génération de nombres aléatoires suivant une loi $Norm(\mu := 3, \sigma := 4)$.
 
 \begin{lstlisting}[caption = Replication d'une analyse stochastique,label=src:replicate]
 fsimul <- function() qnorm(runif(100),3,4)
@@ -45,7 +45,7 @@ histogram(~ as.vector(results) | g,xlab = "Results",ylab = "Frequency")
 \addPicture{1}{0.5}{replicate}{Comparaison des résultats d'une analyse stochastique à 6 réplicats}{replicate}
 
 \begin{moreInfo}{Une "Poisson" dans une pisciculture...}
-	La distribution Poisson sera souvent à la base des processus stochastiques en raison de ses propriétés particulières. Nous parlerons souvent du fait que cette loi ne possède pas de mémoire ce qui implique que le nombre de succès observés sur différents intervalles seront indépendants. Nous pouvons aussi mentionné que la somme des variables aléatoires suivant des lois Poisson indépendantes de paramètres $\lambda_1$ et $\lambda_2$ suivra à son tour une loi de Poisson de paramètre $\lambda_1 + \lambda_2$. \\
+	La distribution Poisson sera souvent à la base des processus stochastiques en raison de ses propriétés particulières. Nous parlerons souvent du fait que cette loi ne possède pas de mémoire ce qui implique que le nombre de succès observés sur différents intervalles sera indépendant. Nous pouvons aussi mentionné que la somme des variables aléatoires suivant des lois Poisson indépendantes de paramètres $\lambda_1$ et $\lambda_2$ suivra à son tour une loi de Poisson de paramètre $\lambda_1 + \lambda_2$. \\
 	\url{https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-262-discrete-stochastic-processes-spring-2011/course-notes/MIT6_262S11_chap02.pdf} \\
 	\url{https://fr.wikipedia.org/wiki/Loi_de_Poisson}
 \end{moreInfo}
