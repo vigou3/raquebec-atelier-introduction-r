@@ -17,14 +17,14 @@
 
 #### Setting working directory properly ####
 getwd()
-setwd("..")    
+setwd("..")
 (path <- getwd())
 set.seed(31459)
 
 #### Import data ####
 airports <- read.csv(paste(path,"/Reference/AirportModif.csv",sep=""), comment = "#",
                      as.is = c(2, 3, 5), na.strings=c("\\N",""), fileEncoding = "UTF-8")
-province <- read.csv(paste(path,"/Reference/province.csv",sep=""), na.strings=c("\\N",""), 
+province <- read.csv(paste(path,"/Reference/province.csv",sep=""), na.strings=c("\\N",""),
                      as.is = 1, fileEncoding = "UTF-8", comment = "#")
 
 ## Exercice 1 ####
@@ -42,7 +42,7 @@ nbAirportCity <- table(airportsCanada$city)
 
 ## Exercice 3 ####
 # 3.1 À l'aide de la fonction R lenght, déterminer le nombre de IATA manquant dans airportsCanada.
-length(is.na(airportsCanada$IATA))
+length(airportsCanada$IATA[is.na(airportsCanada$IATA)])
 # 3.2 Faire le même exercice mais avec la fonction R sum.
 sum(is.na(airportsCanada$IATA))
 
@@ -66,20 +66,20 @@ listeIATA <- function(sourceIATA, destIATA)
 listeIATA("YUL", "YYQ")
 
 ## Exercice 6 ####
-# Écrire une fonction qui prend en argument une distance et un poids et qui retourne le prix de la 
+# Écrire une fonction qui prend en argument une distance et un poids et qui retourne le prix de la
 # livraison selon la formule suivante : prix = poids * indicePoids + distance * indiceDistance.
 # De plus, assurer vous que le poids ne dépasse pas les 30 Kg, afficher le message suivant:
 # "Le poids doit être inférieur à 30 Kg".
 # Notes: l'indice de poids est de 0.7 et l'indice de distance est de 0.02
 coutLivraison <- function(distance, poids)
 {
-     if(poids > 30) 
+     if(poids > 30)
      {
           stop("Le poids doit être inférieur à 30 Kg")
      }
      indicePoids <- 0.7
      indiceDistance <- 0.02
-     
+
      prix <- poids * indicePoids + distance * indiceDistance
      prix
 }
@@ -88,14 +88,14 @@ coutLivraison(100, 31)
 
 ## Exercices 7 ####
 
-# 7.1 À l'aide de la fonction R plot dessiner un nuage de point de la fréquence des voies aériennes 
+# 7.1 À l'aide de la fonction R plot dessiner un nuage de point de la fréquence des voies aériennes
 # entrantes pour chaque aéroport
 plot(airports$totalFlights)
 
 # 7.2 À l'aide de la fonction R hist dessiner un histograme à bande.
 hist(airports$totalFlights)
 
-# 7.3 À l'aide de la fonction R ecdf ainsi que de la fonction R plot dessiner la fonction de 
+# 7.3 À l'aide de la fonction R ecdf ainsi que de la fonction R plot dessiner la fonction de
 # répartition.
 plot(ecdf(airports$totalFlights))
 
@@ -111,7 +111,7 @@ plot(données, main = "Courbe des prix", ylab = "Prix")
 
 ## Exercices 9 ####
 # À l'aide de la fonction R plot3d dessiner un graphique du prix et de la distance par rapport au prix.
-# Autrement dit, le poids en x, la distance en y et le prix en z. 
+# Autrement dit, le poids en x, la distance en y et le prix en z.
 # Données à votre disposition:
 poids <- runif(1000, 1, 30)
 distance <- rlnorm(1000, 5, 1.1)
@@ -120,7 +120,7 @@ prix <- rgamma(1000, 35, 1)
 plot3d(poids, distance, prix)
 
 ## Exercice 10 ####
-# À l'aide de la fonction R lm déterminer une droite de régression du prix ~ (en fonction de) 
+# À l'aide de la fonction R lm déterminer une droite de régression du prix ~ (en fonction de)
 # la distance et du poids.
 # Données à votre disposition:
 poids <- runif(1000, 1, 30)
@@ -130,7 +130,7 @@ prix <- rgamma(1000, 35, 1)
 lm(prix ~ distance + poids)
 
 ## Exercices 11 ####
-# À l'aide de la fonction R optim, déterminer les paramètres de la fonction de densité des prix. 
+# À l'aide de la fonction R optim, déterminer les paramètres de la fonction de densité des prix.
 # Autrement dit, on cherche à optimiser la fonction : - sum ( log(dgamma(prix, param1, param2)))
 fct <- function(prix, param)
 {
@@ -139,7 +139,7 @@ fct <- function(prix, param)
 optim(c(1,1), function(param) fct(prix, param))
 
 ## Exercices 12 ####
-# À l'aide de la fonction R fitdistr du package MASS, déterminer les paramètres des densités 
+# À l'aide de la fonction R fitdistr du package MASS, déterminer les paramètres des densités
 # "lognormal" et "gamma" par rapport au poids
 # Données à votre disposition :
 compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep="" ))
@@ -159,7 +159,7 @@ sample(aeroports, size = 100, prob = frequence, replace = TRUE)
 ## Exercices 14 ####
 # À l"aide des fonctions R runif et rlnorm simuler des poids et des distances de 100 envoie des colis
 # à partir de "YUL" et affecter les simulations aux variables respectives poidsSimul et distancesSimul.
-# Notes: 
+# Notes:
 # - Pour la simulation runif utiliser les paramètres 1 et 30.
 # - Pour la simulation rlnorm utiliser les paramètres 5 et 1.1.
 poidsSimul <- runif(100, 1, 30)
