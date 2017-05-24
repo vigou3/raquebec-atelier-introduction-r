@@ -100,9 +100,9 @@ plot(ecdf(airports$totalFlights))
 # Titre du graphique : "Courbe des prix"
 # Titres de l'axe des y (verticale) : Prix
 # Donnée à votre disposition :
-données <- sort(runif(100, min = 5, max = 100))
+data <- sort(runif(100, min = 5, max = 100))
 
-plot(données, main = "Courbe des prix", ylab = "Prix")
+plot(data, main = "Courbe des prix", ylab = "Prix")
 
 ## Exercices 9 ####
 # À l'aide de la fonction R plot3d dessiner un graphique du prix et de la distance par rapport au prix.
