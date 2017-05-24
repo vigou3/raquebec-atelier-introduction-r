@@ -18,7 +18,6 @@ setwd("..")
 (path <- getwd())
 set.seed(31459)
 
-#### Data extraction, cleaning, visualization and analysis #### 
 
 # Extraction of airports.dat and routes.dat
 airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat",
@@ -26,7 +25,7 @@ airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/mas
 routes <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", 
                    header = FALSE, na.strings=c("\\N",""))
 
-# Coloumns names assignation based on the information available on the website
+# Columns names assignation based on the information available on the website
 # https://openflights.org/data.html
 colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "latitude", "longitude", "altitude", "timezone", "DST",
