@@ -2,17 +2,14 @@
 ##
 ## Copyright (C) 2017 Vincent Goulet
 ##
-## 'make pdf' crée les fichiers .tex à partir des fichiers .Rnw avec
-## Sweave, place les bonnes URL vers les vidéos dans le code source et
-## compile le document maître avec XeLaTeX.
+## 'make doc' crée la documentation.
 ##
-## 'make zip' crée l'archive contenant le code source des sections
-## d'exemples.
+## 'make zip' crée l'archive contenant le matériel de la formation.
 ##
-## 'make release' crée une nouvelle version dans GitHub, téléverse les
-## fichiers PDF et .zip et modifie les liens de la page web.
+## 'make release' crée une nouvelle version dans GitHub, téléverse le
+## .zip et modifie les liens de la page web.
 ##
-## 'make all' est équivalent à 'make pdf' question d'éviter les
+## 'make all' est équivalent à 'make doc zip' question d'éviter les
 ## publications accidentelles.
 ##
 ## Auteur: Vincent Goulet
@@ -22,15 +19,19 @@
 ## http://github.com/vigou3/raquebec-atelier-introduction-r
 
 
-## Noms du document maître et de l'archive
-SLIDES = slides/raquebec-atelier-introduction-r.pdf
-CASESTUDY = 
+## Nom de l'archive
 ARCHIVE = raquebec-atelier-introduction-r.zip
 
-## Numéro de version
-VERSION = 0.9
+## Nom du répertoire temporaire pour la construction de l'archive
+TMPDIR = tmpdir
 
-## Ensemble des sources du document.
+## Numéro de version
+VERSION = $(shell cat VERSION)
+
+## Composantes de l'archive
+README = README.md
+SLIDES = slides/raquebec-atelier-introduction-r.pdf
+CASESTUDY = 
 SCRIPTS = \
 	scripts/presentation.R \
 	scripts/bases.R \
@@ -43,33 +44,40 @@ DATA = \
 	data/benchmark.csv \
 	data/province.csv
 
-## Outils de travail
-SWEAVE = R CMD SWEAVE --encoding="utf-8"
-TEXI2DVI = LATEX=xelatex texi2dvi -b
-RM = rm -rf
-
 ## Dépôt GitHub et authentification
 REPOSURL = https://api.github.com/repos/vigou3/raquebec-atelier-introduction-r
 OAUTHTOKEN = ${shell cat ~/.github/token}
 
+# Outils de travail
+RM = rm -r
 
-all: zip
+
+all: doc zip
 
 .PHONY: tex pdf zip release create-release upload publish clean
 
 release: create-release upload publish
 
-${SLIDES}:
+doc:
 	${MAKE} -C $(dir ${SLIDES})
 
-zip: ${SLIDES} ${SCRIPTS} ${DATA}
-	zip -j --filesync ${ARCHIVE} README.md ${SLIDES} ${SCRIPTS} ${DATA} ${CASESTUDY}
+zip: ${SLIDES} ${CASESTUDY} ${SCRIPTS} ${DATA} ${README}
+	if [ -d ${TMPDIR} ]; then ${RM} ${TMPDIR}; fi
+	mkdir -p ${TMPDIR} ${TMPDIR}/data
+	touch ${TMPDIR}/${README} && \
+	  awk 'state==0 && /^# / { state=1 }; \
+	       /^## Auteurs/ { printf("## Version\n\n%s\n\n", "${VERSION}") } \
+	       state' ${README} >> ${TMPDIR}/${README}
+	cp ${SLIDES} ${SCRIPTS} ${TMPDIR}
+	cp ${DATA} ${TMPDIR}/data
+	cd ${TMPDIR} && zip --filesync -r ../${ARCHIVE} *
+	${RM} ${TMPDIR}
 
 create-release :
 	@echo ----- Creating release on GitHub...
 	if [ -e relnotes.in ]; then rm relnotes.in; fi
 	touch relnotes.in
-	git commit -a -m "Version ${VERSION}" && git push
+	# git commit -a -m "Version ${VERSION}" && git push
 	awk 'BEGIN { ORS=" "; print "{\"tag_name\": \"v${VERSION}\"," } \
 	      /^$$/ { next } \
 	      /^## Historique/ { state=0; next } \
@@ -80,8 +88,8 @@ create-release :
 	      (state==1) && /^### / { state=2; print "\","; next } \
 	      state==1 { printf "%s\\n", $$0 } \
 	      END { print "\"draft\": false, \"prerelease\": false}" }' \
-	      README.md >> relnotes.in
-	# curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
+	      ${README} >> relnotes.in
+	curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
 	# rm relnotes.in
 	@echo ----- Done creating the release
 
