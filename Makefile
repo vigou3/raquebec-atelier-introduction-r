@@ -81,8 +81,8 @@ create-release :
 	      state==1 { printf "%s\\n", $$0 } \
 	      END { print "\"draft\": false, \"prerelease\": false}" }' \
 	      README.md >> relnotes.in
-	curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
-	rm relnotes.in
+	# curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
+	# rm relnotes.in
 	@echo ----- Done creating the release
 
 upload :
