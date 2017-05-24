@@ -1,22 +1,40 @@
 \section{Étude de cas}
 
-\begin{frame}[fragile=singleslide]
-  \frametitle{Description sommaire}
-
-À l'aide du jeux de données d' \href{https://openflights.org/data.html}{OpenFlights} nous allons effectuer l'analyse d'un département de tarification oeuvrant au sein d'une compagnie de transport de colis par voies aériennes.
-\end{frame}
-
-\begin{frame}[fragile=singleslide]
-  \frametitle{Démarche d'analyse}
+\begin{frame}
+  \frametitle{Contexte}
 
   \begin{itemize}
-  \item Importation, traitement, visualisation et analyse des données
-  \item Création de fonctions utilitaires
-  \item Communication des résultats
-  \item Analyse de la compétition
-  \item Ajustement des lois de distribution sur les données empiriques 
-  \item Simulation et analyse de rentabilité
+  \item Compagnie de transport de colis par voie aérienne
+  \item Analyse de tarification face à la compétition
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Démarche}
+
+  Données sur l'industrie aéronautique tirées de
+  \href{https://openflights.org/data.html}{OpenFlights}.
+
+  \begin{enumerate}
+  \item Importation, traitement, visualisation et analyse des données
+    brutes
+  \item Création d'outils de calcul
+    \begin{itemize}
+    \item distance entre deux aéroports
+    \item temps de vol
+    \item coût d'envoi
+    \end{itemize}
+  \item Visualisation des données de coût
+  \item Analyse de la compétition
+  \item Construction d'un modèle de simulation
+  \item Simulation et analyse
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Analyse complète}
+
+  Consulter l'analyse complète dans le dossier \texttt{documentation}.
 \end{frame}
 
 %%% Local Variables:
