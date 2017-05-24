@@ -10,8 +10,8 @@
 %%% International de Creative Commons.
 %%% http://creativecommons.org/licenses/by-sa/4.0/
 
-\documentclass[aspectratio=1610,10pt,xcolor=x11names]{beamer}
-  \usepackage[french]{babel}
+\documentclass[aspectratio=1610,10pt,xcolor=x11names,english,french]{beamer}
+  \usepackage{babel}
   \usepackage[autolanguage]{numprint}
   \usepackage[noae]{Sweave}
   \usepackage{fontawesome}
@@ -77,6 +77,9 @@
     aboveskip=0pt,
     belowskip=0pt,
     showstringspaces=false}
+
+  %% Bibliographie
+  \bibliographystyle{francais}
 
   %% =========================
   %%  Nouveaux environnements
@@ -178,8 +181,8 @@
 \part{Analyse statistique}
 \frame{\partpage}
 
-
 %% backmatter
+\include{bibliographie}
 \include{colophon}
 \include{couverture-arriere}
 
