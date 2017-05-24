@@ -94,7 +94,7 @@ Ceux qui sont familiers avec les distributions statistiques auront remarqués qu
 
 En présence de données empiriques, la première étape d'une analyse statistiques sera de dresser le portrait statistique de ces données. Nous avons déjà parlé de la fonction \texttt{summary} à la \autoref{subsec:extraction}. Nous rajouterons ici les fonctions \texttt{mean} et \texttt{sd} retournant respectivement la moyenne et l'écart-type d'un jeu de données empiriques comme nous l'avons fait montré dans le \autoref{src:aleaNorm}. \\
 
-Afin de valider l'ajustement d'une distribution donnée sur les données empiriques, nous serons souvent contraint à identifier les fonctions de densité et de répartition sous-jacentes. Il existe plusieurs façons de faire. Celle qui nous semble toutefois la plus pertinente et polyvalente exploite le comportement de la fonction \texttt{ecdf}. Cette dernière permet de construire une fonction de répartition empirique à partir des observations fourniess en argument. Nous pouvons ensuite construire une fonction de densité empirique en évaluant cette fonction de répartition à deux points autour de la valeur désirée et en divisant ensuite le résultat par la largeur de l'intervalle évalué. Les instructions permettant de construire ces fonctions sont fournies par \autoref{src:fctEmp}. \\
+Afin de valider l'ajustement d'une distribution sur les données empiriques, nous serons souvent contraints à identifier les fonctions de densité et de répartition sous-jacentes. Il existe plusieurs façons de faire. Celle qui nous semble toutefois la plus pertinente et polyvalente exploite le comportement de la fonction \texttt{ecdf}. Cette dernière permet de construire une fonction de répartition empirique à partir des observations fourniess en argument. Nous pouvons ensuite construire une fonction de densité empirique en évaluant cette fonction de répartition à deux points autour de la valeur désirée et en divisant ensuite le résultat par la largeur de l'intervalle évalué. Les instructions permettant de construire ces fonctions sont fournies par \autoref{src:fctEmp}. \\
 
 \begin{lstlisting}[caption = Fonctions de densité et de répartition empiriques,label=src:fctEmp]
 empCDF <- ecdf(compData$weight)
@@ -105,7 +105,7 @@ empPDF <- function(x,delta=0.01)
 \end{lstlisting}
 
 \vspace{\baselineskip}
-En plus de dresser le portrait statistique du jeu de données, nous pourrions être tentés d'effectuer des tests statistiques sur ces mêmes données. Parmi les tests disponibles, nous retrouvons notamment :
+En plus de dresser le portrait statistique du jeu de données, nous pourrions être tentés d'effectuer des tests statistiques sur ces mêmes celles-ci. Parmi les tests disponibles, nous retrouvons notamment :
 \begin{itemize}
 	\item Test de normalité (Test de Shapiro-Wilk)
 	\item Test de comparaison de deux variances (Test F)
@@ -115,7 +115,7 @@ En plus de dresser le portrait statistique du jeu de données, nous pourrions ê
 	\item ANOVA (Analyse de variance)
 	\item Test de corrélation
 \end{itemize}
-Il n'est toutefois pas indispensable de connaître l'utilité de tous ces tests, les situations dans lesquelles ils devraient être utilisés ni la mécanique mathétique sous-entendue puisque la plupart des méthodes statistiques inclueront déjà les appels nécessaires de ceux-ci. Ce sera le cas de la fonction \texttt{lm} comme nous le verrons plus loin. \cite{testStatsR} \\
+Il n'est toutefois pas indispensable de connaître l'utilité de tous ces tests, les situations dans lesquelles ils devront être utilisés ni la mécanique mathématique sous-entendue puisque la plupart des méthodes statistiques inclueront déjà les appels nécessaires de ceux-ci. Ce sera le cas de la fonction \texttt{lm} comme nous le verrons plus loin. \cite{testStatsR} \\
 
 Dans le cadre de notre étude de cas, nous avons performé les tests du Khi carré et de corrélation afin de s'assurer que les variables explicatives du poids et de la distance soient indépendantes et sans corrélation. Dans le cas où ce genre de phénoène serait apparru entre nos variables, nous aurions été contraint d'utiliser des modèles de régression plus complexes tel que les modèles linéaires généralisés. \\
 
