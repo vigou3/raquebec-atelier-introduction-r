@@ -6,12 +6,12 @@
 - [Description Sommaire](#description-sommaire)
 - [Mandat](#mandat)
 - [Énoncé](#-nonc-)
-  * [Question 1 - Importation, traitement, visualisation et analyse des données](#question-1---extraction--traitement--visualisation-et-analyse-des-donn-es)
-  * [Question 2 - Création de fonctions utilitaires](#question-2---cr-ation-de-fonctions-utilitaires)
-  * [Question 3 - Communication de vos résultats](#question-3---communication-de-vos-r-sultats)
-  * [Question 4 - Analyse de la compétition](#question-4---analyse-de-la-comp-tition)
-  * [Question 5 - Ajustement des lois de distribution sur données empiriques](#question-5---ajustement-des-lois-de-distribution-sur-donn-es-empiriques)
-  * [Question 6 - Simulation et analyse de rentabilité](#question-6---simulation-et-analyse-de-rentabilit-)
+  * [Étape 1 - Importation, traitement, visualisation et analyse des données](#question-1---extraction--traitement--visualisation-et-analyse-des-donn-es)
+  * [Étape 2 - Création de fonctions utilitaires](#question-2---cr-ation-de-fonctions-utilitaires)
+  * [Étape 3 - Communication de vos résultats](#question-3---communication-de-vos-r-sultats)
+  * [Étape 4 - Analyse de la compétition](#question-4---analyse-de-la-comp-tition)
+  * [Étape 5 - Ajustement des lois de distribution sur données empiriques](#question-5---ajustement-des-lois-de-distribution-sur-donn-es-empiriques)
+  * [Étape 6 - Simulation et analyse de rentabilité](#question-6---simulation-et-analyse-de-rentabilit-)
 - [Auteurs](#auteurs)
 - [Liens utiles](#liens-utiles)
 
@@ -21,22 +21,23 @@ Dans le cadre de cette étude de cas, nous nous placerons dans la peau d'un anal
 
 ## Mandat
 
-Notre mandat consistera dans un premier temps à analyser les bases de données que nous avons à notre disposition afin de créer des fonctions qui permettront de facilement intégrer les informations qu'elles contiennent lors de la tarification d'une livraison spécifique. Une fois cette tarification complétée, nous devrons fournir des chartes pour facilement estimer les prix d'une livraison qui s'avèreront être des outils indispensables au département de marketing et au reste de la direction. Après avoir transmis les documents en question, votre gestionnaire voulant s'assurer que la nouvelle tarification sera efficiente et profitable vous demandera d'analyser les prix de la concurrence pour en extrapoler leur tarification. Finalement, vous serez appelé à comparer ces deux tarifications et la compétitivité de votre nouvelle tarification comparativement au reste du marché en procédant à une analyse stochastique.
+Notre mandat consistera dans un premier temps à analyser les bases de données que nous avons à notre disposition afin de créer des fonctions qui permettront de facilement intégrer les informations qu'elles contiennent lors de la tarification d'une livraison de colis par voie aérienne. Une fois cette tarification complétée, nous devrons fournir des chartes pour facilement estimer les prix d'une livraison qui s'avèreront être des outils indispensables au département de marketing et au reste de la direction. Après avoir transmis les documents en question, votre gestionnaire voulant s'assurer que la nouvelle tarification sera efficiente et profitable vous demandera d'analyser les prix de la concurrence pour en extrapoler leur tarification. Finalement, vous serez appelé à comparer ces deux tarifications et la compétitivité de votre nouvelle tarification comparativement au reste du marché en procédant à une analyse stochastique.
 
 <div style="page-break-after: always;"></div>
 
 ## Énoncé
 
-### Question 1 - Extraction, traitement, visualisation et analyse des données
-1. Extraire les bases de données [**airports.dat**](), [**routes.dat**]() et [**province**]().
-2. Nettoyer le jeu de données en ne conservant que les données relatives au Canada.
-3. Extraire des informations générales sur la distribution des variables présente dans le jeu de données et vous informer sur la signification de ces dernières. Ainsi que sur les différentes modalités qu'elles peuvent prendre. Identifier les données manquantes.
-4. Corriger les modalités des variables absentes et faire une sélection des variables qui vous semble utile pour le reste du traitement. 
-5. Créer une carte du Canada affichant les différents aéroports à l'aide du paquetage ggmap.
-6. Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports.
-7. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en destination.
-8. Créer une carte permettant de visualiser l'indice grâce à un graphique à bulles.
-
+### Question 1 - Importation, traitement, visualisation et analyse des données
+1. Extraire les bases de données [**airports.dat**]() et [**routes.dat**]().
+2. Attribuer des noms aux différentes colonnes des données selon l'information disponible sur [OpenFlights](https://openflights.org/data.html).
+3. Nettoyer le jeu de données en ne conservant que les données relatives au Canada.
+4. Extraire des informations générales sur la distribution des variables présente dans le jeu de données et identifier les données manquantes.
+5. Corriger les modalités des variables absentes et faire une sélection des variables qui vous semble utile pour le reste du traitement. 
+6. Créer une carte du Canada affichant les différents aéroports à l'aide du package ggmap.
+7. Créer une seconde carte montrant toutes les routes possibles entre ces différents aéroports à l'aide du package ggmap.
+8. Calculer un indice d'achalandage des aéroports en fonction de la quantité de routes en destination.
+9. Créer une carte permettant de visualiser l'indice grâce à un graphique à bulles.
+10. Créer une carte avec marqueur permettant de visualiser les informations pertinentes sur les principaux aéroports.
 > Note:
 > Les données disponibles avec le code source on été simplifier, les données d'origines sont disponible en référence.
 
@@ -65,8 +66,7 @@ Notre mandat consistera dans un premier temps à analyser les bases de données 
 * Votre fonction devrait être complètement paramétrable sans nécessairement exiger la définition de tous les paramètres afin de permettre son utilisation. Pensez donc à définir des valeurs par défaut aux arguments que vous jugerez optionnels.
 
 ### Question 3 - Communication de vos résultats
-1. À partir de la fonction **shippingCost**, créer des chartes graphiques permettant d'analyser la tarification d'un trajet en fonction de sa **distance** sachant que le poids moyen des colis est de **Y**.
-2. Pendant que vous étiez en train de créer les chartes de distance, vous vous souvenez que vous avez reçu une demande spéciale du département de marketing pour les comptoirs de dépôt de la ville de Montréal. Celle-ci aimerait avoir différentes chartes variant selon le **poids** pour les trajets suivants:
+1. À partir de la fonction **shippingCost**, créer des chartes graphiques permettant d'analyser la tarification d'un trajet en fonction de son **poids** pour les trajets suivants:
   * Montréal (YUL) - Québec (YQB)
   * Montréal (YUL) - Vancouver (YVR)
   * Montréal (YUL) - Toronto (YYZ)
@@ -81,13 +81,12 @@ Grâce à la base de données [benchmark.csv](https://github.com/vigou3/raquebec
 5. Vous constatez qu'un modèle linéaire serait suffisant pour faire l'approximation.
 6. En utilisant la fonction *lm*, déterminer la droite de régression afin de déterminer les paramètres de la loi sous-jacente.
 
-
 > Note:
 > Vous savez que vos compétiteurs utilisent principalement le poids et la distance pour déterminer le prix des livraisons.
 
 ### Question 5 - Ajustement des lois de distribution sur les données empiriques
 En reprenant les données de la compétition, vous êtes aussi en mesure d'extraire la distribution suivie par le poids des colis et des distances.
-1. Utiliser le paquetage *actuar* et la fonction *optim* ou *fitdistr* pour ajuster les distributions suivantes à la distribution empirique en fonction du poids.
+1. Utiliser le paquetage *actuar* ainsi que la fonction *optim* pour ajuster les distributions suivantes à la distribution empirique en fonction du poids.
   * Loi Normale
   * Loi Gamma
   * Loi Log-normale
