@@ -1,4 +1,4 @@
-## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
 ##
 ## Ce fichier fait partie du projet «Introduction à R - Atelier
 ## du colloque R à Québec 2017»
@@ -128,7 +128,7 @@ hist(airports$totalFlights)
 plot(ecdf(airports$totalFlights))
 
 
-## Exercices 8
+## Exercice 8
 
 ### Tracer une courbe du coût d'un envoi. Le titre du graphique doit
 ### être «Coût d'envoi» et la légende de l'ordonnée, «Coût».
@@ -139,7 +139,7 @@ cost <- sort(runif(100, min = 5, max = 100))
 plot(cost, main = "Coût d'envoi", ylab = "Coût")
 
 
-## Exercices 9
+## Exercice 9
 
 ### Tracer une série de graphiques des relations deux à deux entre le
 ### coût d'un envoi, poids du colis et la distance à parcourir.
@@ -167,7 +167,7 @@ summary(fit)
 plot(fit)
 
 
-## Exercices 11
+## Exercice 11
 
 ### Ajuster une loi gamma à la distribution des coûts par la méthode
 ### du maximum de vraisemblance. Utiliser la fonction 'optim' pour
@@ -183,7 +183,7 @@ loglik <- function(x, p)
 optim(c(1, 1), loglik, x = cost)
 
 
-## Exercices 12
+## Exercice 12
 
 ### Ajuster des lois gamma et log-normale à la distribution des poids
 ### des colis à l'aide de la fonction 'fitdistr' du paquetage MASS.
@@ -197,7 +197,7 @@ library("MASS")
 (fit.lnorm <- fitdistr(compReference$weight, "lognormal"))
 
 
-## Exercices 13
+## Exercice 13
 
 ### Simuler, à l'aide la fonction 'sample', la destination de 100
 ### envois de colis à partir de l'aéroport Montréal-Trudeau (YUL) en
@@ -212,7 +212,7 @@ freq <- c(4, 23, 12,  7, 22, 18, 12,  7, 18,  6,  2)
 sample(aeroports, size = 100, prob = freq, replace = TRUE)
 
 
-## Exercices 14
+## Exercice 14
 
 ### Simuler les poids et les distances à parcourir de 100 envois de
 ### colis à partir de l'aéroport Montréal-Trudeau (YUL).
@@ -227,7 +227,7 @@ weightSimul <- runif(100, 1, 30)
 distanceSimul <- rlnorm(100, 5, 1.1)
 
 
-## Exercices 15
+## Exercice 15
 
 ### Déterminer le coût de chacun des envois pour les données simulées
 ### précédemment à partir de la fonction de coût suivante:
