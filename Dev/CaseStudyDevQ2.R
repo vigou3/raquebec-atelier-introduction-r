@@ -10,7 +10,8 @@
 ## Attribution-Sharing in the same conditions 4.0
 ## of Creative Commons International
 ## http://creativecommons.org/licenses/by-sa/4.0/
-# Question 2 :Functions creation
+
+# Functions creation
 
 #' Distance calculation function between two airports.
 #' 
@@ -190,21 +191,17 @@ shippingCost <- function(sourceIATA, destIATA, weight,
                                               "YTZ" = 0.975,
                                               "YZD" = 0.975)
   # The Migrator
-  if(distance$value > 3500)
+  if(distance$value > 3000)
   {
-    automatedCredit <- automatedCredit * 0.8125
+       automatedCredit <- automatedCredit * 0.9
   }
-  else if(distance$value >= 3000)
+  else if(distance$value <= 3000 & distance$value > 2500)
   {
-    automatedCredit <- automatedCredit * 0.825
+       automatedCredit <- automatedCredit * 0.8775
   }
-  else if(distance$value >= 2500)
+  else if(distance$value <= 2500 & distance$value > 2000)
   {
-    automatedCredit <- automatedCredit * 0.85
-  }
-  else if(distance$value >= 2000)
-  {
-    automatedCredit <- automatedCredit * 0.9
+       automatedCredit <- automatedCredit * 0.85
   }
   
   # Calculation of taxe rate and control of text
