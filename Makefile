@@ -63,7 +63,7 @@ ${SLIDES}:
 	${MAKE} -C $(dir ${SLIDES})
 
 zip: ${SLIDES} ${SCRIPTS} ${DATA}
-	zip -j --filesync ${ARCHIVE} README.md ${SLIDES} ${SCRIPTS} ${DATA} 
+	zip -j --filesync ${ARCHIVE} README.md ${SLIDES} ${SCRIPTS} ${DATA} ${CASESTUDY}
 
 create-release :
 	@echo ----- Creating release on GitHub...
