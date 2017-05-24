@@ -1,55 +1,39 @@
-TABLE DES MATIÈRES
+# Introduction à R - Atelier du colloque R à Québec 2017
 
-# Première partie: le langage R et les fonctionnalités statistiques de base
-  
-  
-1. Présentation de R et préparation d'un environnement de travail
-   - langage interprété très près du langage mathématique
-   - utilisation interactive
-   - dossier de travail (workspace)
-   - modèle «code réel, objets virtuels»
-   - environnement de travail: RStudio
-   - anatomie d'une session de travail
-2. Bases du langage R (avec vecteurs simples)
-   - types de données de base: nombres, `TRUE`/`FALSE`, `NA`, `NaN`,
-     vecteur simple
-   - indiçage des vecteurs
-   - approche vectorielle: opérations implicites, réduction,
-     accumulation
-   - appel de fonctions internes (exemples avec `seq`, `rep`)
-   - définition d'une fonction
-   - portée d'une variable (lexical scope)
-   - argument `...`
-   - concept de fonction anonyme
-3. Types de données
-   - vecteur simple (numérique, caractère, booléen)
-   - attributs [sans doute préférable de sauter]
-   - matrice et tableau
-   - liste
-   - data frame
-   - facteurs
-   - indiçage général
-[4. Fonctions et opérateurs utiles (nous n'aurons pas le temps)]
-5. Fonctions d'application
-   - `apply` pour les matrices et tableaux
-   - `tapply` pour les données catégorielles
-   - `lapply`, `sapply`, `mapply` pour les vecteurs et listes
-   - `replicate` pour les simulations
-6. Structures de contrôle
-   - exécution conditionnelle (`if`)
-   - exécution répétée (`for`, `while`, `repeat`)
-   - contrôle du flux (`return`, `break`, `next`)
-7. Extensions du système de base
-   - contenu de la bibliothèque standard
-   - chargement d'un package
-   - installer un package externe depuis CRAN
-8. Quelques procédures statistiques standard
-   - importation de données
-   - tri et sélection de données
-   - estimation par le maximum de vraisemblance (`fitdistr`, `optim`)
-   - régression linéaire (`lm`)
-   - séries chronologiques (`ar`, `arima`)
-9. Graphiques
-   - fonction générique `plot`
-   - fonction `curve`
-   - options
+La présente archive contient le matériel destiné aux participants à
+l'atelier *Introduction à R*, offert en marge du colloque R à Québec 2017.
+
+L'atelier s'adresse aux personnes désirant s’initier à R. Il est
+divisé en deux grandes parties: un exposé des concepts de base
+permettant de comprendre les fondements du **langage de
+programmation** R; une mise en situation permettant de découvrir
+quelques unes des nombreuses fonctionnalités de l'**environnement
+statistique**. Dans les deux cas, l'accent est mis sur la pratique.
+
+## Contrat de licence
+
+Creative Commons Attribution-ShareAlike 4.0 International.
+
+## Auteurs
+
+David Beauchemin <david.beauchemin.5@ulaval.ca>
+Samuel Cabral Cruz <samuel.cabral-cruz.1@ulaval.ca>
+Vincent Goulet <vincent.goulet@act.ulaval.ca>
+
+## Contenu de l'archive
+
+- `README.md`: présent fichier;
+- `LICENSE`: contrat de licence Creative Commons Attribution-ShareAlike 4.0 International;
+- `raquebec-atelier-introduction-r.pdf`: diapositives de la formation;
+- `*.R`: fichiers de scripts R pour les démonstrations et les exercices;
+- `*.csv`: fichiers de données pour les démonstrations et les exercices.
+
+## Code source complet
+
+[Voir dans GitHub](https://github.com/vigou3/raquebec-atelier-introduction-r/)
+
+## Historique des versions
+
+### 0.9 (2017-05-24)
+
+- Première version sans la documentation complète de l'étude de cas.
