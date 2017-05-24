@@ -239,3 +239,4 @@ distanceSimul <- rlnorm(100, 5, 1.1)
 ###
 ###   coût = poids * 0.7 + distance * 0.02
 cost <- weightSimul * 0.7 + distanceSimul * 0.02
+
