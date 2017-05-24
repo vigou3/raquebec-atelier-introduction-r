@@ -177,7 +177,7 @@ c(seq, rep)                # vecteur de fonctions!
 ## utilisée si l'argument n'est pas spécifié dans l'appel de
 ## la fonction.
 ##
-## Examinons la définition de la fonction 'matrix', qui sert à
+## Examinons les arguments de la fonction 'matrix', qui sert à
 ## créer une matrice à partir d'un vecteur de valeurs.
 args(matrix)
 
