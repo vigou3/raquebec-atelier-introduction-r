@@ -35,7 +35,7 @@ travail:
 
 - la plus récente version de [R](https://cran.r-project.org/);
 - la plus récente version de [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/#download); 
-- la [documentation]({{ site.github.releases_url }}/download/v0.9/raquebec-atelier-introduction-r.zip) de la formation (décompresser l'archive `.zip` dans un dossier quelconque).
+- la [documentation]({{ site.github.releases_url }}/download/v0.9a/raquebec-atelier-introduction-r.zip) de la formation (décompresser l'archive `.zip` dans un dossier quelconque).
 
 
 ## Auteurs et animateurs

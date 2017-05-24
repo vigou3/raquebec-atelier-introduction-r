@@ -102,10 +102,8 @@ upload :
 	@echo ----- Uploading PDF and archive to GitHub...
 	curl -H 'Content-Type: application/zip' \
 	     -H 'Authorization: token ${OAUTHTOKEN}' \
-	     --upload-file ${MASTER} \
-             -i "${upload_url}?&name=${MASTER}" \
-	     --upload-file ${CODE} \
-             -i "${upload_url}?&name=${CODE}" -s
+	     --upload-file ${ARCHIVE} \
+             -i "${upload_url}?&name=${ARCHIVE}" -s
 	@echo ----- Done uploading files
 
 publish :
