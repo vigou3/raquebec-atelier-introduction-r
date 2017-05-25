@@ -13,7 +13,9 @@
 
 
 #### Question 3 ####
-# We visualize the impact of a changes in the weight from a starting at the YUL airport.
+# We create a visual support ploting the relationship between the weight and the price
+# Source airport : YUL
+# Destination airport : YQB, YVR, YYZ and YYC
 curve(shippingCost("YUL","YQB",x)$price,0.01,50,ylim=c(0,200),
       main="Shipping Price Variation with Weight",xlab="weight (Kg)",
       ylab="price (CND $)",lwd = 2)
