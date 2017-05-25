@@ -42,11 +42,6 @@ min(weightsFinalPrice)
 var(weightsFinalPrice)
 
 # Generate the distance with a LogNormal distribution
-# routesCanada
-# routesIATA <- cbind(paste(routesCanada$sourceAirport),paste(routesCanada$destinationAirport))
-# routesDistance <- apply(routesIATA, 1, function(x) airportsDist(x[1],x[2])$value)
-# max(routesDistance)
-# mean(routesDistance)
 mu2 <- log(650)
 sigma2 <- log(1.4)
 (distances <- round(qlnorm(x[,2],mu2,sigma2)))
@@ -66,7 +61,6 @@ min(distancesFinalPrice)
 
 # Generate total price
 baseCost <- 10
-# taxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
 taxRate <- 1.082408
 profitMargin <- 1.15
 (totalCost <- round((baseCost + weightsFinalPrice + distancesFinalPrice)*profitMargin*taxRate,2))
@@ -78,6 +72,7 @@ min(totalCost)
 # Export to csv format
 (dataExport <- cbind(weights,distances,totalCost))
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
-
-write.csv(dataExport,paste(path,"/references/benchmark.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(dataExport,
+          paste(path,"/references/benchmark.csv",sep="")
+          ,row.names = FALSE, fileEncoding = "UTF-8")
 
