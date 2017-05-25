@@ -1,4 +1,4 @@
-## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz
+## Copyright (C) 2017 David Beauchemin, Samuel Cabral Cruz, Vincent Goulet
 ##
 ## Ce fichier fait partie du projet «Introduction à R - Atelier
 ## du colloque R à Québec 2017»
@@ -9,19 +9,16 @@
 ## International de Creative Commons.
 ## http://creativecommons.org/licenses/by-sa/4.0/
 
-#### Setting working directory properly ####
-getwd()
-setwd("..")
-(path <- getwd())
+## Initialisation de l'amorce du générateur de nombres aléatoires.
 set.seed(31459)
 
 ## Importation des données dans l'espace de travail.
-airports <- read.csv("Reference/AirportModif.csv",
+airports <- read.csv("data/AirportModif.csv",
                      comment.char = "#",
                      as.is = c(2, 3, 5),
                      na.strings = c("\\N", ""),
                      fileEncoding = "UTF-8")
-province <- read.csv("Reference/province.csv",
+province <- read.csv("data/province.csv",
                      comment.char = "#",
                      as.is = 1,
                      na.strings = c("\\N", ""),
@@ -119,26 +116,27 @@ listeIATA <- function(depart, arrival)
 
 
 
-## Exercices 8
+## Exercice 8
 
 ### Tracer une courbe du coût d'un envoi. Le titre du graphique doit
-### être «Coût d'envoi» et la légende de l'ordonnée, «Coût».
+### être «Coût d'envoi», la légende de l'ordonnée «Coût» et la
+### légenre de l'abscisse, «Distance».
 ###
 ### Utiliser les données simulées suivantes.
-cost <- sort(runif(100, min = 5, max = 100))
+cost <- runif(100, min = 5, max = 50)
+distance <- rlnorm(100, 2, 1.1)
 
 
+## Exercice 9
 
-## Exercices 9
-
-### Tracer un graphique du coût d'un envoi en fonction du poids du
-### colis et de la distance à parcourir. Utiliser la fonction
-### 'plot3d'.
+### Tracer une série de graphiques des relations deux à deux entre le
+### coût d'un envoi, poids du colis et la distance à parcourir.
+### Utiliser pour ce faire la fonction 'pairs'.
 ###
 ### Utiliser les données simulées suivantes.
 weight <- runif(1000, 1, 30)
 distance <- rlnorm(1000, 5, 1.1)
-cost <- rgamma(1000, 35, 1)
+cost <- weight * 0.7 + distance * 0.02
 
 
 
@@ -154,7 +152,7 @@ cost <- rgamma(1000, 35, 1)
 
 
 
-## Exercices 11 ####
+## Exercice 11
 
 ### Ajuster une loi gamma à la distribution des coûts par la méthode
 ### du maximum de vraisemblance. Utiliser la fonction 'optim' pour
@@ -167,18 +165,18 @@ cost <- rgamma(1000, 35, 1)
 
 
 
-## Exercices 12
+## Exercice 12
 
 ### Ajuster des lois gamma et log-normale à la distribution des poids
 ### des colis à l'aide de la fonction 'fitdistr' du paquetage MASS.
 ###
 ### Importer et utiliser les données suivantes.
-compData <- read.csv("Reference/benchmark.csv")
+compData <- read.csv("data/benchmark.csv")
 colnames(compData) <- c("weight", "distance", "cost")
 
 
 
-## Exercices 13
+## Exercice 13
 
 ### Simuler, à l'aide la fonction 'sample', la destination de 100
 ### envois de colis à partir de l'aéroport Montréal-Trudeau (YUL) en
@@ -190,7 +188,7 @@ aeroports <- c("YYZ", "YQZ", "YKZ", "YYC", "YWF", "YAM",
                "YBC", "YPA", "YOW", "YZR", "YQY")
 freq <- c(4, 23, 12,  7, 22, 18, 12,  7, 18,  6,  2)
 
-## Exercices 14
+## Exercice 14
 
 ### Simuler les poids et les distances à parcourir de 100 envois de
 ### colis à partir de l'aéroport Montréal-Trudeau (YUL).
@@ -204,7 +202,7 @@ freq <- c(4, 23, 12,  7, 22, 18, 12,  7, 18,  6,  2)
 
 
 
-## Exercices 15
+## Exercice 15
 
 ### Déterminer le coût de chacun des envois pour les données simulées
 ### précédemment à partir de la fonction de coût suivante:

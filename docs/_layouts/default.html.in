@@ -5,13 +5,16 @@
     <title>{{ page.title | default: site.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
-    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:300,400' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
   </head>
   <body>
     <section class="page-header">
+      <div class="shaded">
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
-      <a href="{{ site.github.releases_url }}/download/v<VERSION>/<ARCHIVE>" class="btn">Télécharger</a>
+      <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
+      </div>
+      <a href="{{ site.github.releases_url }}/download/v<VERSION>/<ARCHIVE>" class="btn">Télécharger .zip</a>
       <a href="{{ site.github.repository_url }}" class="btn">Voir sur GitHub</a>
     </section>
 
@@ -19,7 +22,7 @@
       {{ content }}
 
       <footer class="site-footer">
-          <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> est un projet de Vincent Goulet (<a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>).</span>
+          <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> est un projet de <a href="{{ site.github.owner_url }}">Vincent Goulet</a>, <a href="https://github.com/davebulaval">David Beauchemin</a> et <a href="https://github.com/SamuelCabralCruz">Samuel Cabral Cruz</a>.</span>
         <span class="site-footer-credits">Cette page est produite par <a href="https://pages.github.com">GitHub Pages</a>.</span>
       </footer>
     </section>

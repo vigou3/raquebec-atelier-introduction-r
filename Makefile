@@ -1,18 +1,15 @@
 ### -*-Makefile-*- pour préparer «Introduction à R - Atelier du colloque R à Québec 2017»
 ##
-## Copyright (C) 2017 Vincent Goulet, David Beauchemin, Samuel Cabral Cruz
+## Copyright (C) 2017 Vincent Goulet
 ##
-## 'make pdf' crée les fichiers .tex à partir des fichiers .Rnw avec
-## Sweave, place les bonnes URL vers les vidéos dans le code source et
-## compile le document maître avec XeLaTeX.
+## 'make doc' crée la documentation.
 ##
-## 'make zip' crée l'archive contenant le code source des sections
-## d'exemples.
+## 'make zip' crée l'archive contenant le matériel de la formation.
 ##
-## 'make release' crée une nouvelle version dans GitHub, téléverse les
-## fichiers PDF et .zip et modifie les liens de la page web.
+## 'make release' crée une nouvelle version dans GitHub, téléverse le
+## .zip et modifie les liens de la page web.
 ##
-## 'make all' est équivalent à 'make pdf' question d'éviter les
+## 'make all' est équivalent à 'make doc zip' question d'éviter les
 ## publications accidentelles.
 ##
 ## Auteur: Vincent Goulet
@@ -22,84 +19,65 @@
 ## http://github.com/vigou3/raquebec-atelier-introduction-r
 
 
-## Noms du document maître et de l'archive
-MASTER = raquebec-atelier-introduction-r.pdf
-ARCHIVE = raquebec-atelier-introduction-r-code.zip
+## Nom de l'archive
+ARCHIVE = raquebec-atelier-introduction-r.zip
 
-## Numéro de version extrait du fichier maître
-YEAR = $(shell grep "newcommand{\\\\year" ${MASTER:.pdf=.tex} \
-	| cut -d } -f 2 | tr -d {)
-MONTH = $(shell grep "newcommand{\\\\month" ${MASTER:.pdf=.tex} \
-	| cut -d } -f 2 | tr -d {)
-VERSION = ${YEAR}.${MONTH}
+## Nom du répertoire temporaire pour la construction de l'archive
+TMPDIR = tmpdir
 
-## Ensemble des sources du document.
-RNWFILES = \
-	bases.Rnw \
-	donnees.Rnw
-TEXFILES = \
-	couverture-avant.tex \
-	frontispice.tex \
-	licence.tex \
-	reference.tex \
-	presentation.tex \
-	application.tex \
-	controle.tex \
-	extensions.tex \
-	colophon.tex \
-	couverture-arriere.tex
+## Numéro de version
+VERSION = $(shell cat VERSION)
+
+## Composantes de l'archive
+README = README.md
+SLIDES = slides/raquebec-atelier-introduction-r.pdf
+CASESTUDY = 
 SCRIPTS = \
-	presentation.R \
-	bases.R \
-	donnees.R \
-	application.R \
-	controle.R \
-	extensions.R
+	scripts/presentation.R \
+	scripts/bases.R \
+	scripts/donnees.R \
+	scripts/application.R \
+	scripts/controle.R \
+	scripts/extensions.R
 DATA = \
-
-
-AUXFILES = \
-	Fotolia_99831160.jpg \
-	by-sa.pdf \
-	by.pdf \
-	sa.pdf \
-	Chambers.jpg \
-	introduction-programmation-r.jpg \
-
-## Outils de travail
-SWEAVE = R CMD SWEAVE --encoding="utf-8"
-TEXI2DVI = LATEX=xelatex texi2dvi -b
-RM = rm -rf
+	data/AirportModif.csv \
+	data/benchmark.csv \
+	data/province.csv
 
 ## Dépôt GitHub et authentification
 REPOSURL = https://api.github.com/repos/vigou3/raquebec-atelier-introduction-r
 OAUTHTOKEN = ${shell cat ~/.github/token}
 
+# Outils de travail
+RM = rm -r
 
-all: pdf
+
+all: doc zip
 
 .PHONY: tex pdf zip release create-release upload publish clean
 
-pdf: ${MASTER}
-
-tex: ${RNWFILES:.Rnw=.tex}
-
 release: create-release upload publish
 
-%.tex: %.Rnw
-	${SWEAVE} '$<'
+doc:
+	${MAKE} -C $(dir ${SLIDES})
 
-${MASTER}: ${MASTER:.pdf=.tex} ${RNWFILES:.Rnw=.tex} ${TEXFILES} ${SCRIPTS} ${AUXFILES}
-	${TEXI2DVI} ${MASTER:.pdf=.tex}
-
-zip: ${MASTER} ${SCRIPTS} ${DATA}
-	zip -j ${MASTER} ${SCRIPTS} ${DATA} ${ARCHIVE}
+zip: ${SLIDES} ${CASESTUDY} ${SCRIPTS} ${DATA} ${README}
+	if [ -d ${TMPDIR} ]; then ${RM} ${TMPDIR}; fi
+	mkdir -p ${TMPDIR} ${TMPDIR}/data
+	touch ${TMPDIR}/${README} && \
+	  awk 'state==0 && /^# / { state=1 }; \
+	       /^## Auteurs/ { printf("## Version\n\n%s\n\n", "${VERSION}") } \
+	       state' ${README} >> ${TMPDIR}/${README}
+	cp ${SLIDES} ${SCRIPTS} ${TMPDIR}
+	cp ${DATA} ${TMPDIR}/data
+	cd ${TMPDIR} && zip --filesync -r ../${ARCHIVE} *
+	${RM} ${TMPDIR}
 
 create-release :
 	@echo ----- Creating release on GitHub...
 	if [ -e relnotes.in ]; then rm relnotes.in; fi
 	touch relnotes.in
-	git commit -a -m "Version ${VERSION}" && git push
+	# git commit -a -m "Version ${VERSION}" && git push
 	awk 'BEGIN { ORS=" "; print "{\"tag_name\": \"v${VERSION}\"," } \
 	      /^$$/ { next } \
 	      /^## Historique/ { state=0; next } \
@@ -110,9 +88,9 @@ create-release :
 	      (state==1) && /^### / { state=2; print "\","; next } \
 	      state==1 { printf "%s\\n", $$0 } \
 	      END { print "\"draft\": false, \"prerelease\": false}" }' \
-	      README.md >> relnotes.in
+	      ${README} >> relnotes.in
 	curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
-	rm relnotes.in
+	# rm relnotes.in
 	@echo ----- Done creating the release
 
 upload :
@@ -124,21 +102,18 @@ upload :
 	@echo ----- Uploading PDF and archive to GitHub...
 	curl -H 'Content-Type: application/zip' \
 	     -H 'Authorization: token ${OAUTHTOKEN}' \
-	     --upload-file ${MASTER} \
-             -i "${upload_url}?&name=${MASTER}" \
-	     --upload-file ${CODE} \
-             -i "${upload_url}?&name=${CODE}" -s
+	     --upload-file ${ARCHIVE} \
+             -i "${upload_url}?&name=${ARCHIVE}" -s
 	@echo ----- Done uploading files
 
 publish :
 	@echo ----- Publishing the web page...
 	cd docs && \
 	sed -e 's/<VERSION>/${VERSION}/g' \
-	    -e 's/<VERSIONSTR>/${VERSIONSTR}/' \
-	    -e 's/<ISBN>/${ISBN}/' \
+	    -e 's/<ARCHIVE>/${ARCHIVE}/' \
 	    index.md.in > index.md && \
 	sed -e 's/<VERSION>/${VERSION}/g' \
-	    -e 's/<MASTER>/${MASTER}/' \
+	    -e 's/<ARCHIVE>/${ARCHIVE}/' \
 	    _layouts/default.html.in > _layouts/default.html
 	git commit -a -m "Mise à jour de la page web pour l'édition ${VERSION}" && \
 	git push
