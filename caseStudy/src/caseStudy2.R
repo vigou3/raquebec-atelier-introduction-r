@@ -11,23 +11,27 @@
 ## of Creative Commons International
 ## http://creativecommons.org/licenses/by-sa/4.0/
 
-# Functions creation
+# install.packages("geosphere")
+library(geosphere)
 
-#' Distance calculation function between two airports.
+#' Distance between two airports
 #' 
-#' @param sourceIATA The IATA of the departure airport.
-#' @param destIATA The IATA of the arrival airport.
-#' @return A list of the distance in Km between sourceIATA and destIATA, the index of the airports and the unit.
+#' @param sourceIATA The IATA of the departure airport
+#' @param destIATA The IATA of the arrival airport
+#' @return A list containing:
+#'  source,
+#'  dest,
+#'  value,
+#'  metric,
+#'  xy_dist,
+#'  sourceIndex and
+#'  destIndex
 #' @examples
 #' airportsDist("YUL","YQB")
 #' airportsDist("YUL","YVR")
 #' 
-
-# install.packages("geosphere")
-library(geosphere)
 airportsDist <- function(sourceIATA,destIATA)
 {
-  # Verification of the sourceIATA and destIATA
   sourceFindIndex <- match(sourceIATA,airportsCanada$IATA)
   if(is.na(sourceFindIndex))
   {
@@ -60,24 +64,33 @@ airportsDist("YPA","YQB")
 airportsDist("YUL","YQB")
 airportsDist("YUL","YQB")$value
 
-#' Function to establish the estimated time of arrival
+
+# install.packages("lubridate")
+library(lubridate)
+
+#' Establish the time of arrival
 #' 
-#' @param sourceIATA The IATA of the departure airport.
-#' @param destIATA The IATA of the arrival airport.
-#' @return A list of the arrival time at the destIATA airport, and the information relative to it.
+#' @param sourceIATA The IATA of the departure airport
+#' @param destIATA The IATA of the arrival airport
+#' @return A list containing:
+#'  sourceIATA,
+#'  destIATA,
+#'  departureTime,
+#'  avgCruiseSpeed,
+#'  flightTime,
+#'  departureTZ,
+#'  arrivalTZ and
+#'  value
 #' @examples
 #' arrivalTime("YUL","YQB")
 #' arrivalTime("YUL","YVR")
 #' 
-
-# install.packages("lubridate")
-library(lubridate)
 arrivalTime <- function(sourceIATA,destIATA)
 {
   topSpeed <- 850
   adjustFactor <- list()
-  adjustFactor$a <- 0.0001007194 # found by regression (not included)
-  adjustFactor$b <- 0.4273381 # found by regression (not included)
+  adjustFactor$a <- 0.0001007194 # found by interpolation (not included)
+  adjustFactor$b <- 0.4273381 # found by interpolation (not included)
   arrivalTimeList <- list()
   arrivalTimeList$source <- sourceIATA
   arrivalTimeList$dest <- destIATA
@@ -108,35 +121,49 @@ difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 library(XML)
 library(RCurl)
 library(rlist)
-theurl <- getURL("http://www.calculconversion.com/sales-tax-calculator-hst-gst.html",.opts = list(ssl.verifypeer = FALSE))
+theurl <- getURL("http://www.calculconversion.com/sales-tax-calculator-hst-gst.html",
+                 .opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
 provinceName <- as.character(sort(unique(airportsCanada$province)))
 taxRates <- as.data.frame(cbind(provinceName,as.numeric(sub("%","",tables$`NULL`[-13,5]))/100+1))
 colnames(taxRates) <- c("province","taxRate")
 taxRates
 
-#' Shipping cost calculation function
+
+#' Shipping cost calculation
 #' 
 #' @param sourceIATA The IATA of the departure airport.
 #' @param destIATA The IATA of the arrival airport.
 #' @param weight The weight of the shipping.
 #' @param percentCredit A double with a default value of 0.
 #' @param dollarCredit A double with a default value of 0.
-#' @return A list of the information for a shipping between the sourceIATA airport to the destIATA airport.
+#' @return A list containing:
+#'  distance,
+#'  weight,
+#'  distanceFactor,
+#'  weightFactor,
+#'  fixedCost,
+#'  profitMargin,
+#'  percentCredit,
+#'  dollarCredit,
+#'  minimalDist,
+#'  traficIndex,
+#'  baseCost,
+#'  automatedCredit,
+#'  taxRate and 
+#'  price
 #' @examples
 #' shippingCost("YUL","YQB")
 #' shippingCost("YUL","YVR")
 #' 
-
 shippingCost <- function(sourceIATA, destIATA, weight, 
                          percentCredit = 0, dollarCredit = 0)
 {
-  
-  # Verification of the existance of the route between sourceIATA and destIATA
   routeConcat <- as.character(paste(routesCanada$sourceAirport,routesCanada$destinationAirport))
   if(is.na(match(paste(sourceIATA,destIATA),routeConcat)))
   {
-    stop(paste("the combination of sourceIATA and destIATA (",sourceIATA,"-",destIATA,") do not corresponds to existing route"))
+    stop(paste("the combination of sourceIATA and destIATA (",sourceIATA,"-",destIATA,") 
+               do not corresponds to existing route"))
   }
   
   if(weight < 0 || weight > 30) 
@@ -158,7 +185,6 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   distance <- airportsDist(sourceIATA, destIATA)
   if (distance$value < minimalDist)
   {
-    # We verify if the distance of shipping is further than the minimal requierement
     stop(paste("The shipping distance is under the minimal requirement of",minDist,"Km"))
   }
   
@@ -173,7 +199,8 @@ shippingCost <- function(sourceIATA, destIATA, weight,
   traficIndexDest <- as.numeric(paste(airportsCanada[distance$destIndex,"combinedIndex"]))
   
   # Calculation of the base cost
-  baseCost <-  fixedCost + (distance$value*distanceFactor + weight*weightFactor)/(traficIndexSource*traficIndexDest)
+  baseCost <-  fixedCost + (distance$value*distanceFactor + weight*weightFactor)/
+    (traficIndexSource*traficIndexDest)
   
   # Additional automated credits
   automatedCredit <- 1
@@ -204,9 +231,11 @@ shippingCost <- function(sourceIATA, destIATA, weight,
        automatedCredit <- automatedCredit * 0.85
   }
   
-  # Calculation of taxe rate and control of text
-  taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],taxRates$province),"taxRate"]))
-  price <- round(pmax(fixedCost*profitMargin*automatedCredit*taxRate,(baseCost*automatedCredit*profitMargin - dollarCredit)*(1 - percentCredit)*taxRate),2)
+  taxRate <- as.numeric(paste(taxRates[match(airportsCanada[distance$sourceIndex,"province"],
+                                             taxRates$province),"taxRate"]))
+  price <- round(pmax(fixedCost*profitMargin*automatedCredit*taxRate,
+                      (baseCost*automatedCredit*profitMargin - dollarCredit)
+                      *(1 - percentCredit)*taxRate),2)
   
   # Return List
   shippingCostList <- list()
