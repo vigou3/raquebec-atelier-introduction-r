@@ -3,11 +3,13 @@
 ##
 ## Copyright (C) 2017 Vincent Goulet, David Beauchemin, Samuel Cabral Cruz
 ##
-## 'make pdf' crée les fichiers .tex à partir des fichiers .Rnw avec
-## Sweave et compile le document maître avec XeLaTeX.
-##
 ## 'make tex' crée les fichier .tex à partir des fichiers .Rnw avec
 ## Sweave.
+##
+## 'make pdf' fait la même chose que 'make tex' et en plus compile le
+## document maître avec XeLaTeX.
+##
+## 'make all' est équivalent à 'make pdf'.
 ##
 ## Auteur: Vincent Goulet
 ##
@@ -16,7 +18,7 @@
 ## http://github.com/vigou3/raquebec-atelier-introduction-r
 
 
-## Noms du document maître et de l'archive
+## Nom du document maître
 MASTER = raquebec-atelier-introduction-r.pdf
 
 ## Ensemble des sources du document.
@@ -40,12 +42,13 @@ AUXFILES = \
 	by.pdf \
 	sa.pdf \
 	Chambers.jpg \
-	introduction-programmation-r.jpg \
+	introduction-programmation-r.jpg
 
 ## Outils de travail
 SWEAVE = R CMD SWEAVE --encoding="utf-8"
 TEXI2DVI = LATEX=xelatex texi2dvi -b
 RM = rm -rf
+
 
 all: pdf
 

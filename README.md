@@ -42,6 +42,11 @@ Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 ## Historique des versions
 
+### 1.0 (2017-05-25)
+
+- Ajout de la documentation complète de l'étude de cas.
+- Ajout des fichiers de script manquants `etude.R` et `etude-solutions.R`.
+
 ### 0.9a (2017-05-24)
 
 - Jeux de données placés dans un sous-répertoire `data` pour
