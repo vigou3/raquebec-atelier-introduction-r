@@ -31,14 +31,16 @@ VERSION = $(shell cat VERSION)
 ## Composantes de l'archive
 README = README.md
 SLIDES = slides/raquebec-atelier-introduction-r.pdf
-CASESTUDY = 
+CASESTUDY = caseStudy/Statement/LaTeX/OpenFlightsCaseStudy.pdf
 SCRIPTS = \
 	scripts/presentation.R \
 	scripts/bases.R \
 	scripts/donnees.R \
 	scripts/application.R \
 	scripts/controle.R \
-	scripts/extensions.R
+	scripts/extensions.R \
+	scripts/etude.R \
+	scripts/etude-solutions.R
 DATA = \
 	data/AirportModif.csv \
 	data/benchmark.csv \
@@ -68,7 +70,7 @@ zip: ${SLIDES} ${CASESTUDY} ${SCRIPTS} ${DATA} ${README}
 	  awk 'state==0 && /^# / { state=1 }; \
 	       /^## Auteurs/ { printf("## Version\n\n%s\n\n", "${VERSION}") } \
 	       state' ${README} >> ${TMPDIR}/${README}
-	cp ${SLIDES} ${SCRIPTS} ${TMPDIR}
+	cp ${SLIDES} ${CASESTUDY} ${SCRIPTS} ${TMPDIR}
 	cp ${DATA} ${TMPDIR}/data
 	cd ${TMPDIR} && zip --filesync -r ../${ARCHIVE} *
 	${RM} ${TMPDIR}
@@ -77,7 +79,7 @@ create-release :
 	@echo ----- Creating release on GitHub...
 	if [ -e relnotes.in ]; then rm relnotes.in; fi
 	touch relnotes.in
-	# git commit -a -m "Version ${VERSION}" && git push
+	git commit -a -m "Version ${VERSION}" && git push
 	awk 'BEGIN { ORS=" "; print "{\"tag_name\": \"v${VERSION}\"," } \
 	      /^$$/ { next } \
 	      /^## Historique/ { state=0; next } \
@@ -90,7 +92,7 @@ create-release :
 	      END { print "\"draft\": false, \"prerelease\": false}" }' \
 	      ${README} >> relnotes.in
 	curl --data @relnotes.in ${REPOSURL}/releases?access_token=${OAUTHTOKEN}
-	# rm relnotes.in
+	rm relnotes.in
 	@echo ----- Done creating the release
 
 upload :
