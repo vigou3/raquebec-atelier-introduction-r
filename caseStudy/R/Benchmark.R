@@ -14,10 +14,7 @@
 # Source code for the creation of the benchmark.csv file
 
 # Setting working directory properly 
-setwd('C:/Users/Samuel/Documents/ColloqueR/Dev')
-getwd()
-setwd("..")
-(path <- getwd())
+(path <- paste(getwd(),"..",sep="/"))
 
 # Parameters of the simulation
 n <- 100000
@@ -82,5 +79,5 @@ min(totalCost)
 (dataExport <- cbind(weights,distances,totalCost))
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
 
-write.csv(dataExport,paste(path,"/Reference/benchmark.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(dataExport,paste(path,"/references/benchmark.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8")
 
