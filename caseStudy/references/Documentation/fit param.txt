@@ -1,7 +1,0 @@
-fitting des param
-https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html
-
-https://cran.r-project.org/web/packages/actuar/actuar.pdf
-
-http://libre.act.ulaval.ca/fileadmin/Portail_libre/ACT-2005/Notes%20de%20cours/distributions_sinistres.pdf
-

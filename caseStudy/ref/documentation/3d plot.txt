@@ -1,0 +1,9 @@
+plot3D package
+https://cran.r-project.org/web/packages/plot3D/vignettes/plot3D.pdf
+
+rgl package
+https://www.r-bloggers.com/interactive-3d-plot-in-r/
+
+interactive plot
+http://www.sthda.com/english/wiki/amazing-interactive-3d-scatter-plots-r-software-and-data-visualization
+https://unix.stackexchange.com/questions/333747/how-to-install-and-use-scatter3d-without-pause-in-r-3-3-2

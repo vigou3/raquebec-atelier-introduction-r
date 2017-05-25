@@ -1,0 +1,40 @@
+Colloque R
+
+Objectif:
+-Formation débutant
+
+Brainstorming:
+-Approche problématique
+
+Sujets:
+-Langage interprêté (pas besoin définir type)
+-Très mathématique
+-Installation RStudio et R
+-Walktrough RStudio
+-Mise à jour R et packages
+-Packages
+-Importation fichiers
+-Approche vectorielle (apply)
+-Fonctions
+-Arguments
+-Optimisation
+-Graphiques
+-Packages intéressants
+-Connection avec R
+
+À faire:
+-Table des matières
+-Répartition des tâches
+
+RMarkdown?
+
+Durée 6h (2 fois 3h)
+-Premier bloc:
+	Théorie
+-Deuxième bloc:
+	Projet : Vol d'avions
+		-Intégré visualisation données
+
+Sources:
+http://openflights.org/data.html
+http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/

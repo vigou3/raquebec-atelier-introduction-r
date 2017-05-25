@@ -1,3 +1,0 @@
-http://blog.revolutionanalytics.com/2009/06/converting-time-zones.html
-http://www5.statcan.gc.ca/cansim/a26?lang=fra&retrLang=fra&id=0510056&&pattern=&stByVal=1&p1=1&p2=37&tabMode=dataTable&csid=
-https://cran.r-project.org/web/packages/sqldf/sqldf.pdf

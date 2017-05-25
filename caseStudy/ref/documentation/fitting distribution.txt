@@ -1,0 +1,7 @@
+fitting weight distribution
+
+LogNormal Wiki
+https://en.wikipedia.org/wiki/Log-normal_distribution
+
+LogNormal properties and transformations
+http://www.math.uah.edu/stat/special/LogNormal.html

@@ -1,2 +1,0 @@
-Switch (select case)
-https://stat.ethz.ch/R-manual/R-devel/library/base/html/switch.html

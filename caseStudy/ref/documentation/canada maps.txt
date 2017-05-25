@@ -1,0 +1,20 @@
+Convert factor to numeric without loss of information
+http://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information
+
+Maps application with R
+http://www.molecularecologist.com/2012/09/making-maps-with-r/
+
+verify aeroport mapping
+http://www.huffingtonpost.ca/2014/04/17/canada-empty-maps_n_5169055.html
+
+map multiple segments
+http://stackoverflow.com/questions/24617414/enriching-a-ggplot2-plot-with-multiple-geom-segment-in-a-loop
+
+continuous scale
+http://stackoverflow.com/questions/20251119/increase-the-size-of-variable-size-points-in-ggplot2-scatter-plot
+
+scale_size_area
+http://stackoverflow.com/questions/11517411/ggplot2-how-to-manually-adjust-scale-area
+
+extract canada maps informations
+http://www12.statcan.gc.ca/census-recensement/2011/geo/bound-limit/bound-limit-2011-eng.cfm
