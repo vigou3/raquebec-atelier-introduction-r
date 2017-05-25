@@ -5,13 +5,10 @@ Les données d'OpenFlights possèdent l'avantage d'être téléchargeables direc
 
 \addPicture{1}{1}{rawAirports}{Extrait du fichier airports.dat}{rawAirports} 
 
-\noindent
 Dans la même figure, on constate aussi l'absence d'une ligne servant à présenter les en-têtes de colonnes. Ceci pourra dans certains cas vous jouer de mauvais tours en ignorant la première ligne de données ou encore de considérer les titres comme étant des entrées en soi. \footnote{La deuxième situation étant bien moins dramatique et plus facilement identifiable.}  Bien qu'il serait possible de travailler avec des données sans nom, il s'agit ici d'une très mauvaise pratique. Pour remédier à la situation, nous assignerons donc des noms aux colonnes grâce à l'attribut \emph{colnames} d'un objet \emph{data.frame} en lui passant un vecteur de noms.\\
 
-\noindent
 Par défaut, lors de l'importation, la fonction \emph{read.csv} retournera un \emph{data.frame} en transformant les chaînes de caractères sous la forme de facteurs (\emph{factors}). Cette action sera complètement transparente à l'utilisateur puisque l'affichage des variables ne sera pas impacté étant donné que R aura créé des formats d'affichage qui associe à chaque facteur la valeur unique correspondante. Le seul impact réel réside dans la possibilité d'utiliser des fonctions à caractères mathématiques sur les données, peu importe si ces dernières sont numériques ou non. Parmi ce genre de fonctions, nous pouvons penser à des fonctions d'agrégation (\emph{clustering}) ou tout simplement à l'utilisation de la fonction \emph{summary} \cite{Rfunction:summary} permettant d'afficher des informations génériques sur le contenu d'un objet. Il est important de comprendre que les données ne sont toutefois plus représentées comme des chaînes de caractères, mais bien pas un indice référant à la valeur textuelle correspondante. \\
 
-\noindent
 La manière de représenter des valeurs manquantes variera souvent d'une base de données à une autre. Une fonctionnalité très intéressante de la fonction \emph{read.csv} est de pouvoir automatiquement convertir ces chaînes de caractères symboliques en \emph{NA} ayant une signification particulaire dans R. Dans le cas présent, les valeurs manquantes sont représentées par \text{\textbackslash \textbackslash n} ou \text{" "} correspondant à un simple retour de chariot et un espace vide respectivement. Il suffit donc de passer cette liste de valeurs à l'argument \emph{na.strings}. \\
 
 \begin{moreInfo}{\emph{read.csv}}
@@ -19,7 +16,6 @@ La manière de représenter des valeurs manquantes variera souvent d'une base de
 	\url{https://stat.ethz.ch/R-manual/R-devel/library/utils/html/read.table.html}
 \end{moreInfo}
 
-\noindent
 Comme nous venons de le démontrer, l'extraction des données peut facilement devenir une tâche ingrate si nous n'avons aucune connaissance sur la manière dont l'information y a été entreposée. La règle d'or est donc de toujours avoir une idée globale de ce que nous cherchons à importer afin de bien paramétriser les fonctions. Si nous assemblons les différents aspects que nous venons d'aborder, nous aboutissons donc au code suivant:
 \begin{lstlisting}[caption = Extraction des données,label=src:Extraction]
 	airports <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", header = FALSE, na.strings=c('\\N',''))
