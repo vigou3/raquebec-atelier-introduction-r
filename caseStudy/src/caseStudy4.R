@@ -13,12 +13,12 @@
 
 #### Question 4 ####
 # Import data of the competition
-compData <- read.csv(paste(path,"/Reference/benchmark.csv",sep=""))
+compData <- read.csv(paste(path,"/ref/benchmark.csv",sep=""))
 View(compData)
 colnames(compData) <- c("weight","distance","price")
 summary(compData)
 
-# Weight visualisation
+# Weight distribution
 hist(compData$weight, freq = TRUE, main = "Repartition according to the weight", 
      xlab = "weight (Kg)", col = "cadetblue",breaks = 50)
 weightCDF <- ecdf(compData$weight)
@@ -26,7 +26,7 @@ curve(weightCDF(x),0,15,ylim = c(0,1),lwd = 2,
       xlab = "weight (Kg)",
       ylab = "Cumulative Distribution Function")
 
-# Distance visualisation
+# Distance distribution
 hist(compData$distance, freq = TRUE, main = "Repartition according to the distance", 
      xlab = "distance (Km)", col = "cadetblue",breaks = 50)
 distanceCDF <- ecdf(compData$distance)
@@ -48,12 +48,14 @@ library(rgl)
 plot3d(compData$weight,compData$distance,compData$price)
 
 # Chi's Square Test of Independency between the two variables
-weightsBinded <- as.numeric(cut(compData$weight,25))
-distancesBinded <- as.numeric(cut(compData$distance,25))
+weightsBinded <- cut(compData$weight,25)
+distancesBinded <- cut(compData$distance,25)
 contingencyTable <- table(weightsBinded,distancesBinded)
+rownames(contingencyTable) <- NULL
+colnames(contingencyTable) <- NULL
 chisq.test(contingencyTable)
-contingencyTable <- rbind(contingencyTable[1:4,],colSums(contingencyTable[5:18,]))
-(contingencyTable <- cbind(contingencyTable[,1:14],rowSums(contingencyTable[,15:24])))
+contingencyTable <- rbind(contingencyTable[1:6,],colSums(contingencyTable[7:25,]))
+contingencyTable <- cbind(contingencyTable[,1:12],rowSums(contingencyTable[,13:25]))
 independencyTest <- chisq.test(contingencyTable)
 head(independencyTest$expected)
 head(independencyTest$observed)
@@ -63,13 +65,13 @@ cor.test(compData$weight,compData$distance,method = "pearson")
 
 # Linear model 
 # we assume the same profit margin to simplify the situation
-# We keep an intercept since we have a fixed cost
+# We let  an intercept because shipping pricing always have fixed cost component
 profitMargin <- 1.12
-avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/length(airportsCanada$province)
+avgTaxRate <- sum(table(airportsCanada$province)*as.numeric(paste(taxRates$taxRate)))/
+  length(airportsCanada$province)
 compModel <- lm(price/(profitMargin*avgTaxRate) ~ distance + weight, compData)
 summary(compModel)
 
 # We plot the model
 par(mfrow=c(2,2))
 plot(compModel)
-

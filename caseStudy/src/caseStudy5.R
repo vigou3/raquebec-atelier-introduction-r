@@ -22,7 +22,7 @@ empPDF <- function(x,delta=0.01)
   (empCDF(x+delta/2)-empCDF(x-delta/2))/delta
 }
 
-#' Generic function for statistical distribution adjustment
+#' Statistical distribution adjustment
 #' 
 #' @param data A vector of value over which we want to fit the distribution
 #' @param dist The distribution name
@@ -120,7 +120,8 @@ distFit <- function(data,dist,...)
       -sum(do.call(eval(parse(text = paste("d",law,sep=""))),c(list(data),par,log = TRUE))))
   }
   # Deviance value
-  devValue <- sum((empPDF(x <- seq(0,max(data),0.1))-do.call(eval(parse(text = paste("d",law,sep=""))),c(list(x),param$par)))**2)
+  devValue <- sum((empPDF(x <- seq(0,max(data),0.1))-
+                     do.call(eval(parse(text = paste("d",law,sep=""))),c(list(x),param$par)))**2)
 
   # Return List
   distFitList <- list() 
@@ -132,36 +133,35 @@ distFit <- function(data,dist,...)
   distFitList
 }
 
-
 (resultDistFitting <- sapply(distName,function(x) unlist(distFit(compData$weight,x,1,1))))
 
 law <- c("norm","gamma","lnorm","weibull","pareto","invgauss")
 col <- c("red", "yellow", "purple", "green", "cyan", "blue")
 x <- seq(0,30,0.1)
 
-# Visulization of the fitting distribution
+# Visulization of the goodness of the fit
 par(mfrow = c(1,2),font = 2)
 plot(function(x) empCDF(x), xlim = c(0,15), main = "", xlab = "weight (Kg)", ylab = "CDF(x)")
-invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("p",law[i],sep = ""))),
-                                                         c(list(x), as.vector(resultDistFitting[c(1:2),i]))), 
-                                                 add = TRUE, lwd = 3, col = col[i])))
+invisible(sapply(1:length(law),
+                 function(i) curve(do.call(eval(parse(text = paste("p",law[i],sep = ""))),
+                                           c(list(x), as.vector(resultDistFitting[c(1:2),i]))), 
+                                   add = TRUE, lwd = 3, col = col[i])))
 hist(compData$weight, xlim = c(0,15), main = "", xlab = "weight (Kg)", breaks = 300,freq = FALSE)
-invisible(sapply(1:length(law),function(i) curve(do.call(eval(parse(text = paste("d",law[i],sep = ""))),
-                                                         c(list(x), as.vector(resultDistFitting[c(1:2),i]))), 
-                                                 add = TRUE, lwd = 3, col = col[i])))
+invisible(sapply(1:length(law),
+                 function(i) curve(do.call(eval(parse(text = paste("d",law[i],sep = ""))),
+                                           c(list(x), as.vector(resultDistFitting[c(1:2),i]))), 
+                                   add = TRUE, lwd = 3, col = col[i])))
 legend(x="right", y = "center",distName, inset = 0.1, col = col, pch = 20, pt.cex = 2, cex = 1, 
        ncol = 1, bty = "n", text.width = 2, title = "Distribution")
 mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE)
 
-# We thus choose the LogNormal distribution which possesses the smallest deviance and the best fit.
+# We thus choose the LogNormal distribution which possesses the smallest deviance and the best fit
 distChoice <- "LogNormal"
 (paramAdjust <- resultDistFitting[c(1:2),match(distChoice,distName)])
 
-# It is also possible to do the equivalent with fitdistr of the library MASS, 
-# but with less option for the distribution.
+# It is also possible to do the equivalent with fitdistr of the MASS library
 library("MASS")
 (fit.normal <- fitdistr(compData$weight,"normal"))
 (fit.gamma <- fitdistr(compData$weight, "gamma"))
 (fit.lognormal <- fitdistr(compData$weight, "lognormal"))
 (fit.weibull <- fitdistr(compData$weight, "weibull"))
-
