@@ -44,7 +44,7 @@ var(weightsFinalPrice)
 # Generate the distance with a LogNormal distribution
 mu2 <- log(650)
 sigma2 <- log(1.4)
-(distances <- round(qlnorm(x[,2],mu2,sigma2)))
+distances <- round(qlnorm(x[,2],mu2,sigma2))
 hist(distances,breaks = 100,freq=FALSE)
 mean(distances)
 max(distances)
@@ -63,14 +63,14 @@ min(distancesFinalPrice)
 baseCost <- 10
 taxRate <- 1.082408
 profitMargin <- 1.15
-(totalCost <- round((baseCost + weightsFinalPrice + distancesFinalPrice)*profitMargin*taxRate,2))
+totalCost <- round((baseCost + weightsFinalPrice + distancesFinalPrice)*profitMargin*taxRate,2)
 mean(totalCost)
 var(totalCost)
 max(totalCost)
 min(totalCost)
 
 # Export to csv format
-(dataExport <- cbind(weights,distances,totalCost))
+dataExport <- cbind(weights,distances,totalCost)
 colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
 write.csv(dataExport,
           paste(path,"/references/benchmark.csv",sep="")

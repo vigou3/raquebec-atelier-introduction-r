@@ -12,7 +12,7 @@
 ## http://creativecommons.org/licenses/by-sa/4.0/
 
 #### Setting working directory properly ####
-setwd("C:/Users/Samuel/Documents/ColloqueR/Dev")
+setwd("C:/Users/Samuel/Documents/ColloqueR/caseStudy/R")
 getwd()
 setwd("..")
 (path <- getwd())
