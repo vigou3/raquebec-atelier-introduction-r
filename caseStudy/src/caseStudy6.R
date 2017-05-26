@@ -12,17 +12,16 @@
 ## http://creativecommons.org/licenses/by-sa/4.0/
 
 #### Question 6 ####
-theurl <- getURL(paste("file:///",path,"/Statement/MarkDown/CaseStudyStatement.html",sep=""),.opts = 
-                      list(ssl.verifypeer = FALSE))
+theurl <- getURL(paste("file:///",path,"/statement/MarkDown/CaseStudyStatement.html",sep = ""),
+                 .opts = list(ssl.verifypeer = FALSE))
 tables <- readHTMLTable(theurl)
 lambdaTable <- as.data.frame(tables$"NULL")
 colnames(lambdaTable) <- c("Month","Avg3yrs")
 lambdaTable
 
-# The possible routes are filtered from the starting point 'YUL' 
-# and a distribution is created according to the destination index.
-simAirportsDests <- as.character(paste(routesCanada[routesCanada$sourceAirport == "YUL",
-                                                    "destinationAirport"]))
+# The possible routes are filtered as having a departure from 'YUL' 
+# and a distribution is created according to the destination index
+simAirportsDests <- routesCanada$destinationAirport[routesCanada$sourceAirport == "YUL"]
 simCombinedIndex <- combinedIndex[names(combinedIndex) %in% simAirportsDests]
 airportsDensity <- simCombinedIndex/sum(simCombinedIndex)
 
@@ -43,8 +42,10 @@ simulShipmentPrice <- function(Arrival,Weight)
 simulShipment <- function(simNbShipments)
 {
   # Weights are then generated for each of the packages.
-  simWeights <- eval(parse(text = paste("r",law[match(distChoice,distName)],sep = "")))(simNbShipments,
-                                                                                        paramAdjust[1],paramAdjust[2])
+  simWeights <- eval(parse(
+    text = paste("r",law[match(distChoice,distName)],sep = "")))(simNbShipments,
+                                                                 paramAdjust[1],
+                                                                 paramAdjust[2])
   # We finally generate a destination for each package (the departure will always be from 'YUL').
   simArrivals <- sample(size = simNbShipments,names(airportsDensity),prob = airportsDensity,
                         replace = TRUE)
@@ -64,9 +65,12 @@ simulOverall <-function()
 
 nsim <- 1
 simulResults <- replicate(nsim, simulOverall(),simplify = FALSE)
-(marketShareSales <- sapply(1:nsim,function(x) sum(as.numeric(simulResults[[x]][6,]))/length(simulResults[[x]][6,])))
-(ownRevenus <- sum(as.numeric(simulResults[[1]][4,])*as.numeric(simulResults[[1]][6,]),na.rm = TRUE))
-(compRevenus <- sum(as.numeric(simulResults[[1]][5,])*(1-as.numeric(simulResults[[1]][6,])),na.rm = TRUE))
+(marketShareSales <- sapply(1:nsim,function(x) 
+  sum(as.numeric(simulResults[[x]][6,]))/length(simulResults[[x]][6,])))
+(ownRevenus <- sum(as.numeric(simulResults[[1]][4,])*
+                     as.numeric(simulResults[[1]][6,]),na.rm = TRUE))
+(compRevenus <- sum(as.numeric(simulResults[[1]][5,])*
+                      (1-as.numeric(simulResults[[1]][6,])),na.rm = TRUE))
 (marketShareRevenus <- ownRevenus/(ownRevenus+compRevenus))
 
 arrivalSales <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==1]) 
@@ -91,8 +95,3 @@ abline(v = v <- exp(paramAdjust[1]+paramAdjust[2]**2/2), lwd = 2)
 text(v+0.75,0.3,as.character(round(v,2)))
 abline(v = v <- mean(weightSales),col = "red", lwd = 2)
 text(v - 0.75,0.3,round(v,2),col = "red")
-
-sample(airportsCanada$altitude,size = 10, replace = TRUE)
-probs = airportsCanada$altitude/sum(airportsCanada$altitude)
-sample(airportsCanada$altitude,size = 10, replace = TRUE,prob = probs)
-sample(unique(as.character(paste(airportsCanada$name))),size = 10,replace = FALSE)

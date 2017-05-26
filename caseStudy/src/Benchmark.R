@@ -75,4 +75,3 @@ colnames(dataExport) <- c("Poids (Kg)","Distance (Km)","Prix (CAD $)")
 write.csv(dataExport,
           paste(path,"/ref/benchmark.csv",sep="")
           ,row.names = FALSE, fileEncoding = "UTF-8")
-
