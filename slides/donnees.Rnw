@@ -66,6 +66,11 @@ levels(grandeurs)
 list(seq,
      list(size = c(1, 5, 2), user = "Joe", new = TRUE))
 @
+\item Éléments souvent nommés, extraction avec \verb=$=
+<<echo=TRUE>>=
+x <- list(nom = c("Tremblay", "Gagné"), age = c(35, 54))
+x$nom
+@
   \end{itemize}
 \end{frame}
 
