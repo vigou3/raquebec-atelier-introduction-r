@@ -42,6 +42,17 @@ Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 ## Historique des versions
 
+### 1.1 (en développement)
+
+- Ajout de codes IATA manquants dans le jeu de données
+  `AirportsModif.csv` pour l'exercice 3.1 de `etude.R`.
+- Ajout d'un lien vers la chaine YouTube associée au document
+  *Introduction à la programmation en R*.
+- Ajout d'une mention de `help.search` dans la rubrique «Obtenir de
+  l'aide» des diapositives.
+- Ajout d'une présentation de l'opérateur `$` dans la rubrique «Liste» des
+  diapositives.
+
 ### 1.0 (2017-05-25)
 
 - Ajout de la documentation complète de l'étude de cas.
