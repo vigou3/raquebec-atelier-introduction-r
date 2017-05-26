@@ -1,4 +1,4 @@
-Dans le cadre de cette étude de cas, nous nous placerons dans la peau d'un analyste du département de la tarification oeuvrant au sein d'une compagnie canadienne se spécialisant dans le transport de colis par voies aériennes en mettant à profit les jeux de données d'\emph{OpenFlights}. \cite{OpenFlightsData} 
+Dans le cadre de cette étude de cas, nous nous placerons dans la peau d'un analyste du département de la tarification oeuvrant au sein d'une compagnie canadienne se spécialisant dans le transport de colis par voies aériennes. Nous fonderons notre analyse sur le jeu de données d'\emph{OpenFlights}. \cite{OpenFlightsData} 
 
 \addPicture{1}{0.5}{OpenFlights}{Interface de l'outil OpenFlights}{OpenFlightsInterface}
 
@@ -14,7 +14,7 @@ Parmi les bases de données disponibles, nous retrouvons: \\
 Ainsi, notre mandat consistera, dans un premier temps, à analyser les bases de données mises à notre disposition afin de créer des fonctions utilitaires qui permettront de facilement intégrer les informations qu'elles contiennent lors de la tarification d'une livraison spécifique. Une fois cette tarification complétée, nous devrons fournir des chartes pour facilement estimer les prix d'une livraison qui s'avèreront être des outils indispensables au département de marketing et au reste de la direction. Après avoir transmis les documents en question, nous serons amenés à analyser les prix de la concurrence pour extrapoler leur tarification. Nous pourrons ainsi s'assurer que la nouvelle tarification sera efficiente et profitable. Finalement, nous comparerons ces deux tarifications pour déterminer la compétitivité de notre nouvelle structure de prix en procédant à une analyse stochastique. \\
 
 \begin{moreInfo}{\emph{OpenFlights}}
-	\emph{OpenFlights} est un outil en ligne permettant de visualiser, chercher et filtrer tous les vols aériens dans le monde. Il s’agit d’un projet libre entretenu par la communauté via GitHub. \cite{GitHub} L’information disponible y est étonnamment très complète et facile d’approche. Ces caractéristiques rendent ce jeu de données très intéressant pour quiconque qui désire s’initier à l’analyse statistique.
+	\emph{OpenFlights} est un outil en ligne permettant de visualiser, chercher et filtrer tous les vols aériens dans le monde. Il s’agit d’un projet libre entretenu par la communauté via GitHub. \cite{GitHub} L’information disponible y est étonnamment très complète et facile d’approche. Ces caractéristiques rendent ce jeu de données très intéressant pour quiconque qui désire s’initier à l’analyse statistique. \\
 	\url{https://openflights.org/}
 \end{moreInfo}
 
@@ -22,17 +22,22 @@ Bien qu'on n'en soit toujours qu'à l'introduction, nous tenons dès lors à int
 
 De manière similaire qu'au sein d'un invité de commandes traditionnel, il est possible d'utiliser ".." (\texttt{cd ..}) afin de revenir à un niveau supérieur dans la structure de dossiers. Dans la plupart des cas, le code source d'un projet sera souvent isolé du reste du projet en le plaçant dans un sous-dossier dédié. \footnote{Il s'agit ici d'une excellente pratique de programmation et je dirais même indispensable si vous utilisez un gestionnaire de versions.} \\
 
-Bref, comme le code source du présent projet se retrouve à l'intérieur du sous-dossier \texttt{dev} \cite{repo:RAQ} et que nous pourrions vouloir avoir accès à d'autres parties du répertoire au sein du code, le code suivant nous permettra de placer notre racine de projet à un niveau de dossier supérieur et de stocker ce chemin dans la variable \texttt{path}. Avec cette variable, tous les appels subséquents à des portions du répertoire pourront donc se faire de manière relative puisque c'est cette variable path qui changera d'une architecture à un autre, tandis que la structure du répertoire restera toujours la même. \\
+Bref, comme le code source du présent projet se retrouve à l'intérieur du sous-dossier \texttt{src} \cite{repo:RAQ} et que nous pourrions vouloir avoir accès à d'autres parties du répertoire au sein du code, le \autoref{src:wdSetting} nous permettra de placer notre racine de projet à un niveau supérieur dans l'arborescence des dossiers et de stocker ce chemin dans la variable \texttt{path}. Avec cette variable, tous les appels subséquents à des portions du répertoire pourront donc se faire de manière relative puisque c'est cette variable path qui changera d'une architecture à un autre, tandis que la structure du répertoire restera toujours la même. \footnote{Il faut comprendre que les chemins relatifs n'enlèvent pas toutes les dépendances, mais seulement celles qui sont externes au dépôt du projet.} \\
 
-La deuxième notion que nous tenons à introduire immédiatement est celle de reproductibilité d'une analyse statistique. Comme vous le savez probablement, l'aléatoire pur n'existe pas en informatique, d'où la raison pour laquelle nous utiliserons plutôt le terme de nombres pseudo-aléatoires. Bien que cela peut sembler étrange à première vue, il existe tout de même un point positif à tout ceci, soit la possibilité de fixer une racine au générateur de nombre pseudo-aléatoires (GNPA) ce qui aura comme impact de toujours produire les mêmes résultats pour autant que le GNPA utilisé soit le même. Comme nous pouvons le voir dans le code ci-dessous, l'instruction \texttt{set.seed} \cite{Rfunction:setseed} se chargera de fournir une valeur de départ aux calculs du GNPA. \\
+La deuxième notion que nous tenons à introduire immédiatement est celle de reproductibilité d'une analyse statistique. Comme vous le savez probablement, l'aléatoire pur n'existe pas en informatique, d'où l'appellation "nombres pseudo-aléatoires". Bien que cela peut sembler étrange à première vue, il existe tout de même un point positif à tout ceci, soit la possibilité de fixer une racine au générateur de nombres pseudo-aléatoires (GNPA) ce qui aura comme impact de toujours produire les mêmes résultats pour autant que le GNPA utilisé soit le même. L'instruction \texttt{set.seed} \cite{Rfunction:setseed} dans le \autoref{src:wdSetting} se chargera de fournir une valeur de départ aux calculs du GNPA. \\
 
-\begin{lstlisting}[caption = Environnement de travail,label=src:WDsettings]
+\begin{lstlisting}[caption = Environnement de travail,label=src:wdSetting]
 #### Setting working directory properly ####
-setwd('..')
-path <- getwd()
+# Recommended :
+path <- paste(getwd(),"..",sep = "/")
+# Alternatively :
+# setwd('..')
+# path <- getwd()
+
+# Root Pseudo Random Number Generator (PRNG)
 set.seed(31459)
 \end{lstlisting} 
 
 \begin{moreInfo}{Code source du projet}
-	Le code source du projet se retrouve dans son intégrité en annexe à ce document. N'hésitez pas à vous y référer au besoin.
+	Les codes sources du projet dans son intégrité sont en annexe à ce document. N'hésitez pas à vous y référer au besoin.
 \end{moreInfo}
