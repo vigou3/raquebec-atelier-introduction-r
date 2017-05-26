@@ -144,7 +144,7 @@ x[[c(1, 2)]]               # idem, par indiçage récursif
 ## Les éléments d'une liste étant généralement nommés (c'est
 ## une bonne habitude à prendre!), il est souvent plus simple
 ## et sûr d'extraire les éléments d'une liste par leur
-## étiquette.
+## étiquette avec l'opérateur $.
 x$joueur                   # équivalent à x[[1]]
 x$joueur[2]                # équivalent à x[[c(1, 2)]]
 x[["expert"]]              # aussi valide, mais peu usité
