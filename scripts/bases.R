@@ -39,6 +39,13 @@ mode(TRUE)                 # mode "logical"
 TRUE & FALSE               # ET logique
 TRUE | FALSE               # OU logique
 
+## Il est possible d'effecteur des opérations arithmétiques
+## avec les valeurs booléennes. 'TRUE' vaut alors 1 et
+## 'FALSE', 0.
+2 + TRUE                   # == 2 + 1
+3 + FALSE                  # == 3 + 0
+sum(c(TRUE, TRUE, FALSE))  # nombre de 'TRUE' dans le vecteur
+
 ## Donnée manquante. 'NA' est un nom réservé pour représenter
 ## une donnée manquante.
 c(65, NA, 72, 88)          # traité comme une valeur
