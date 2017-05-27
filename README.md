@@ -25,7 +25,7 @@ Creative Commons Attribution-ShareAlike 4.0 International.
 ## Auteurs
 
 David Beauchemin <david.beauchemin.5@ulaval.ca>
-Samuel Cabral Cruz <samuel.cabral-cruz.1@ulaval.ca>
+Samuel Cabral Cruz <samuelcabralcruz@gmail.com>
 Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 ## Contenu de l'archive
