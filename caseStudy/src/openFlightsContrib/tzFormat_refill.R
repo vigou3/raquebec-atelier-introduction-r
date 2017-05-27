@@ -20,6 +20,7 @@ colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "latitude", "longitude", "altitude", "timezone", "DST",
                         "tzFormat","typeAirport","Source")
 
+
 # Initial Proportion of missing tzFormat
 length(airports$tzFormat[is.na(airports$tzFormat)])/length(airports$tzFormat)
 
@@ -39,6 +40,15 @@ subset(merged_tz,TZID == "uninhabited")
 is.na(merged_tz) <- merged_tz == "uninhabited"
 sum(merged_tz$TZID == "uninhabited",na.rm = TRUE)
 
+tz_world.shape <- readOGR(dsn=paste(path,"/ref/tz_world_2",sep=""),layer="combined_shapefile")
+obs <- subset(airports,select = c("airportID","name","longitude","latitude"))
+sppts <- SpatialPoints(subset(obs,select = c("longitude","latitude")))		
+proj4string(sppts) <- CRS("+proj=longlat")		
+sppts <- spTransform(sppts, proj4string(tz_world.shape))		
+merged_tz_2 <- cbind(obs,over(sppts,tz_world.shape))
+
+
+
 # install.packages("sqldf")		
 library(sqldf)		
 airports <- sqldf("select 		
@@ -48,7 +58,16 @@ airports <- sqldf("select
                    from airports a 		
                    left join merged_tz b		
                    on a.airportID = b.airportID		
-                   order by a.airportID")		
+                   order by a.airportID")
+
+airports <- sqldf("select 		
+                   a.*,
+                   b.TZID as tzMerged_2,
+                   coalesce(a.tzFormat,b.TZID) as tzCombined		
+                   from airports a 		
+                   left join merged_tz_2 b		
+                   on a.airportID = b.airportID		
+                   order by a.airportID")
 airports <- as.data.frame(as.matrix(airports))
 summary(airports)
 names(airports)
