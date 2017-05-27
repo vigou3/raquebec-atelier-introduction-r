@@ -1,0 +1,28 @@
+|airportID |name                                  |IATA |tzFormat        |tzMerged          |
+|:---------|:-------------------------------------|:----|:---------------|:-----------------|
+|1058      |Melilla Airport                       |MLN  |Europe/Madrid   |Africa/Casablanca |
+|1199      |RAF Akrotiri                          |AKT  |Europe/London   |Asia/Nicosia      |
+|2105      |Abumusa Island Airport                |NA   |Asia/Tehran     |Asia/Dubai        |
+|3397      |Kashgar Airport                       |KHG  |Asia/Shanghai   |Asia/Kashgar      |
+|3398      |Hotan Airport                         |HTN  |Asia/Shanghai   |Asia/Kashgar      |
+|3399      |Ürümqi Diwopu International Airport |URC  |Asia/Shanghai   |Asia/Urumqi       |
+|4097      |Lhasa Gonggar Airport                 |LXA  |Asia/Shanghai   |Asia/Urumqi       |
+|4308      |Dunhuang Airport                      |DNH  |Asia/Shanghai   |Asia/Urumqi       |
+|6357      |Zhanjiang Airport                     |ZHA  |Asia/Shanghai   |Asia/Urumqi       |
+|6363      |Golmud Airport                        |GOQ  |Asia/Shanghai   |Asia/Urumqi       |
+|6396      |Qamdo Bangda Airport                  |BPX  |Asia/Shanghai   |Asia/Urumqi       |
+|6402      |Nyingchi Airport                      |LZY  |Asia/Shanghai   |Asia/Urumqi       |
+|6404      |Aksu Airport                          |AKU  |Asia/Shanghai   |Asia/Kashgar      |
+|6405      |Qiemo Airport                         |IQM  |Asia/Shanghai   |Asia/Urumqi       |
+|6406      |Kuqa Airport                          |KCA  |Asia/Shanghai   |Asia/Urumqi       |
+|6407      |Korla Airport                         |KRL  |Asia/Shanghai   |Asia/Urumqi       |
+|6408      |Karamay Airport                       |KRY  |Asia/Shanghai   |Asia/Urumqi       |
+|6409      |Yining Airport                        |YIN  |Asia/Shanghai   |Asia/Kashgar      |
+|6743      |Hami Airport                          |HMI  |Asia/Shanghai   |Asia/Urumqi       |
+|6752      |Tacheng Airport                       |TCG  |Asia/Shanghai   |Asia/Urumqi       |
+|7894      |Yushu Batang Airport                  |YUS  |Asia/Shanghai   |Asia/Urumqi       |
+|7932      |Ngari Gunsa Airport                   |NGQ  |Asia/Shanghai   |Asia/Kashgar      |
+|8218      |Black Tickle Airport                  |YBI  |America/Halifax |America/St_Johns  |
+|8233      |Kanas Airport                         |KJI  |Asia/Shanghai   |Asia/Urumqi       |
+|8926      |Turpan Jiaohe Airport                 |TLQ  |Asia/Shanghai   |Asia/Urumqi       |
+|9386      |Xinyuan Nalati Airport                |NLT  |Asia/Shanghai   |Asia/Urumqi       |
