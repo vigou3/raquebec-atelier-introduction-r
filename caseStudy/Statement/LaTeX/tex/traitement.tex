@@ -12,8 +12,12 @@ Une fois en possession du jeu de données, il fut nécessaire de nettoyer ce der
 
 Nous considérons pertinent d'apporter quelques précisions sur le fonctionnement de R avant d'expliciter les traitements susmentionnés. Tout d'abord, R est un langage interprété orienté objet à caractère fonctionnel optimisé pour le traitement vectoriel. Ces simples mots ne sont pas à prendre à la légère puisque ce n'est qu'en s'appropriant ce mode de penser que les futurs développeurs que vous êtes parviendront à utiliser R dans toute sa puissance, sa simplicité et son élégance. \\
 
-Par sa sémantique objet, R permet de définir des attributs aux objets créés. L'accès à ces attributs se fera grâce à des fonctions définies à cet effet. Comme il sera possible de le voir plus loin, l'opérateur \texttt{\$} servira aussi à l'accès aux attributs dans le cas particulier où l'objet manipulé sera de type \texttt{list}.
+Par sa sémantique objet, R permet de définir des attributs aux objets créés. L'accès à ces attributs se fera grâce à des fonctions définies à cet effet. Comme il sera possible de le voir plus loin, l'opérateur \texttt{\$} servira aussi à l'accès aux attributs dans le cas particulier où l'objet manipulé sera de mode \texttt{list}.
 Vous vous demandez probablement: Comment savoir si nous sommes en présence d'un objet? C'est simple, tout dans R est un objet! \\
+
+\begin{moreInfo}{\texttt{\$} et le \texttt{data.frame}}
+	Nous ne serons pas étonné d'apprendre que l'opérateur \texttt{\$} nous permettra d'extraire des variables d'un \texttt{data.frame}. Comme nous l'avons préciser à la \autoref{subsec:extraction}, un \texttt{data.frame} n'est rien d'autre qu'une liste de vecteurs.
+\end{moreInfo}
 
 Le langage R permet aussi de mimer le paradigme fonctionnel puisque les fonctions (qui sont en fait des objets) sont des valeurs à part entière qui peuvent se retrouver en argument ou en valeur de retour d'une autre fonction. De plus, il est possible de définir des fonctions dites anonymes qui se révèleront très pratiques. À ce sujet, les personnes habituées au paradigme procédural présent dans les langages comme \emph{SAS} ou \emph{VBA} devront s'habituées à l'évaluation d'une expression de son point central vers l'extérieur au lieu du chemin traditionnel allant du début vers la fin. \\
 
@@ -158,7 +162,7 @@ routesCanada <- sqldf("
 	\url{https://www.w3schools.com/sql/}
 \end{moreInfo}
 
-Avant de passer à la prochaine section, il serait injuste de présenter \texttt{sqldf} avec autant de précisions sans toucher un mot sur les paquetages \texttt{plyr} et \texttt{dplyr}. Ces derniers visent à reproduire les opérations permises par le langage SQL avec une notation aussi simpliste, mais en optimisant ces opérations pour prendre en compte le fonctionnement intrinsèque de R, soit le calcul vectoriel. Une différence majeure avec le SQL provient du mode de pensée se rapprochant davantage d'un mode procédural pour \texttt{plyr} que du mode fonctionnel pour le SQL. Ces packages deviendront des outils très pertinents lorsque vous commencerez à faire face à des problèmes de temps d'exécution irraisonnables.
+Avant de passer à la prochaine section, il serait injuste de présenter \texttt{sqldf} avec autant de précisions sans toucher un mot sur les paquetages \texttt{plyr} et \texttt{dplyr}. Ces derniers visent à reproduire les opérations permises par le langage SQL avec une notation aussi simpliste, mais en optimisant ces opérations pour prendre en compte le fonctionnement intrinsèque de R, soit le calcul vectoriel. Une différence majeure avec le SQL provient du mode de pensée se rapprochant davantage d'un mode procédural pour \texttt{plyr} que du mode fonctionnel pour le SQL. Ces packages deviendront des outils très pertinents lorsque vous commencerez à faire face à des temps d'exécution irraisonnables. \cite{dplyrVSsqldf}
 
 \begin{moreInfo}{\texttt{plyr} ou \texttt{dplyr} ?}
 	Le paquetage \texttt{dplyr} est en fait une seconde version du paquetage \texttt{plyr} visant à optimiser le temps de calcul, simplifier son utilisation à l'aide d'une syntaxe plus intuitive et à rendre ses fonctions plus cohérentes entre elles. De plus, \texttt{dplyr} concentre son développement autour de la classe object \texttt{data.frame}. Pour toutes ces raisons, l'utilisation de \texttt{dplyr} serait à préconiser si vous travaillez avec des \texttt{data.frame} qui consistent du même coup en la classe standard de R pour représenter les bases de données...\\
