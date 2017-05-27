@@ -80,7 +80,7 @@ errorsTot <- subset(airports, (paste(tzFormat) != paste(tzMerged_1) & !is.na(tzF
 # install.packages("knitr")
 library(knitr)
 mdErrorsTable <- kable(subset(errorsTot,select = c("airportID","name","IATA","tzFormat","tzMerged_1","tzMerged_2")),format = "markdown")
-knit("errors",text = mdErrorsTable)
+knit("errors",text = mdErrorsTable,"../valid/errors.md")
 
 # install.packages("lubridate")
 library(lubridate)
@@ -95,16 +95,15 @@ couplediffTot <- cbind(couplediff1,couplediff2)
 
 toValid <- subset(airports,paste(tzMerged_1) != paste(tzMerged_2) & !is.na(tzMerged_1) & !is.na(tzMerged_2))
 mdValidTable <- kable(subset(toValid,select = c("airportID","name","IATA","tzFormat","tzMerged_1","tzMerged_2")),format = "markdown")
-knit("valid",text = mdValidTable)
-
+knit("valid",text = mdValidTable,"../valid/valid.md")
 
 # install.packages("rmarkdown")
 # library(rmarkdown)
 # render(input = mdErrorsTable,output_file = "file",output_dir = ".")
 # install.packages("markdown")
 library(markdown)
-markdownToHTML("errors.txt","errors.html",encoding = "utf8")
-markdownToHTML("valid.txt","valid.html",encoding = "utf8")
+markdownToHTML("../valid/errors.md","../valid/errors.html",encoding = "utf8")
+markdownToHTML("../valid/valid.md","../valid/valid.html",encoding = "utf8")
 
 airports <- subset(airports, select = -c(tzFormat,tzMerged_1))
 summary(airports)
@@ -117,4 +116,5 @@ airports <- plyr::rename(airports, c("tzMerged_2" = "tzFormat"))
 length(airports$tzFormat[is.na(airports$tzFormat)])/length(airports$tzFormat)
 
 # Export final database
-write.table(airports,file = "airports_Updated.dat",row.names = FALSE,col.names = FALSE)
+summary(airports)
+write.table(airports,file = "../data/airports_Updated.dat",row.names = FALSE,col.names = FALSE)
