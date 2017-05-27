@@ -30,27 +30,23 @@ colnames(airports) <- c("airportID", "name", "city", "country", "IATA", "ICAO",
                         "tzFormat","typeAirport","Source")
 
 
-# We fill the missing IATA for canada
-airports$IATA <- as.character(airports$IATA) 
-airports$IATA[is.na(airports$IATA)] <- substr(airports$ICAO[is.na(airports$IATA)],2,4) 
-airports$IATA <- as.factor(airports$IATA)
-airports <- subset(airports, select = -ICAO)
-
-
 
 # Adding the number of arrivalFlights for each airports
-routesCanada <- read.csv(paste(path,"/Reference/RoutesModif.csv",sep=""),  na.strings=c("\\N",""), 
-                         fileEncoding = "UTF-8", comment = "#")
+routesCanada <- read.csv("https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat", 
+                                   header = FALSE, na.strings=c("\\N",""))
+colnames(routesCanada) <- c("airline","airlineID","sourceAirport","sourceAirportID",
+                      "destinationAirport","destinationAirportID","codeshare",
+                      "stops","equipment")
 
 arrivalFlights <- table(routesCanada$destinationAirport)
 arrivalFlights <- data.frame(arrivalFlights)
 colnames(arrivalFlights) <- c("IATA","totalFlights")
-# On joint les données sur l'achalandage aux aéroports canadiens appropriés
-airports<- merge(airportsCanada, arrivalFlights, by.x = "IATA", by.y = "IATA")
 
+# Data on ridership are attached to appropriate Canadian airports
+airports<- merge(airports, arrivalFlights, by.x = "IATA", by.y = "IATA", all.x = TRUE)
 
+airpotsCanada <- subset(airports, country == "Canada")
 
-# We have fill all the missing tzFormat for the CaseStudyStudent document
-write.csv(airports, paste(path,"/Reference/AirportModif.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8", na = c("\\N",""))
+write.csv(airports, paste(path,"/data/AirportModif.csv",sep=""),row.names = FALSE, fileEncoding = "UTF-8", na = c("\\N",""))
 
 # In case of a student without Internet we have import the other data

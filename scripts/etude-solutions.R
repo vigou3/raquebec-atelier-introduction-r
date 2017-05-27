@@ -27,11 +27,10 @@ province <- read.csv("data/province.csv",
 ## Exercice 1
 
 ### 1.1 Extraire les données des aéroports canadiens par indicage du
-###     data frame
+###     data frame avec [ ].
 airportsCanada <- airports[airports$country=="Canada", ]
 
-### 1.2 Extraire les données des aéroports canadiens à l'aide de la
-###     fonction 'subset'.
+### 1.2 Répéter l'exercice 1.1 avec la fonction 'subset'.
 airportsCanada2 <- subset(airports, country == "Canada")
 
 
@@ -61,7 +60,7 @@ length(airportsCanada$IATA[is.na(airportsCanada$IATA)])
 
 ### Ajouter le code de province aux données d'aéroports canadiens en
 ### les fusionnant avec les données 'province' par le prédicat IATA.
-### Utiliser la fonction 'merge'.
+### Utiliser pour ce faire la fonction 'merge'.
 airportsCanada<- merge(airportsCanada, province, by = "IATA")
 
 
@@ -88,9 +87,9 @@ listeIATA("YUL", "YYQ")
 
 ## Exercice 6
 
-### Écrire une fonction 'shippingCost' qui prend en argument une
-### distance et un poids, et qui retourne le coût de la livraison selon
-### la formule suivante:
+### Écrire une fonction 'shippingCost' qui prend en arguments une
+### distance et un poids, et qui retourne le coût de la livraison
+### calculé avec la formule suivante:
 ###
 ###   coût = poids * indicePoids + distance * indiceDistance.
 ###
@@ -114,13 +113,15 @@ shippingCost(100, 31)
 
 ## Exercice 7
 
-### 7.1 Dessiner un nuage de points de la fréquence des routes
-###     aériennes entrantes pour chaque aéroport à l'aide de la
-###     fonction 'plot'.
+### 7.1 La variable 'totalFlights' du jeu de données contient le
+###     nombre de routes aériennes entrantes dans un aéroport. Tracer
+###     un nuage de points de la fréquence de ces routes à l'aide de
+###     la fonction 'plot'.
 plot(airportsCanada$totalFlights)
 
 ### 7.2 Représenter la distribution de fréquence du nombre de routes
-###     aériennes entrantes à d'un histograme.
+###     aériennes entrantes à d'un histograme. Utiliser la
+###     fonction 'hist'.
 hist(airports$totalFlights)
 
 ### 7.3 Tracer la fonction de répartition empirique du nombre de
@@ -134,6 +135,9 @@ plot(ecdf(airports$totalFlights))
 ### être «Coût d'envoi», la légende de l'ordonnée «Coût» et la
 ### légenre de l'abscisse, «Distance».
 ###
+### La rubrique d'aide de la fonction 'par' fournit la liste de tous
+### les paramètres graphiques.
+###
 ### Utiliser les données simulées suivantes.
 cost <- runif(100, min = 5, max = 50)
 distance <- rlnorm(100, 2, 1.1)
@@ -146,7 +150,7 @@ plot(sort(distance), sort(cost),
 ## Exercice 9
 
 ### Tracer une série de graphiques des relations deux à deux entre le
-### coût d'un envoi, poids du colis et la distance à parcourir.
+### coût d'un envoi, le poids du colis et la distance à parcourir.
 ### Utiliser pour ce faire la fonction 'pairs'.
 ###
 ### Utiliser les données simulées suivantes.
@@ -159,8 +163,8 @@ pairs(cbind(weight, distance, cost))
 
 ## Exercice 10
 
-### Calculer un modèle de régression liant le coût d'un envoi au poids
-### du colis et à la distance à parcourir.
+### Calculer un modèle de régression avec la fonction 'lm' liant le
+### coût d'un envoi au poids du colis et à la distance à parcourir.
 ###
 ### Utiliser les données simulées suivantes.
 weight <- runif(1000, 1, 30)
@@ -192,6 +196,8 @@ optim(c(1, 1), loglik, x = cost)
 
 ### Ajuster des lois gamma et log-normale à la distribution des poids
 ### des colis à l'aide de la fonction 'fitdistr' du paquetage MASS.
+### (Ce paquetage est livré avec R, mais il n'est pas chargé par
+### défaut.)
 ###
 ### Importer et utiliser les données suivantes.
 compData <- read.csv("data/benchmark.csv")

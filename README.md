@@ -42,6 +42,22 @@ Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 ## Historique des versions
 
+### 1.1 (en développement)
+
+- Ajout de codes IATA manquants dans le jeu de données
+  `AirportsModif.csv` pour l'exercice 3 de `etude.R`.
+- Ajout de la variable `totalFleights` dans le jeu de données
+  `AirportsModif.csv` pour l'exercice 7 de `etude.R`.
+- Ajout d'un lien vers la chaine YouTube associée au document
+  *Introduction à la programmation en R* dans les diapositives.
+- Ajout d'une mention de `help.search` dans la rubrique «Obtenir de
+  l'aide» des diapositives.
+- Ajout d'une présentation de l'opérateur `$` dans la rubrique «Liste» des
+  diapositives.
+- Ajout d'un exemple d'opération arithmétique avec des valeurs
+  booléennes dans `bases.R`.
+- Énoncés de plusieurs exercices de `etude.R` précisés ou clarifiés.
+
 ### 1.0 (2017-05-25)
 
 - Ajout de la documentation complète de l'étude de cas.
