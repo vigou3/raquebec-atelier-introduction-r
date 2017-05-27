@@ -63,6 +63,8 @@ airportsDist("YUL","AAA")
 airportsDist("YPA","YQB")
 airportsDist("YUL","YQB")
 airportsDist("YUL","YQB")$value
+airportsDist("YUL","YVR")$value
+airportsDist("YUL","YYZ")$value
 
 
 # install.packages("lubridate")
@@ -110,6 +112,7 @@ arrivalTime("YUL","AAA")
 arrivalTime("YUL", "YYZ")
 arrivalTime("YUL","YVR")
 arrivalTime("YUL", "YYZ")$value
+difftime(arrivalTime("YUL", "YQB")$value,Sys.time())
 difftime(arrivalTime("YUL", "YVR")$value,Sys.time())
 difftime(arrivalTime("YUL", "YYZ")$value,Sys.time())
 

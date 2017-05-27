@@ -114,7 +114,7 @@ $params
 \end{lstlisting}
 
 \vspace{\baselineskip}
-Le dernier thème qu'il nous reste à aborder au sujet des fonctions consiste en la gestion des erreurs. Lorsque nous voulons définir les limites d'utilisation d'une fonction, il est préférable de parfaitement connaître ce qu'elle ne peut accomplir. Nous définirons ensuite des validations pour s'assurer que nous ne sommes pas en présence de ces cas particuliers. Dans le cas contraire, nous renverrons à l'utilisateur un message lui permettant de corriger son appel. La simplicité de R pour générer ce genre de traitement enlève toute raison possible de ne pas le faire. Ce procédé se résume en quatre étapes qui sont:
+Le dernier thème à aborder au sujet des fonctions est la gestion des erreurs. Lorsque nous voulons définir les limites d'utilisation d'une fonction, il est préférable de parfaitement connaître ce qu'elle ne peut accomplir. Nous définirons ensuite des validations pour s'assurer que nous ne sommes pas en présence de ces cas particuliers. Dans le cas contraire, nous renverrons à l'utilisateur un message lui permettant de corriger son appel. La simplicité de R pour générer ce genre de traitement enlève toute raison possible de ne pas le faire. Ce procédé se résume en quatre étapes qui sont:
 \begin{enumerate}
 	\item Identifier une limitation du programme;
 	\item Faire la validation nécessaire pour détecter la survenance de cette limitation;
@@ -143,3 +143,21 @@ Error in ftest6(3, 0) :
 	\url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/try.html} \\
 	\url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/try.html}
 \end{moreInfo}
+
+À des fins de validation, nous avons avons comparé les valeurs retournées par nos fonctions avec les valeurs disponibles directement sur l'outil d'\emph{OpenFlights}. Les résultats sont tout de même très satisfaisant compte tenu de la méthode utilisée. (\autoref{tab:validFunc}) \\
+\begin{table}
+	\begin{tabular}{cccccc}
+		\multicolumn{2}{c}{\textbf{IATA}} & \multicolumn{2}{c}{\textbf{Distance (km)}} & \multicolumn{2}{c}{\textbf{Temps (hh:mm)}} \\
+		\textbf{Source} & \textbf{dest.} & \textbf{\emph{OpenFlights}} & \textbf{\texttt{airportsDist}} & \textbf{\emph{OpenFlights}} & \textbf{\texttt{arrivalTime}} \\  	
+		\hline
+		YUL & YQB & 232 & 233 & 0:47 & 0:36 \\
+		YUL & YVR & 3679 & 3693	& 5:04 & 5:26 \\
+		YUL & YYZ & 505	& 508 & 1:07 & 1:14
+	\end{tabular}
+	\caption{Comparaison entre les informations d'\emph{OpenFlights} et les résultats des fonctions \texttt{airportsDist} ainsi que \texttt{arrivalTime}}
+	\label{tab:validFunc}
+\end{table}
+
+Les différences entre les temps de vol d'\emph{OpenFlights} et le retour de la fonction \texttt{arrivalTime} sont facilement explicables. Si nous examinons le code source de cette fonction, nous remarquons la définition d'une vitesse moyenne de croisière. Cette dernière est déterminée par interpolation linéaire à partir de la vitesse de croisière optimale utilisée pour les vols commerciaux. \cite{Help:detailsFlights} Cela a pour effet de nous faire sous-estimer le temps pour des vols de courte durée tout en sur-estimant celle des vols de longue durée. En effet, plus la proportion du temps de vol destinée à faire décoler et ratterir un avion est important, moins sa vitesse de croisière moyenne s'approchera de notre estimation. En ce qui concerne les vols de moyenne durée, nos calculs sont très représentatifs de la réalité. \\
+
+La divergence sur la distance entre YUL et YVR est toutefois un peu plus déplaisante à justifier puisque la vraie valeur devrait plutôt se situer quelque part entre les deux distances présentées. \cite{Help:distYULYVR} En considérant la valeur mentionnée sur le site de \emph{Air Miles Calculator}, nous voyons que notre divergence est beaucoup plus acceptable et cohérente avec la légère sur-estimation que nous retrouvons pour les deux autres destinations.
