@@ -29,76 +29,74 @@ length(airports$tzFormat[is.na(airports$tzFormat)])/length(airports$tzFormat)
 # install.packages("rgdal")		
 library(sp)		
 library(rgdal)		
-tz_world.shape <- readOGR(dsn=paste(path,"/ref/tz_world",sep=""),layer="tz_world")	
 obs <- subset(airports,select = c("airportID","name","longitude","latitude"))
 sppts <- SpatialPoints(subset(obs,select = c("longitude","latitude")))		
 proj4string(sppts) <- CRS("+proj=longlat")		
-sppts <- spTransform(sppts, proj4string(tz_world.shape))		
-merged_tz <- cbind(obs,over(sppts,tz_world.shape))
-sum(merged_tz$TZID == "uninhabited",na.rm = TRUE)
-subset(merged_tz,TZID == "uninhabited")
-is.na(merged_tz) <- merged_tz == "uninhabited"
-sum(merged_tz$TZID == "uninhabited",na.rm = TRUE)
 
-tz_world.shape <- readOGR(dsn=paste(path,"/ref/tz_world_2",sep=""),layer="combined_shapefile")
-obs <- subset(airports,select = c("airportID","name","longitude","latitude"))
-sppts <- SpatialPoints(subset(obs,select = c("longitude","latitude")))		
-proj4string(sppts) <- CRS("+proj=longlat")		
-sppts <- spTransform(sppts, proj4string(tz_world.shape))		
-merged_tz_2 <- cbind(obs,over(sppts,tz_world.shape))
+tz_world_1.shape <- readOGR(dsn=paste(path,"/ref/tz_world_1",sep=""),layer="tz_world")	
+sppts <- spTransform(sppts, proj4string(tz_world_1.shape))
+merged_tz_1 <- cbind(obs,over(sppts,tz_world_1.shape))
+sum(merged_tz_1$TZID == "uninhabited",na.rm = TRUE)
+subset(merged_tz_1,TZID == "uninhabited")
+is.na(merged_tz_1) <- merged_tz_1 == "uninhabited"
+sum(merged_tz_1$TZID == "uninhabited",na.rm = TRUE)
 
-
+tz_world_2.shape <- readOGR(dsn=paste(path,"/ref/tz_world_2",sep=""),layer="combined_shapefile")	
+sppts <- spTransform(sppts, proj4string(tz_world_2.shape))
+merged_tz_2 <- cbind(obs,over(sppts,tz_world_2.shape))
 
 # install.packages("sqldf")		
 library(sqldf)		
 airports <- sqldf("select 		
                    a.*,
-                   b.TZID as tzMerged,
-                   coalesce(a.tzFormat,b.TZID) as tzCombined		
+                   b.TZID as tzMerged_1,
+                   c.TZID as tzMerged_2
                    from airports a 		
-                   left join merged_tz b		
-                   on a.airportID = b.airportID		
-                   order by a.airportID")
-
-airports <- sqldf("select 		
-                   a.*,
-                   b.TZID as tzMerged_2,
-                   coalesce(a.tzFormat,b.TZID) as tzCombined		
-                   from airports a 		
-                   left join merged_tz_2 b		
-                   on a.airportID = b.airportID		
+                   left join merged_tz_1 b
+                   on a.airportID = b.airportID
+                   left join merged_tz_2 c
+                   on a.airportID = c.airportID
                    order by a.airportID")
 airports <- as.data.frame(as.matrix(airports))
 summary(airports)
 names(airports)
 
 # Verification with available time zones 
-test <- subset(airports, !is.na(tzFormat))
-sum(paste(test$tzFormat) == paste(test$tzMerged))/length(test$tzFormat)
-errors <- subset(airports, paste(tzFormat) != paste(tzMerged) & !is.na(tzFormat) & !is.na(tzMerged))
+# Test 1
+test1 <- subset(airports, !is.na(tzFormat) & !is.na(tzMerged_1))
+sum(paste(test1$tzFormat) == paste(test1$tzMerged_1))/length(test1$tzFormat)
+# Test 2
+test2 <- subset(airports, !is.na(tzFormat) & !is.na(tzMerged_2))
+sum(paste(test2$tzFormat) == paste(test2$tzMerged_2))/length(test2$tzFormat)
+# Test 3
+test3 <- subset(airports, !is.na(tzMerged_1) & !is.na(tzMerged_2))
+sum(paste(test3$tzMerged_1) == paste(test3$tzMerged_2))/length(test3$tzFormat)
+
+errors1 <- subset(airports, (paste(tzFormat) != paste(tzMerged_1) & !is.na(tzFormat) & !is.na(tzMerged_1)))
+errors2 <- subset(airports, (paste(tzFormat) != paste(tzMerged_2) & !is.na(tzFormat) & !is.na(tzMerged_2)))
+errorsTot <- subset(airports, (paste(tzFormat) != paste(tzMerged_1) & !is.na(tzFormat) & !is.na(tzMerged_1)) |  (paste(tzFormat) != paste(tzMerged_2) & !is.na(tzFormat) & !is.na(tzMerged_2)))
 
 # Export of the errors into a report
 # install.packages("knitr")
 library(knitr)
-mdErrorsTable <- kable(subset(errors,select = c("airportID","name","IATA","tzFormat","tzMerged")),format = "markdown")
+mdErrorsTable <- kable(subset(errorsTot,select = c("airportID","name","IATA","tzFormat","tzMerged_1","tzMerged_2")),format = "markdown")
 knit("errors",text = mdErrorsTable)
 
 # install.packages("lubridate")
 library(lubridate)
 x <- Sys.time()
-mean(totaldiff <- sapply(1:length(errors$tzFormat), function(i) difftime(force_tz(x,paste(errors$tzMerged)[i]),force_tz(x,paste(errors$tzFormat)[i]))))
+mean(totaldiff1 <- sapply(1:length(errors1$tzFormat), function(i) difftime(force_tz(x,paste(errors1$tzMerged_1)[i]),force_tz(x,paste(errors1$tzFormat)[i]))))
+mean(totaldiff2 <- sapply(1:length(errors2$tzFormat), function(i) difftime(force_tz(x,paste(errors2$tzMerged_2)[i]),force_tz(x,paste(errors2$tzFormat)[i]))))
 
-couple <- unique(cbind(paste(errors$tzFormat),paste(errors$tzMerged)))
-mean(couplediff <- sapply(1:nrow(couple), function(i) difftime(force_tz(x,couple[i,1]),force_tz(x,couple[i,2]))))
+couple <- unique(cbind(paste(errorsTot$tzFormat),paste(errorsTot$tzMerged_1),paste(errorsTot$tzMerged_2)))
+mean(couplediff1 <- sapply(1:nrow(couple), function(i) difftime(force_tz(x,couple[i,1]),force_tz(x,couple[i,2]))))
+mean(couplediff2 <- sapply(1:nrow(couple), function(i) difftime(force_tz(x,couple[i,1]),force_tz(x,couple[i,3]))))
+couplediffTot <- cbind(couplediff1,couplediff2)
 
-names(couplediff) <- paste(couple[,1],couple[,2])
-y <- sort(couplediff, decreasing = TRUE)
-y[abs(y) > 1]
-
-(coupleWatching <-couple[order(couplediff,decreasing = TRUE),][abs(y) > 1,])
-toValid <- subset(errors, paste(tzFormat,tzMerged) %in% paste(coupleWatching[,1],coupleWatching[,2]))
-mdValidTable <- kable(row.names = FALSE,subset(toValid,select = c("airportID","name","IATA","tzFormat","tzMerged")),format = "markdown")
+toValid <- subset(airports,paste(tzMerged_1) != paste(tzMerged_2) & !is.na(tzMerged_1) & !is.na(tzMerged_2))
+mdValidTable <- kable(subset(toValid,select = c("airportID","name","IATA","tzFormat","tzMerged_1","tzMerged_2")),format = "markdown")
 knit("valid",text = mdValidTable)
+
 
 # install.packages("rmarkdown")
 # library(rmarkdown)
@@ -108,15 +106,15 @@ library(markdown)
 markdownToHTML("errors.txt","errors.html",encoding = "utf8")
 markdownToHTML("valid.txt","valid.html",encoding = "utf8")
 
-airports <- subset(airports, select = -tzFormat)
-
-# install.packages("plyr")
-library(plyr)
+airports <- subset(airports, select = -c(tzFormat,tzMerged_1))
 summary(airports)
-airports <- rename(airports, "tzMerged"="tzFormat")
+
+# install.packages("dplyr")
+library(plyr)
+airports <- plyr::rename(airports, c("tzMerged_2" = "tzFormat"))
 
 # Final Proportion of missing tzFormat
 length(airports$tzFormat[is.na(airports$tzFormat)])/length(airports$tzFormat)
 
-
-
+# Export final database
+write.table(airports,file = "airports_Updated.dat",row.names = FALSE,col.names = FALSE)
