@@ -1,8 +1,8 @@
 En plus des capacités statistiques impressionnantes que nous avons survolées à la section précédente, R dispose d'une vaste gamme d'outils d'optimisation. Pour ne pas trop nous écarter du but premier de cette documentation, soit de faire une revue globale des fonctionnalités de R en utilisant une étude de cas à titre de support de présentation, nous concentrerons la discussion autour des fonctions \texttt{optim} \cite{Rfunction:optim} et \texttt{fitdistr} \cite{Rfunction:fitdistr}. Nous terminerons en présentant comment répliquer le comportement de la fonction \texttt{fitdistr} dans le cadre d'une fonction utilitaire. \\
 
-La fonction \texttt{optim} est un excellent choix de fonction pour aborder tout problème d'optimisation. Contrairement à bien d'autres outils, cette fonction permettra d'optimiser plusieurs paramètres à la fois. Elle imposera tout de même quelques limitations telles que l'impossibilité de facilement préciser un intervalle d'optimisation, le fait qu'elle cherchera toujours le minimum et que nous devrons lui fournir un point de départ. Tous ces désavantages seront toutefois contrebalancés par la possibilité d'optimiser plusieurs paramètres à la fois. \cite{optim} \\
+La fonction \texttt{optim} est un excellent choix de fonction pour aborder tout problème d'optimisation. Contrairement à bien d'autres outils, cette fonction permettra d'optimiser plusieurs paramètres à la fois. Elle imposera tout de même quelques limitations telles que l'impossibilité de facilement préciser un intervalle d'optimisation, le fait qu'elle ne pourra que minimiser la fonction étudiée et l'obligation de lui fournir des valeurs de départ. \cite{optim} \\
 
-Parmi les arguments de la fonction \texttt{optim}, nous devrons minimalement désigner les valeurs de départ à nos paramètres avec \texttt{par} et fournir à \texttt{fn} la fonction qui devra être minimisée. Il sera possible de définir des bornes aux valeurs optimisées grâce aux arguments \texttt{lower} et \texttt{upper}. Le \autoref{src:optim} illustre une application standard de cette fonction. Vous ne serez pas surpris de rencontrer à nouveau la technique du retour multiple au sein d'une liste. De cette liste, nous utiliserons principalement les attributs \texttt{par} et \texttt{value}. Ceux-ci nous donneront accès aux paramètres optimisés et à la valeur de convergence obtenue. Il sera conseillé de garder un oeil sur \texttt{convergence} qui indiquera si l'optimisation s'est terminée de manière conforme (valeur de 0) ou que le processus d'optimisation  n’est pas parvenu à converger (valeur de 1). La valeur de \texttt{counts} témoigne du nombre d'itérations effectuées afin d'arriver au résultat affiché. Par défaut, la fonction \texttt{optim} arrêtera au compte de 501 itérations après quoi les valeurs actuelles de l'optimisation seront renvoyées en plaçant toutefois la valeur de l'attribut \texttt{convergence} à 1. \\
+Parmi les arguments de la fonction \texttt{optim}, nous devrons minimalement désigner les valeurs de départ de nos paramètres avec \texttt{par} \footnote{À ne pas confondre avec la fonction permettant de contrôler l'affichage graphique \texttt{par}.} et fournir à \texttt{fn} la fonction à minimiser. Il sera possible de définir des bornes aux valeurs optimisées grâce aux arguments \texttt{lower} et \texttt{upper}. Le \autoref{src:optim} illustre une application standard de cette fonction. Vous ne serez pas surpris de rencontrer à nouveau la technique du retour multiple au sein d'une liste. De cette liste, nous utiliserons principalement les attributs \texttt{par} et \texttt{value}. Ceux-ci nous donneront accès aux paramètres optimisés et à la valeur de convergence obtenue. Il sera conseillé de garder un oeil sur \texttt{convergence} qui indiquera si l'optimisation s'est terminée de manière conforme (valeur de 0) ou que le processus d'optimisation  n’est pas parvenu à converger (valeur de 1). La valeur de \texttt{counts} témoigne du nombre d'itérations effectuées afin d'arriver aux résultats. Par défaut, la fonction \texttt{optim} arrêtera au compte de 501 itérations après quoi les valeurs actuelles de l'optimisation seront renvoyées en plaçant toutefois la valeur de l'attribut \texttt{convergence} à 1. \\
 
 \begin{lstlisting}[caption = Optimisation générique avec R,label=src:optim]
 > f1 <- function(x,y) 5*x**2 - 7*y + 10
@@ -32,9 +32,9 @@ NULL
 \end{lstlisting}
 
 \vspace{\baselineskip}
-Malgré le fait que nous ayons mentionné des limitations à la fonction \texttt{optim}, cela ne signifie pas pour autant que nous ne pourrons pas imaginer des manières de contourner ces dernières. En effet, une maximisation revient tout simplement à trouver la valeur minimale de l'inverse de la fonction étudiée. Ainsi, le simple ajout d'un signe de négation devant la fonction passée à l'argument \texttt{fn} nous permettra d'effectuer une maximisation plutôt qu'une minimisation. Il s'agit là de la stratégie que nous avons empruntée dans le \autoref{src:optimMax}. \\
+Malgré le fait que nous ayons mentionné des limitations à la fonction \texttt{optim}, cela ne signifie pas pour autant que nous ne pourrons pas imaginer des manières de contourner ces dernières. En effet, une maximisation revient tout simplement à trouver la valeur minimale de l'inverse de la fonction étudiée. Ainsi, le simple ajout d'un signe de négation devant la fonction passée à l'argument \texttt{fn} nous permettra d'effectuer une maximisation plutôt qu'une minimisation. Il s'agit là de la stratégie employée dans le \autoref{src:optimMax}. \\
 
-Il n’est pas rare que plus d’une solution soit viable aux yeux d’un processus d’optimisation dépendamment du problème éludé. Nous appelons ces nombreuses solutions des extremums locaux. C'est l'existence de ces extremums qui rend les valeurs initiales de l'optimisation si sensibles. Lorsque possible, il sera donc fortement conseillé de procéder à des techniques de validation graphique comme nous l'avons fait dans le cadre du \autoref{src:optimMax} (voir \autoref{fig:optimMax}). \\
+Il n’est pas rare que plus d’une solution soit viable aux yeux d’un processus d’optimisation dépendamment du problème étudié. Nous appelons ces nombreuses solutions des extremums locaux. C'est l'existence de ces extremums qui rend les valeurs initiales de l'optimisation si sensibles. Lorsque possible, il sera donc fortement conseillé de procéder à des techniques de validation graphique comme nous l'avons fait dans le cadre du \autoref{src:optimMax}. (Voir \autoref{fig:optimMax}) \\
 
 \begin{lstlisting}[caption = Maximisation d'une fonction avec \texttt{optim},label=src:optimMax]
 > f3 <- function(x,y) -x**2 - 2*y**2 + 3*x + 4*y - 5
@@ -63,31 +63,34 @@ NULL
 \addPicture{1}{0.5}{optim3d}{Représentation graphique de la fonction \texttt{f3}}{optimMax}
 
 \begin{moreInfo}{Contrôler l'incontrôlable}
-	Bien que vous n'aurez pas à modifier le comportement par défaut de la fonction \texttt{optim} pour parvenir à vos fins, il est important de savoir que la fonction propose plusieurs arguments qui permettent d'influencer la manière que l'optimisation sera effectuée. Nous pouvons rapidement citer les arguments \texttt{method} et \texttt{control}. Veillez vous référer à la documentation officielle pour de plus amples détails à leur sujet. \\
+	Bien que vous n'aurez pas à modifier le comportement par défaut de la fonction \texttt{optim} pour parvenir à vos fins, il est important de savoir que la fonction propose plusieurs arguments qui permettent d'influencer la manière par laquelle l'optimisation sera effectuée. Nous pouvons rapidement citer les arguments \texttt{method} et \texttt{control}. Veillez vous référer à la documentation officielle pour de plus amples détails à leur sujet. \\
 	\url{https://stat.ethz.ch/R-manual/R-devel/library/stats/html/optim.html}
 \end{moreInfo}
 
-Une autre fonction d'intérêt lorsque nous travaillons avec des distributions statistiques est \texttt{fitdistr} provenant du paquetage \texttt{MASS}. Celle-ci permet de facilement ajuster une distribution donnée à un jeu de données empirique. Évidemment, nous pourrions très bien passer par optim pour réaliser le même travail moyennant un certain coût de complexité. Or, ce mal sera parfois nécessaire puisque la fonction \texttt{fitdistr} n'est définie que pour les distributions suivantes : \cite{MASS}
+Une autre fonction d'intérêt lorsque nous travaillons avec des distributions statistiques est \texttt{fitdistr} provenant du paquetage \texttt{MASS}. Celle-ci permet de facilement ajuster une distribution donnée à un jeu de données empiriques. Évidemment, nous pourrions très bien passer par \texttt{optim} pour réaliser le même travail moyennant un certain coût de complexité. Or, ce mal sera parfois nécessaire puisque la fonction \texttt{fitdistr} n'est définie que pour les distributions suivantes : \cite{MASS}
 
-\begin{multicols}{2}
-	\begin{itemize}
-		\item Bêta
-		\item Binomiale négative
-		\item Cauchy
-		\item Khi carrée
-		\item Exponentielle
-		\item F (Fisher)
-		\item Gamma
-		\columnbreak
-		\item Géometrique
-		\item Log-Normale
-		\item Logistique
-		\item Normale
-		\item Poisson
-		\item T (Student)
-		\item Weibull
-	\end{itemize}
-\end{multicols}
+\begin{minipage}{\linewidth}
+	\begin{multicols}{2}
+		\begin{itemize}
+			\item Bêta
+			\item Binomiale négative
+			\item Cauchy
+			\item Khi carrée
+			\item Exponentielle
+			\item F (Fisher)
+			\item Gamma
+			\columnbreak
+			\item Géometrique
+			\item Log-Normale
+			\item Logistique
+			\item Normale
+			\item Poisson
+			\item T (Student)
+			\item Weibull
+		\end{itemize}
+	\end{multicols}
+\end{minipage}
+\vspace{\baselineskip}
 
 Il arrivera donc dans certains cas que nous devrons procéder à l'ajustement des distributions par la méthode du maximum de vraisemblance directement avec \texttt{optim}. Nous prioriserons toutefois l'utilisation de \texttt{fitdistr}. \\
 
@@ -242,9 +245,9 @@ Le \autoref{src:distFit} peut sembler impressionnant à première vue, mais envi
 \end{minipage}
 
 \vspace{\baselineskip}
-Sans trop rentrer dans les détails, la fonction \texttt{parse} permettra de créer des expressions non évaluée. Il existe plusieurs manières de générer ces expressions. Celle employée dans le cas présent se fera à partir d'un vecteur de caractères qui nous permettra de concaténer le "d" de la fonction de densité à l'identifiant R de la distribution choisie (Voir \autoref{tab:distStatsR} $\langle ID_R \rangle$). Une fois cette expression construite, nous pourrons la faire évaluer par R grâce à la fonction \texttt{eval} qui transformera la ligne de code en un objet (étant ici la fonction de densité de la distribution choisie). À cet objet, nous pourrons désormais lui fournir des paramètres au même titre que nous le ferions avec la fonction de densité correspondante. Alors pourquoi avons-nous senti le besoin d'utiliser \texttt{do.call}? La fonction \texttt{do.call} permet la possibilité de faire l'appel d'une fonction en s'occupant de lui fournir une liste de paramètres de taille quelconque pour autant que la fonction réceptrice accepte autant d'arguments que fournis et de type correspondant. Étant donné que le nombre de paramètres de nos distributions peut varier, nous n'aurions pas pu envisager de créer un traitement particulier pour tous les cas possibles.
+Sans trop de précisions, la fonction \texttt{parse} permettra de créer des expressions non-évaluées. Il existe plusieurs manières de générer ces expressions. Celle employée dans le cas présent se fera à partir d'un vecteur de caractères qui nous permettra de concaténer le "d" de la fonction de densité à l'identifiant R de la distribution choisie. (Voir \autoref{tab:distStatsR} $\langle ID_R \rangle$) Une fois cette expression construite, nous pourrons la faire évaluer par R grâce à la fonction \texttt{eval} qui transformera la ligne de code en un objet (étant ici la fonction de densité de la distribution choisie). À cet objet, nous pourrons désormais lui fournir des paramètres au même titre que nous le ferions avec la fonction de densité correspondante. Alors pourquoi avons-nous senti le besoin d'utiliser \texttt{do.call}? La fonction \texttt{do.call} rend possible l'appel d'une fonction ayant un nombre d'arguments quelconque. Elle s'occupera de fournir une liste de paramètres à la fonction considérée pour autant que la fonction réceptrice accepte autant d'arguments que fournis et que les types correspondent. Étant donné que le nombre de paramètres de nos distributions peut varier, nous n'aurions pas pu envisager de créer un traitement particulier pour tous les cas possibles.
 
-\begin{lstlisting}[caption = Exemple d'utilisation de la fonction \texttt{distFit},label=src:distFistEx]
+\begin{lstlisting}[caption = Exemple d'utilisation de la fonction \texttt{distFit},label=src:distFitEx]
 > x <- rexp(10000,4)
 > distFit(x,"Exp",1)$param
 [1] 4.102991
