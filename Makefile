@@ -110,15 +110,7 @@ upload :
 
 publish :
 	@echo ----- Publishing the web page...
-	cd docs && \
-	sed -e 's/<VERSION>/${VERSION}/g' \
-	    -e 's/<ARCHIVE>/${ARCHIVE}/' \
-	    index.md.in > index.md && \
-	sed -e 's/<VERSION>/${VERSION}/g' \
-	    -e 's/<ARCHIVE>/${ARCHIVE}/' \
-	    _layouts/default.html.in > _layouts/default.html
-	git commit -a -m "Mise à jour de la page web pour l'édition ${VERSION}" && \
-	git push
+	${MAKE} -C docs
 	@echo ----- Done publishing
 
 clean:

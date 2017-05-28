@@ -20,19 +20,20 @@ statistique**. Dans les deux cas, l'accent est mis sur la pratique.
 
 ## Contrat de licence
 
-Creative Commons Attribution-ShareAlike 4.0 International.
+[Creative Commons Attribution-Partage dans les mêmes conditions 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/deed.fr)
 
 ## Auteurs
 
-David Beauchemin <david.beauchemin.5@ulaval.ca>
-Samuel Cabral Cruz <samuelcabralcruz@gmail.com>
+David Beauchemin <david.beauchemin.5@ulaval.ca>  
+Samuel Cabral Cruz <samuelcabralcruz@gmail.com>  
 Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 ## Contenu de l'archive
 
 - `README.md`: présent fichier;
-- `LICENSE`: contrat de licence Creative Commons Attribution-ShareAlike 4.0 International;
+- `LICENSE`: contrat de licence Creative Commons;
 - `raquebec-atelier-introduction-r.pdf`: diapositives de la formation;
+- `OpenFlightsCaseStudy.pdf`: documentation complète de l'étude de cas;
 - `*.R`: fichiers de scripts R pour les démonstrations et les exercices;
 - `data/*.csv`: fichiers de données pour les démonstrations et les exercices.
 

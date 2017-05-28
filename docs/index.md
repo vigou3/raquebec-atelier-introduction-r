@@ -12,6 +12,10 @@ permettant de découvrir quelques unes des nombreuses fonctionnalités
 de l'**environnement statistique**. Dans les deux cas, l'accent est
 mis sur la pratique.
 
+## Version
+
+1.0 ([Nouveautés]({{ site.github.repository_url }}/releases/tag/v1.0/))
+
 ## Thèmes abordés
 
 - Présentation générale de R.
