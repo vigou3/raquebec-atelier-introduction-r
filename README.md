@@ -47,7 +47,7 @@ Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 - Ajout de codes IATA manquants dans le jeu de données
   `AirportsModif.csv` pour l'exercice 3 de `etude.R`.
-- Ajout de la variable `totalFleights` dans le jeu de données
+- Ajout de la variable `totalFlights` dans le jeu de données
   `AirportsModif.csv` pour l'exercice 7 de `etude.R`.
 - Ajout d'un lien vers la chaine YouTube associée au document
   *Introduction à la programmation en R* dans les diapositives.
