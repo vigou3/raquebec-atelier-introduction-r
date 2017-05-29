@@ -61,6 +61,9 @@ airports <- as.data.frame(as.matrix(airports))
 summary(airports)
 names(airports)
 
+sum(is.na(airports$tzMerged_1))
+sum(is.na(airports$tzMerged_2))
+
 # Verification with available time zones 
 # Test 1
 test1 <- subset(airports, !is.na(tzFormat) & !is.na(tzMerged_1))
