@@ -31,11 +31,15 @@ Une fois le programme R installer, bien qu'il sera possible d'utiliser R via son
 Prendre note que ceux qui seraient déjà familiers avec un autre éditeur, tel que Emacs, peuvent très bien conserver leurs habitdes et éviter l'installation d'un IDE spécifique pour chaque langage de programmation.
 
 \section{Installation de paquetages}
-L'installation de paquetages R supplémentaires à ceux offerts par défaut pourra se faire de plusieurs manières différentes. Les deux premières méthodes sont très manuelles et ne sont présentées qu'à titre informatif. Il sera beaucoup plus efficient d'utiliser la troisième méthode.
-Via interface R Packages -> Install package(s)...
-	choisir le mirror 0-Cloud [https]
-Via interface R Studio Tools -> Install Packages...
-Via commande install.packages("<nom paquetage>")
+L'installation de paquetages R supplémentaires à ceux offerts par défaut pourra se faire de plusieurs manières différentes. Les deux premières méthodes sont très manuelles et ne sont présentées qu'à titre informatif. Il sera beaucoup plus efficient d'utiliser la troisième méthode. \\
+
+Lorsque nous sommes dans l'interface standard de R, il suffira de cliquer sur l'onglet \emph{Packages} et d'ensuite sélectionner \emph{Install package(s)...}. Une fenêtre vous demandera ensuite de choisir un \emph{mirror}. Nous conseillons de prendre \emph{0-Cloud [https]}. Une autre fenêtre s'ouvrira enfin et vous pourrez choisir le paquetage désiré en trouvant son nom dans la liste. \\
+
+De manière similaire, sous R Studio, vous pourrez aller à l'onglet \emph{Tools} et sélectionner \emph{Install Packages...}. Une fenêtre apparaîtera et vous pourrez procéder à une recherche du paquetage désiré. \\
+
+Finalement, vous pourrez toujours installer des paquetages directement via la console avec la commande R \texttt{install.packages("<nom paquetage>")}. \\
+
+Une fois les paquetages installés, n'oubliez pas d'utiliser la commande \texttt{library(<nom paquetage>)} avant toute utilisation de fonctions rendues accessibles sous ces derniers. \footnote{L'installation d'un paquetage donné ne devra se faire qu'une seule fois lors de sa première utilisation.}
 
 \section{Mise à jour de R et ses paquetages}
 paquetage \texttt{installr}
