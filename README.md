@@ -43,7 +43,7 @@ Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 ## Historique des versions
 
-### 1.1 (en développement)
+### 1.1 (2017-05-27)
 
 - Ajout de codes IATA manquants dans le jeu de données
   `AirportsModif.csv` pour l'exercice 3 de `etude.R`.
