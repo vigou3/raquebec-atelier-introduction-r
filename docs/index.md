@@ -14,7 +14,7 @@ mis sur la pratique.
 
 ## Version
 
-1.1 ([Nouveautés]({{ site.github.repository_url }}/releases/tag/v1.1/))
+1.1 ([nouveautés]({{ site.github.repository_url }}/releases/tag/v1.1/))
 
 ## Thèmes abordés
 
