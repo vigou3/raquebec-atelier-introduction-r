@@ -79,7 +79,7 @@ create-release :
 	@echo ----- Creating release on GitHub...
 	if [ -e relnotes.in ]; then rm relnotes.in; fi
 	touch relnotes.in
-	git commit -a -m "Version ${VERSION}" && git push
+	# git commit -a -m "Version ${VERSION}" && git push
 	awk 'BEGIN { ORS=" "; print "{\"tag_name\": \"v${VERSION}\"," } \
 	      /^$$/ { next } \
 	      /^## Historique/ { state=0; next } \

@@ -14,7 +14,7 @@ mis sur la pratique.
 
 ## Version
 
-1.0 ([Nouveautés]({{ site.github.repository_url }}/releases/tag/v1.0/))
+1.1 ([Nouveautés]({{ site.github.repository_url }}/releases/tag/v1.1/))
 
 ## Thèmes abordés
 
@@ -39,7 +39,7 @@ travail:
 
 - la plus récente version de [R](https://cran.r-project.org/);
 - la plus récente version de [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/#download); 
-- la [documentation]({{ site.github.releases_url }}/download/v1.0/raquebec-atelier-introduction-r.zip) de la formation (décompresser l'archive `.zip` dans un dossier quelconque).
+- la [documentation]({{ site.github.releases_url }}/download/v1.1/raquebec-atelier-introduction-r.zip) de la formation (décompresser l'archive `.zip` dans un dossier quelconque).
 
 
 ## Auteurs et animateurs
