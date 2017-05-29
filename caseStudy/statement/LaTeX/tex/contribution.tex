@@ -1,0 +1,43 @@
+Comme mentionné à la \autoref{subsec:Traitement}, un traitement a été nécessaire afin de repopuler la variable \texttt{tzFormat} contenant les informations sur le fuseau horaire des différents aéroports. Pour ce faire, deux sources externes ont été comparées avec les données actuelles pour déterminer la manière la plus précise de repopuler cette information pour parvenir à la publication d'un jeu de données corrigé. Nous nous attarderons pas sur le procédé utilisé, mais davantage sur les résultats obtenus. Vous pourrez au besoin vous referez au \autoref{src:tzFormatRefill} contenant tous les traitements qui ont menés à la contribution. \\
+
+Tout d'abord, les deux sources externes utilisées sont:
+\begin{itemize}
+	\item \href{http://efele.net/maps/tz/world/}{\emph{tz\_world}}
+	\item \href{https://github.com/evansiroky/timezone-boundary-builder}{\emph{{timezone-boundary-builder}}}
+\end{itemize}
+La principale différence entre ces dernières est que \emph{{timezone-boundary-builder}} utilise \emph{OpenStreetMap} afin d'inclure les eaux territoriales dans la définition des bornes de fuseaux horaires. De plus, il y a une mention sur le site de \emph{tz\_world} que l'information na'a pas été mise à jour depuis le 28 mai 2016. \\
+
+Outre ces considérations, les deux sources sont construites sensiblement selon le même format. Il s'agit de deux \emph{ShapeFile} à partir desquels nous irons extraire l'identifiant du fuseau horaire nommé \texttt{TZID}. \\
+
+Initialement, le jeu de données d'\emph{OpenFlights} contenait 593 aéroports sans information sur le fuseau horaire. Nous chercherons bien évidemment à réduire le plus possible cette proportion. Sur ce point, le \emph{ShapeFile} de \emph{{timezone-boundary-builder}} performera beaucoup mieux en réduisant le nombre de valeurs manquantes à 7 compartivement à \emph{tz\_world} qui en contiendra toujours 250. \\
+
+Par contre, la réduction du nombre de valeurs manquantes n'est pas un critère suffisant pour discriminer une source par rapport à l'autre. Encore faut-il que ces nouvelles données soit précises! Pour ce faire, nous avons mener une étude comparative par rapport aux valeurs qui étaient déjà présentes dans le jeu de données d'\emph{OpenFlights}. Le principe de cette étude consistait à regarder dans quelle proportion des cas, les valeurs connues ou extraites concordent si les deux valeurs ne sont pas manquantes. La \autoref{tab:tzConsistency} présente ces différentes proportions. \\
+
+\begin{table}
+	\centering
+	\begin{tabular}{ccc}
+		\textbf{Source 1} & \textbf{Source 2} & \textbf{\% Concordance} \\
+		\hline
+		\emph{OpenFlights} & \emph{tz\_world} & 87.5 \% \\
+		\emph{OpenFlights} & \emph{{timezone-boundary-builder}} & 87.6 \% \\
+		\emph{tz\_world} & \emph{{timezone-boundary-builder}} & 99.7 \%	
+	\end{tabular}
+	\caption{Étude comparative de concordance entre les différentes sources de fuseaux horaires}
+	\label{tab:tzConsistency}
+\end{table}
+
+À partir de ces résultats, il sera possible de conclure que les sources \emph{tz\_world} et \emph{{timezone-boundary-builder}} sont plus fiables que l'information actuellement contenue dans la variable \texttt{tzFormat}. Il ne reste plus qu'à savoir si \emph{{timezone-boundary-builder}} est réellement une source plus fiable que \emph{tz\_world}. Pour ce faire, nous avons étudier tous les cas où le fuseau horaire identifié par ces deux sources n'était pas le même. Parmi ces 22 cas, seulement 2 cas indiquaient un résultat légèrement plus précis pour \emph{tz\_world}. D'autre part, nous devons admettre que la variable \texttt{tzFormat} s'est révèlée plus exacte que nos deux sources seulement pour 1 cas. \\
+
+Nous en sommes donc venus à conclure que nous devrions n'ont pas seulement compléter les champs manquants de la variable \texttt{tzFormat}, mais bien complètement remplacer cette dernière par les informations de \emph{{timezone-boundary-builder}}. \\
+
+Certaines considérations sont à prendre en compte:
+\begin{itemize}
+	\item Le fuseau horaire \emph{{America/Punta\_Arenas}} n'est pas reconnu comme un format valide par le paquetage \texttt{lubridate} \\
+	Cependant, la variable \texttt{tzFormat} assignait ces aéroports au fuseau horaire \emph{America/Santiago} ce qui pourrait introduire des erreurs dans le calcul du temps de vol. \cite{timeanddate} \\
+	De plus, ce problème est mineur puisqu'il n'implique que 5 aéroports.
+	\item Aucun travail n'a été fait auprès des autres variables relatives au fuseau horaire. \\
+	Ces dernières devront faire l'objet d'une extrapolation à partir de la nouvelle information ou tout simplement être supprimée puisque le format contient déjà toute l'information nécessaire.
+\end{itemize}
+\vspace{\baselineskip}
+
+Tout le contenu de la contribution est disponible directement sur la page suivante: \url{https://github.com/jpatokal/openflights/pull/736}. \\
