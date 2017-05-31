@@ -123,7 +123,7 @@ NULL
  ( 1.6529478) ( 0.1245497)
 \end{lstlisting}
 
-Les mordus de statistiques parmi vous auront constaté que les distributions reconnues par \texttt{fitdistr} ne nécessitent pas toujours le même nombre de paramètres. Il s'agit là d'une complexité algorithmique de bonne taille. Dans le cadre de l'étude de cas, nous avons cru bon de créer une réplique de cette fonction afin d'expliquer comment nous pouvons nous y prendre pour créer des fonctions aussi flexibles. Voici pour commencer le code source de cette fameuse fonction : \\
+Les mordus de statistiques parmi vous auront constaté que les distributions reconnues par \texttt{fitdistr} ne nécessitent pas toujours le même nombre de paramètres. Il s'agit là d'une complexité algorithmique de bonne taille. Dans le cadre de l'étude de cas, nous avons cru bon de créer une réplique de cette fonction afin d'expliquer comment nous pouvons nous y prendre pour octroyer un comportement aussi flexible. Voici pour commencer le code source de cette fameuse fonction : \\
 
 \begin{lstlisting}[caption = Réplicat maison de la fonction \texttt{fitdistr} ,label=src:distFit]
 #' Generic function for statistical distribution adjustment
@@ -271,4 +271,47 @@ Warning messages:
   NaNs produced
 \end{lstlisting}
 
-Comme nous venons de le voir, la combinaison de ces trois fonctions ouvre les portes à un autre niveau de flexibilité pour la définition de fonctions utilitaires. Grâce à cet exemple, nous comprenons désormais un peu mieux la mécanique sous-entendue par le passage de paramètres additionnels via l'argument \texttt{(...)}.
+Comme nous venons de le voir, la combinaison de ces trois fonctions ouvre les portes à un autre niveau de flexibilité pour la définition de fonctions utilitaires. Grâce à cet exemple, nous comprenons désormais un peu mieux la mécanique sous-entendue par le passage de paramètres additionnels via l'argument \texttt{(...)}. \\
+
+En ce qui à trait à notre étude de cas, l'ajustement de distribution fut nécessaire pour déterminer selon quelle loi les poids des colis pouvaient être modélisés. Une fois cette modélisation réalisée, il sera beaucoup plus simple de procéder à l'analyse par simulation de la \autoref{sec:simul}. La \autoref{tab:weightDistFit} consiste en un sommaire des résultats d'ajustement obtenus selon la fonction utilitaire \texttt{distFit} et la fonction \texttt{fitdistr} du paquetage \texttt{MASS}. \\
+
+\begin{table}
+	\centering
+	\begin{tabular}{ccccc}
+		\multirow{2}{*}{\textbf{Distribution}} & \multicolumn{2}{c}{\textbf{\texttt{distFit}}} & \multicolumn{2}{c}{\textbf{\texttt{fitdistr}}} \\
+		& \textbf{$Param_1$} & \textbf{$Param_2$} & \textbf{$Param_1$} & \textbf{$Param_2$} \\
+		\hline
+		Gamma & 3.055112 & 0.8589427 & 3.054802645 & 0.857914221 \\
+		InvGaussian & 3.560507 & 8.643489 & \texttt{NA} & \texttt{NA} \\
+		LogNormal & 1.097521 & 0.5874043 & 1.097461059 & 0.587425157 \\
+		Normal & 3.560237 & 2.282066 & 3.560736550 & 2.281963899 \\
+		Pareto & 13 974 470 & 49 759 350 & \texttt{NA} & \texttt{NA} \\
+		Weibull & 1.704325 & 4.020126 & 1.704313997 & 4.019855513 \\	
+	\end{tabular}
+	\caption{Ajustement de distribution sur poids observés selon la fonction utilitaire \texttt{distFit} et la fonction \texttt{fitdistr} du paquetage \texttt{MASS}}
+	\label{tab:weightDistFit}
+\end{table} 
+
+\addPicture{1}{0.5}{fitDist}{Visualisation de l'ajustement sur la distribution empirique des poids (Cumulative à gauche et Densité à droite)}{fitDist}
+
+Somme toute, les résultats de notre fonction utilitaire sont drôlement impressionnant compte tenu de la flexibilité additionnelle que nous lui avons fourni en comparaison à son homologue. De l'autre côté de la médaille, notre fonction est loin d'être optimale et pourra s'avérer peu efficace sur des plus gros jeux de données. \\
+
+De ces résultats, nous pouvons désormais conclure que les poids suivent une loi $LogNormal(\mu := 1.0975,\sigma := 0.587)$. Nous voyons toutefois qu'une loi $InvGaussian(\mu := 3.56,\sigma := 8.64)$ aurait pu être un bon choix! Cela n'est pas une situation aussi rare qu'elle peut ne le paraître et le choix de la distribution devra s'appuyer sur d'autres considérations que coefficient d'ajustement. Nous pourrons préférer choisir une distribution avec un moins bon ajustement en raison de ses propriétés simplifiant ainsi le reste de l'analyse par exemple. En terminant, puisque nous sommes dans un contexte éducationnel et que les données ont été produites par le \autoref{src:benchmark}, il nous ai aussi possible de comparer la distribution sélectionnée avec celle qui est à l'origine de ces observations. Vous constaterez par vous même la précision de nos résultats. \\
+
+\begin{table}
+	\centering
+	\begin{tabular}{cccc}
+		\multicolumn{2}{c}{\textbf{Distribution Ajustée}} & \multicolumn{2}{c}{\textbf{Distribution Théorique}} \\
+		\textbf{$Param_1$} & \textbf{$Param_2$} & \textbf{$Param_1$} & \textbf{$Param_2$} \\
+		\hline
+		$1.0975$ & $0.587$ & $\log{3} \approx 1.0986$ & $\log{1.8} \approx 0.5878$
+	\end{tabular}
+	\caption{Comparaison des paramètres de la distribution ajustée et théorique des poids de colis (Kg)}
+	\label{tab:compareDistWeight}
+\end{table}
+
+\begin{moreInfo}{Une variable plutôt invariante...}
+	Il est possible de démontrer que si $X \sim LogNormal(\mu,\sigma)$ alors $aX \sim LogNormal(\mu + \log{a},\sigma)$. C'est cette propriété qui nous permet de faire le pont entre le paramàtre $\mu$ que l'on retrouve dans le \autoref{src:benchmark} ($\log{3000}$) et la valeur théorique que l'on affiche à la \autoref{tab:compareDistWeight}. La différence provient du fait que nous avons créer notre fonction théorique en gramme pour ensuite la convertir en Kg en divisant par 1000. En applicant le postulat, nous obtenons: 
+	$$\log{3000}+\log{\frac{1}{1000}} = \log{3000}-\log{1000} = \log{\frac{3000}{1000}} = \log{3}.$$
+	\url{https://en.wikipedia.org/wiki/Log-normal_distribution#Related_distributions}
+\end{moreInfo}

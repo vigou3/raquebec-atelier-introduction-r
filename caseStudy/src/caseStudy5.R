@@ -153,7 +153,7 @@ invisible(sapply(1:length(law),
                                    add = TRUE, lwd = 3, col = col[i])))
 legend(x="right", y = "center",distName, inset = 0.1, col = col, pch = 20, pt.cex = 2, cex = 1, 
        ncol = 1, bty = "n", text.width = 2, title = "Distribution")
-mtext("Ajustement sur distribution empirique", side = 3, line = -2, outer = TRUE)
+mtext("Adjustment over Empirical Distribution", side = 3, line = -2, outer = TRUE)
 
 # We thus choose the LogNormal distribution which possesses the smallest deviance and the best fit
 distChoice <- "LogNormal"
