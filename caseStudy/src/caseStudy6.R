@@ -94,4 +94,4 @@ curve(do.call(eval(parse(text = paste("d",law[match(distChoice,distName)],sep = 
 abline(v = v <- exp(paramAdjust[1]+paramAdjust[2]**2/2), lwd = 2)
 text(v+0.75,0.3,as.character(round(v,2)))
 abline(v = v <- mean(weightSales),col = "red", lwd = 2)
-text(v - 0.75,0.3,round(v,2),col = "red")
+text(v + 0.5,0.3,round(v,2),col = "red")

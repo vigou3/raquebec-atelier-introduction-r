@@ -50,3 +50,71 @@ histogram(~ as.vector(results) | g,xlab = "Results",ylab = "Frequency")
 	\url{https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-262-discrete-stochastic-processes-spring-2011/course-notes/MIT6_262S11_chap02.pdf} \\
 	\url{https://fr.wikipedia.org/wiki/Loi_de_Poisson}
 \end{moreInfo}
+
+Dans le contexte de l'étude, ces notions de simulation nous ont permis de procéder à une analyse de la compétitivité de notre nouvelle tarification. À partir du nombre de colis moyen observé pour chacun des mois au cours des trois dernières années (\autoref{tab:lambdaPois}), nous serons en mesure de pouvoir générer une observation qui représentera le nombre de colis qui seront postés au cours de la prochaine année. \\
+
+\begin{table}
+	\centering
+	\begin{tabular}{cc}
+		Mois & Nombre de colis \\
+		\hline
+		Janvier & 2000 \\
+		Février & 1700 \\
+		Mars & 1500 \\
+		Avril & 1350 \\
+		Mai & 1600 \\
+		Juin & 1650 \\
+		Juillet & 1750 \\
+		Août & 2000 \\
+		Septembre & 2300 \\
+		Octobre & 2425 \\
+		Novembre & 2500 \\
+		Décembre & 3500 \\
+		\hline
+		Total & 24275
+	\end{tabular}
+	\caption{Moyenne trois ans du nombre de colis postés pour chacun des mois de l'année}
+	\label{tab:lambdaPois}
+\end{table}
+
+Nous ferons ici appel au fait que la moyenne d'une loi de poisson de paramètre $\lambda$ correspond tout simplement au paramètre lui-même et qu'une addition de lois de poisson indépendantes est équivalente à une loi de poisson dont le paramètre $\lambda$ sera en fait l'addition des paramètres de chacune des lois qui la constitue. Cela revient donc à dire que nous pourrons modéliser le nombre de colis postés au cours d'une année grâce à une $Pois(\lambda = 24275)$. \\
+
+
+%
+%> nsim <- 1
+%> simulResults <- replicate(nsim, simulOverall(),simplify = FALSE)
+%> (marketShareSales <- sapply(1:nsim,function(x) 
+%+   sum(as.numeric(simulResults[[x]][6,]))/length(simulResults[[x]][6,])))
+%[1] 0.3143401
+%> (ownRevenus <- sum(as.numeric(simulResults[[1]][4,])*
+%+                      as.numeric(simulResults[[1]][6,]),na.rm = TRUE))
+%[1] 353490.7
+%> (compRevenus <- sum(as.numeric(simulResults[[1]][5,])*
+%+                       (1-as.numeric(simulResults[[1]][6,])),na.rm = TRUE))
+%[1] 1438990
+%> (marketShareRevenus <- ownRevenus/(ownRevenus+compRevenus))
+%[1] 0.1972075
+%> 
+%> arrivalSales <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==1]) 
+%> distanceSales <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==1])
+%> weightSales <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==1])
+%> 
+%> arrivalComp <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==0]) 
+%> distanceComp <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==0])
+%> weightComp <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==0])
+%> 
+%> # Representation of the result
+%> table(arrivalSales)
+%arrivalSales
+% YEG  YHZ  YOW  YQB  YVR  YWG  YYC  YYZ  YZV 
+% 555  261 1291  270  847  430  651 3018  279 
+%> mean(distanceSales)
+%[1] 1281.691
+%> table(arrivalComp)
+%arrivalComp
+% YBC  YBG  YEG  YFC  YGL  YGW  YHZ  YMT  YOW  YQB  YQM  YSJ  YTZ  YUY  YVO 
+% 320  230 1708  207  150  355  968  190  114  850  377  167  483  220  389 
+% YVP  YVR  YWG  YWK  YYC  YYG  YYT  YYY  YYZ  YZV  ZBF 
+% 540 2534 1429  826 2105  251  841  429    1  825   73 
+%> mean(distanceComp)
+%[1] 1831.261
