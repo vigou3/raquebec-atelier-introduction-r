@@ -28,14 +28,16 @@ airportsDensity <- simCombinedIndex/sum(simCombinedIndex)
 # Function for the simulation of the shipment prices.
 simulShipmentPrice <- function(Arrival,Weight)
 {
-  ownPrice <- ifelse(is(testSim <- try(shippingCost("YUL",Arrival,Weight)$price,silent = TRUE),
-                        "try-error"),NA,testSim)
+  ownPrice <- ifelse(is(testSim <- try(shippingCost("YUL",Arrival,Weight),silent = TRUE),
+                        "try-error"),NA,testSim$price)
+  ownPrice <- ifelse(is.na(ownPrice),NA,testSim$price)
+  netProfit <- ifelse(is.na(ownPrice),NA,testSim$price/testSim$taxRate-testSim$fixedCost)
   distance <- airportsDist("YUL",Arrival)$value
   nd <- as.data.frame(cbind(distance,Weight))
   colnames(nd) <- c("distance","weight")
   compPrice <- predict(compModel,newdata = nd)
   customerChoice <- ifelse(is.na(ownPrice),0,ifelse(ownPrice < compPrice,1,0))
-  rbind(Arrival,distance,Weight,ownPrice,compPrice,customerChoice)
+  rbind(Arrival,distance,Weight,ownPrice,compPrice,customerChoice,netProfit)
 }
 
 # Function for the simulation of the shipment parameters, weights and destinations.
@@ -72,7 +74,16 @@ simulResults <- replicate(nsim, simulOverall(),simplify = FALSE)
 (compRevenus <- sum(as.numeric(simulResults[[1]][5,])*
                       (1-as.numeric(simulResults[[1]][6,])),na.rm = TRUE))
 (marketShareRevenus <- ownRevenus/(ownRevenus+compRevenus))
+(ownAvgPricem <- 
+    mean(as.numeric(simulResults[[1]][4,])*as.numeric(simulResults[[1]][6,]),na.rm = TRUE))
+(compAvgPrice <- 
+    mean(as.numeric(simulResults[[1]][5,])*(1-as.numeric(simulResults[[1]][6,])),na.rm = TRUE))
 
+# Fixed Cost Proportion
+(netProfits <- sum(as.numeric(simulResults[[1]][7,])*as.numeric(simulResults[[1]][6,]),na.rm = TRUE))
+1-netProfits/ownRevenus
+
+# Variable creation to simplify the rest of the processing
 arrivalSales <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==1]) 
 distanceSales <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==1])
 weightSales <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==1])
@@ -80,6 +91,9 @@ weightSales <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==1])
 arrivalComp <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==0]) 
 distanceComp <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==0])
 weightComp <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==0])
+
+mean(weightSales)
+mean(weightComp)
 
 # Representation of the result
 table(arrivalSales)

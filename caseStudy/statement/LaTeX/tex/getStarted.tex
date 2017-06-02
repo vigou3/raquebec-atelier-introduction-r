@@ -41,25 +41,19 @@ Finalement, vous pourrez toujours installer des paquetages directement via la co
 
 Une fois les paquetages installés, n'oubliez pas d'utiliser la commande \texttt{library(<nom paquetage>)} avant toute utilisation de fonctions rendues accessibles sous ces derniers. \footnote{L'installation d'un paquetage donné ne devra se faire qu'une seule fois lors de sa première utilisation.}
 
-\section{Mise à jour de R et ses paquetages}
-paquetage \texttt{installr}
-%# installing/loading the package:
-%if(!require(installr)) { install.packages("installr"); require(installr)} #load / install+load installr
-% 
-%updateR(F, T, T, F, T, F, T) # install, move, update.package, quit R.
-%Since the various steps are broken into individual functions, you can also pick and choose what to run using the relevant function:
-%
-%# installing/loading the package:
-%if(!require(installr)) { install.packages("installr"); require(installr)} #load / install+load installr
-% 
-%# step by step functions:
-%check.for.updates.R() # tells you if there is a new version of R or not.
-%install.R() # download and run the latest R installer
-%copy.packages.between.libraries() # copy your packages to the newest R installation from the one version before it (if ask=T, it will ask you between which two versions to perform the copying)
-%
-%https://www.r-statistics.com/2013/03/updating-r-from-r-on-windows-using-the-installr-package/
+\section{Mise à jour de R et de R Studio}
+La mise à jour de R est maintenant beaucoup plus simple grâce au paquetage \texttt{installr}. Une fois la librairie appelée par l'environnement, la fonction \texttt{updateR} sera accessible. Par son appel, une vérification sera fait à savoir si une version plus récente de R est disponible. Le cas échéant, une fenêtre de navigation apparaîtra afin de vous guider dans le processus de mise à jour. Autrement, puisque la fonction \texttt{updateR} n'est qu'une fonction mère réalisant les appels nécessaire dans un ordre précis, vous pourrez préciser toutes vos réponses comme montré par le \autoref{src:updateR}. Vous pourrez aussi remarqué qu'à la mise à jour de R, on vous demandera si vous désirez mettre à jour vos paquetages. \cite{updateR} \\
 
-\section{Installation de Git}
+\begin{lstlisting}[caption = Mise à jour de R avec la fonction \texttt{updateR},label=src:updateR]
+library(intallr)
+# install, move, update.package and quit R
+updateR(F, T, T, F, T, F, T)
+\end{lstlisting}
+
+\vspace{\baselineskip}
+Pour la mise à jour de R Studio, vous n'aurez qu'à aller sous l'onglet \emph{Help} pour ensuite sélectionner \emph{Check for Updates}. Si une nouvelle version de R Studio est disponible, on vous demandera si vous êtes intéressé à la télécharger et en acceptant, votre navigateur web s'ouvrira automatiquement sur la page de téléchargement de R Studio où vous aurez accès au nouveau contenu. 
+
+\section{Gestionnaire de versions}
 Tout developpment devrait être fait à l'aide d'un gestionnaire de versions. Ce sujet est très large et hors d'application du document. Nous nous contentons de donner des liens vers des références intéressantes à ce sujet.
 
 compte privés
@@ -68,3 +62,4 @@ https://github.com/
 https://git-scm.com/download
 https://www.youtube.com/playlist?list=PL-osiE80TeTuRUfjRe54Eea17-YfnOOAx
 tutoriels youtube très intéressants
+lien vers formation que je suis en train de faire.

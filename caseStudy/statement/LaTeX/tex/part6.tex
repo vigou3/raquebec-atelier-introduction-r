@@ -1,6 +1,6 @@
-Quand bien même que la génération de nombres aléatoires ai déjà été abordée à la \autoref{sec:statsTools}, il serait injuste de s'imaginer que les capacités de R s'arrêtent là. R est un excellent langage pour faire des simulations complexes. L'estimation par simulation sera souvent un excellent moyen pour évaluer le comportement d'un phénomène difficilement quantifiable de manière déterministe. \\
+Même si la génération de nombres aléatoires a déjà été abordée à la \autoref{sec:statsTools}, il serait injuste de s'imaginer que les capacités de R s'arrêtent là. R est un excellent langage pour faire des simulations complexes. L'estimation par simulation sera souvent un excellent moyen pour évaluer le comportement d'un phénomène difficilement quantifiable de manière déterministe. \\
 
-La première fonction à connaître lorsque nous abordons une analyse de ce genre est la fonction \texttt{sample} \cite{Rfunction:sample}. Cette dernière sera utile dans les cas où nous cherchons à faire une pige aléatoire de taille quelconque (\texttt{size}) sur un ensemble de valeurs contenues dans un vecteur. Il sera possible de préciser si nous voulons faire une pige avec ou sans remise avec l'argument \texttt{replace} ainsi que la probabilité de survenance de chaque élément grâce à l'argument \texttt{prob}. Un aspect fort intéressant de cette fonction est sa capacité de faire des piges sur des valeurs textuelles. Le \autoref{src:sample} illustre un exemple simplifié de l'utilisation de la fonction \texttt{sample}. Lors du deuxième appel de la fonction, nous remarquons la génération de valeurs beaucoup plus élevées par rapport au premier appel. Toutefois, la seule différence a été de modifier la valeur de l'argument \texttt{prob} pour y assigner le poids relatif de l'altitude sur l'ensemble des altitudes favorisant ainsi les valeurs extrêmes positives. Le troisième appel expose, quant à lui, la capacité de travailler avec un vecteur de valeurs textuelles. \\
+La première fonction à connaître lorsque nous abordons une analyse de ce genre est la fonction \texttt{sample} \cite{Rfunction:sample}. Cette dernière sera utile dans les cas où nous cherchons à faire une pige aléatoire de taille quelconque (\texttt{size}) sur un ensemble de valeurs contenues dans un vecteur. Il sera possible de préciser si nous voulons faire une pige avec ou sans remises à l'aide de l'argument \texttt{replace}. Nous pourrons faire de même pour la probabilité de survenance de chaque élément avec l'argument \texttt{prob}. Un aspect fort intéressant de cette fonction est sa capacité de faire des piges sur des valeurs textuelles. Le \autoref{src:sample} illustre un exemple simplifié de l'utilisation de la fonction \texttt{sample}. Lors du deuxième appel de la fonction, nous remarquons la génération de valeurs beaucoup plus élevées par rapport au premier appel. Toutefois, la seule différence a été de modifier la valeur de l'argument \texttt{prob} pour y assigner le poids relatif de l'altitude sur l'ensemble des altitudes favorisant ainsi les valeurs extrêmes positives. Le troisième appel expose, quant à lui, la capacité de travailler avec un vecteur de valeurs textuelles. \\
 
 \begin{lstlisting}[caption = Pige aléatoire sur support vectoriel,label=src:sample]
 > altitude <- as.numeric(paste(airportsCanada$altitude))
@@ -34,7 +34,7 @@ En inspectant le \autoref{src:caseStudy6}, nous constatons la structure fonction
 
 Ce ne sera qu'en présence de cette structure que la fonction \texttt{replicate} prendra tout son sens. À l'aide de cette fonction, nous pourrons commodément contrôler le nombre de répliques effectuées. Dans le \autoref{src:replicate}, nous avons justement pris cette fonctionnalité pour reproduire à 6 reprises la génération de nombres aléatoires suivant une loi $Norm(\mu := 3, \sigma := 4)$.
 
-\begin{lstlisting}[caption = Replication d'une analyse par simulation,label=src:replicate]
+\begin{lstlisting}[caption = Réplication d'une analyse par simulation,label=src:replicate]
 fsimul <- function() qnorm(runif(100),3,4)
 results <- replicate(6,fsimul())
 g <- rep(c("a", "b","c","d","e","f"), each = 100)
@@ -46,12 +46,12 @@ histogram(~ as.vector(results) | g,xlab = "Results",ylab = "Frequency")
 \addPicture{1}{0.5}{replicate}{Comparaison des résultats de simulation obtenus avec 6 réplicats}{replicate}
 
 \begin{moreInfo}{Une "Poisson" dans une pisciculture...}
-	La distribution Poisson sera souvent à la base des processus de simulation en raison de ses propriétés particulières. Nous parlerons souvent du fait que cette loi ne possède pas de mémoire ce qui implique que le nombre de succès observés sur différents intervalles seront indépendants. Nous pouvons aussi mentionner que la somme des variables aléatoires suivant des lois Poisson indépendantes de paramètres $\lambda_1$ et $\lambda_2$ suivra à son tour une loi de Poisson de paramètre $\lambda_1 + \lambda_2$. \\
+	La distribution Poisson sera souvent à la base des processus de simulation en raison de ses propriétés particulières. Nous parlerons souvent du fait que cette loi ne possède pas de mémoire ce qui implique que le nombre de succès observés sur différents intervalles seront indépendants. Nous pouvons aussi mentionner que la somme des variables aléatoires qui suivent des lois Poisson indépendantes de paramètres $\lambda_1$ et $\lambda_2$ suivra à son tour une loi de Poisson de paramètre $\lambda_1 + \lambda_2$. \\
 	\url{https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-262-discrete-stochastic-processes-spring-2011/course-notes/MIT6_262S11_chap02.pdf} \\
 	\url{https://fr.wikipedia.org/wiki/Loi_de_Poisson}
 \end{moreInfo}
 
-Dans le contexte de l'étude, ces notions de simulation nous ont permis de procéder à une analyse de la compétitivité de notre nouvelle tarification. À partir du nombre de colis moyen observé pour chacun des mois au cours des trois dernières années (\autoref{tab:lambdaPois}), nous serons en mesure de pouvoir générer une observation qui représentera le nombre de colis qui seront postés au cours de la prochaine année. \\
+Dans le contexte de l'étude, ces notions de simulation nous ont permis de procéder à une analyse de la compétitivité de notre nouvelle tarification. À partir du nombre de colis moyen observé pour chacun des mois au cours des trois dernières années (\autoref{tab:lambdaPois}), nous serons en mesure de générer une observation qui représentera le nombre de colis qui seront postés au cours de la prochaine année. \\
 
 \begin{table}
 	\centering
@@ -77,44 +77,36 @@ Dans le contexte de l'étude, ces notions de simulation nous ont permis de proc�
 	\label{tab:lambdaPois}
 \end{table}
 
-Nous ferons ici appel au fait que la moyenne d'une loi de poisson de paramètre $\lambda$ correspond tout simplement au paramètre lui-même et qu'une addition de lois de poisson indépendantes est équivalente à une loi de poisson dont le paramètre $\lambda$ sera en fait l'addition des paramètres de chacune des lois qui la constitue. Cela revient donc à dire que nous pourrons modéliser le nombre de colis postés au cours d'une année grâce à une $Pois(\lambda = 24275)$. \\
+Nous ferons ici appel au fait que la moyenne d'une loi de Poisson de paramètre $\lambda$ correspond tout simplement au paramètre lui-même et qu'une addition de lois de Poisson indépendantes est équivalente à une loi de poisson dont le paramètre $\lambda$ sera en fait l'addition des paramètres de chacune des lois qui la constitue. Cela revient donc à dire que nous pourrons modéliser le nombre de colis postés au cours d'une année grâce à une $Pois(\lambda = 24275)$. \\
 
+Une fois le nombre de colis à livrer déterminé, nous allons générer un poids selon la loi ajustée à la \autoref{sec:fitDist} ainsi qu'une destination pour chacun des colis. Pour identifier les destinations possibles puisque l'aéroport d'origine sera toujours l'aéroport de Montréal (YUL), nous avons filter les trajets possédant cette caractéristique. Nous avons aussi créé un vecteur de probabilité en fonction de l'achalandage des différents aéroports de destination tout en prenant soin de rebalancer  la somme de ces poids à 100%. \\
 
-%
-%> nsim <- 1
-%> simulResults <- replicate(nsim, simulOverall(),simplify = FALSE)
-%> (marketShareSales <- sapply(1:nsim,function(x) 
-%+   sum(as.numeric(simulResults[[x]][6,]))/length(simulResults[[x]][6,])))
-%[1] 0.3143401
-%> (ownRevenus <- sum(as.numeric(simulResults[[1]][4,])*
-%+                      as.numeric(simulResults[[1]][6,]),na.rm = TRUE))
-%[1] 353490.7
-%> (compRevenus <- sum(as.numeric(simulResults[[1]][5,])*
-%+                       (1-as.numeric(simulResults[[1]][6,])),na.rm = TRUE))
-%[1] 1438990
-%> (marketShareRevenus <- ownRevenus/(ownRevenus+compRevenus))
-%[1] 0.1972075
-%> 
-%> arrivalSales <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==1]) 
-%> distanceSales <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==1])
-%> weightSales <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==1])
-%> 
-%> arrivalComp <- as.character(simulResults[[1]][1,simulResults[[1]][6,]==0]) 
-%> distanceComp <- as.numeric(simulResults[[1]][2,simulResults[[1]][6,]==0])
-%> weightComp <- as.numeric(simulResults[[1]][3,simulResults[[1]][6,]==0])
-%> 
-%> # Representation of the result
-%> table(arrivalSales)
-%arrivalSales
-% YEG  YHZ  YOW  YQB  YVR  YWG  YYC  YYZ  YZV 
-% 555  261 1291  270  847  430  651 3018  279 
-%> mean(distanceSales)
-%[1] 1281.691
-%> table(arrivalComp)
-%arrivalComp
-% YBC  YBG  YEG  YFC  YGL  YGW  YHZ  YMT  YOW  YQB  YQM  YSJ  YTZ  YUY  YVO 
-% 320  230 1708  207  150  355  968  190  114  850  377  167  483  220  389 
-% YVP  YVR  YWG  YWK  YYC  YYG  YYT  YYY  YYZ  YZV  ZBF 
-% 540 2534 1429  826 2105  251  841  429    1  825   73 
-%> mean(distanceComp)
-%[1] 1831.261
+Une fois ces informations en main, nous avons simplement calculé les prix en utilisant la fonction utilitaire \texttt{shippingCost} créée à la \autoref{sec:fctUtil} et la fonction \texttt{predict} appliquée au modèle linéaire estimé à la \autoref{statsTools} en lui passant la distance (Voir la fonction \texttt{airportsDist}) et le poids du colis. Ces deux prix représenteront respectivement le prix de notre compagnie et celui du compétiteur. À partir de ces prix, nous attribuerons la vente à la compagnie offrant le prix le plus avantageux. \footnote{Prenez note que nous aurions pu rajouter du réalisme au modèle en applicant une loi de Bernoulli dont le paramètre serait influencé dans la différence de prix.} Cette manière de faire supposera une connaissance parfaite du marché de la part des clients et une influence nulle de tout autre facteur en dehors du prix sur la décision finale du client (ce qui n'est évidemment pas toujours le cas). \\
+
+\begin{moreInfo}{C'est bien modéliser, mais c'est encore mieux prédire!}
+	Nous n'avons pas abordé la manière de prédire des nouvelles valeurs une fois un modèle en main lorsque nous avons introduit la fonction \texttt{lm}. Ceci était volontaire puisque nous avons jugé plus propice son explication avec l'appui d'un exemple de son utilisation. Vous vous doutiez probablement qu'une telle fonction existait puisque la modélisation d'un phénomène ne serait d'aucune utilité si nous ne pourrions pas en ressortir des prédictions. En R, la majorité des techniques de prédiction implémenteront une fonction générique \texttt{predict} à cet effet. Pour utiliser cette dernière, nous devrons préciser le modèle choisi et lui fournir un \texttt{data.frame} contenant les données sur lesquelles nous désirons obtenir une prédiction. \\
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/stats/html/predict.lm.html}
+\end{moreInfo}
+
+Notre simulation ne fera qu'une seule itération, mais il serait simple d'ajouter des itérations en ne modifiant que la valeur de la variable \texttt{nsim}. Il nous ai désormais possible de tirer des conclusions sur la compétitivité de notre tarificiation. Ces dernières sont regroupées dans le \autoref{tab:resultsComp}. \\
+
+\begin{table}
+	\begin{tabular}{ccc}
+		\textbf{Critère de comparaison} & \textbf{Compagnie} & \textbf{Compétiteur} \\
+		\hline
+		Part de marché (\# Ventes) & 31.4\% & 68.6 \% \\
+		Revenus totaux (000 \$) & 353 & 144 \\
+		Part de marché (\$ Ventes) & 19.7\% & 80.3 \% \\
+		Distance moyenne par livraison (Km) & 1282 & 1831 \\
+		Poids moyen par livraison (Kg) & 2.56 & 3.99 \\
+		Prix moyen par livraison (\$) & 14.6 & 59.2
+	\end{tabular}
+	\caption{Comparaison de la compétitivité selon les résultats de l'analyse par simulation}
+	\label{tab:resultsComp}
+\end{table}
+
+Comme nous pouvons le constater, notre tarification aura comme effet de nous spécialiser dans la niche des transports de colis de faibles poids sur de courtes distances. Ceci n'est pas suprenant compte tenu de la structure de rabais qui fut implantée au sein de la fonction \texttt{shippingCost}. Ces conclusions sont encore plus flagrantes lorsque l'on compare la distribution des poids des colis postés par rapport à la distribution théorique de ceux-ci. (Voir \autoref{fig:salesWeightsDist}) \\
+
+\addPicture{1}{0.5}{salesWeightsDist}{Distribution observée et théorique des poids des colis pour les ventes simulées}{salesWeightsDist}
+
+Nous pouvons donc conclure que la stratégie financière est efficiente pour cibler les transports de faible poids sur de courte distance, mais il ne faudra pas négliger le prix moindre de ces livraisons qui auront comme impact d'augmenter la proportion des frais fixes. Ces derniers correspondront à environ 20 \% des revenus avant taxes.
