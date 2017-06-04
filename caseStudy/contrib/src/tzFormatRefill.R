@@ -120,4 +120,4 @@ length(airports$tzFormat[is.na(airports$tzFormat)])/length(airports$tzFormat)
 
 # Export final database
 summary(airports)
-write.table(airports,file = "../data/airports_Updated.dat",row.names = FALSE,col.names = FALSE)
+write.table(airports,file = "../data/airports_Updated.dat",row.names = FALSE,col.names = FALSE,sep = ",")
