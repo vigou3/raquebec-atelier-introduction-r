@@ -1,4 +1,4 @@
-Une des caractéristiques du langage R sur laquel sa réputation s'est bâtie est la variété des outils statistiques qu'il place à la disposition de son utilisateur. Sans même avoir à importer une quelconque librairie à partir de CRAN, plusieurs distributions statistiques sont disponibles. La \autoref{tab:distStatsR} fait la revue des ces distributions et de leur identifiant R correspondant. \cite{distStatsR} \\
+Une des caractéristiques du langage R sur laquelle sa réputation s'est bâtie est la variété des outils statistiques qu'il place à la disposition de son utilisateur. Sans même avoir à importer une quelconque librairie à partir de CRAN, plusieurs distributions statistiques sont disponibles. Le \autoref{tab:distStatsR} fait la revue des ces distributions et de leur identifiant R correspondant. \cite{distStatsR} \\
 
 \begin{table}[h]
 	\centering
@@ -35,7 +35,7 @@ Un aspect particulièrement intéressant de ces fonctions (qu'elles soient dispo
 	\item[$r\langle ID_R \rangle$] Permet de générer des valeurs aléatoires suivants la distribution ayant l'identifiant R $\langle ID_R \rangle$.
 \end{description}
 
-De plus, les arguments de ces fonctions se présenteront toujours sous le même format. Nous devrons soit fournir la valeur à laquelle nous voulons évaluer la fonction ou encore un nombre d'observations à générer dans le cas des fonctions préfixées par "r" et les paramètres de la loi utilisée. À des fins d'optimisation des performances, le logarithme de ces fonctions sera souvent nécessaire et c'est ce qui explique la présence de l'argument \texttt{log}. \footnote{Plusieurs propriétés statistiques découlent du logarithme des fonctions de densité et de répartition tel que la fonction génératrice de moments pour ne nommer que cette denière.} Finalement, nous serons parfois intéressés par la fonction de survie d'une distribution donnée correspondant au complément de la fonction de répartition. En attribuant la valeur \textit{FALSE} à l'argument \texttt{lower.tail}, les fonctions préfixées par "p" renverront ainsi la valeur de la fonction de survie. Un exemple d'utilisation de ces fonctions est présenté par le \autoref{src:distStats}. \\
+De plus, les arguments de ces fonctions se présenteront toujours sous le même format. Nous devrons soit fournir la valeur à laquelle nous voulons évaluer la fonction ou encore un nombre d'observations à générer dans le cas des fonctions préfixées par "r" et les paramètres de la loi utilisée. À des fins d'optimisation des performances, le logarithme de ces fonctions sera souvent nécessaire et c'est ce qui explique la présence de l'argument \texttt{log}. \footnote{Plusieurs propriétés statistiques découlent du logarithme des fonctions de densité et de répartition tels que la fonction génératrice de moments pour ne nommer que cette denière.} Finalement, nous serons parfois intéressés par la fonction de survie d'une distribution donnée correspondant au complément de la fonction de répartition. En attribuant la valeur \textit{FALSE} à l'argument \texttt{lower.tail}, les fonctions préfixées par "p" renverront ainsi la valeur de la fonction de survie. Un exemple d'utilisation de ces fonctions est présenté par le \autoref{src:distStats}. \\
 
 \begin{lstlisting}[caption = Fonctions relatives à la distribution Normale,label=src:distStats]
 > set.seed(2017)
@@ -62,7 +62,7 @@ De plus, les arguments de ces fonctions se présenteront toujours sous le même 
  [6] 6.903811 2.083267 5.996951 5.469328 9.126445
 \end{lstlisting}
 
-Ceux qui sont familiers avec les distributions statistiques auront remarqué qu'à l'aide des fonctions décrites ci-dessus nous aurons donc deux manières de générer des nombres aléatoires. La première qui est aussi la plus évidente sera d'utiliser les fonctions préfixées avec "r". La seconde utilisera le théroême de la réciproque qui consiste à générer des valeurs aléatoires suivant une loi uniforme de paramètre $a := 0$ et $b := 1$ pour ensuite trouver les quantiles de la loi pour laquelle nous voulons générer des nombres aléatoires grâce aux fonctions préfixées par "q". Ces deux techniques sont mises à profit dans le \autoref{src:aleaNorm}. \\
+Ceux qui sont familiers avec les distributions statistiques auront remarqué qu'à l'aide des fonctions décrites ci-dessus nous aurons deux manières de générer des nombres aléatoires. La première, qui est aussi la plus évidente, sera d'utiliser les fonctions préfixées avec "r". La seconde utilisera le théroême de la réciproque qui consiste à générer des valeurs aléatoires suivant une loi uniforme de paramètres $a := 0$ et $b := 1$ pour ensuite trouver les quantiles de la loi pour laquelle nous voulons générer des nombres aléatoires grâce aux fonctions préfixées par "q". Ces deux techniques sont mises à profit dans le \autoref{src:aleaNorm}. \\
 
 \begin{lstlisting}[caption = Génération de nombres aléatoires,label=src:aleaNorm]
 > y1 <- rnorm(1000,mean,sd)
@@ -92,7 +92,7 @@ Ceux qui sont familiers avec les distributions statistiques auront remarqué qu'
 	\url{https://fr.wikipedia.org/wiki/Fonction_de_r%C3%A9partition#Th.C3.A9or.C3.A8me_de_la_r.C3.A9ciproque}
 \end{moreInfo}
 
-En présence de données empiriques, la première étape d'une analyse statistique sera de dresser le portrait statistique de ces données. Nous avons déjà parlé de la fonction \texttt{summary} à la \autoref{subsec:extraction}. Nous rajouterons ici les fonctions \texttt{mean} et \texttt{sd} retournant respectivement la moyenne et l'écart-type d'un jeu de données empiriques (\autoref{src:aleaNorm}). \\
+En présence de données empiriques, la première étape d'une analyse statistique sera de dresser le portrait des données. Nous avons déjà parlé de la fonction \texttt{summary} à la \autoref{subsec:extraction}. Nous rajouterons ici les fonctions \texttt{mean} et \texttt{sd} retournant respectivement la moyenne et l'écart-type d'un jeu de données empiriques (\autoref{src:aleaNorm}). \\
 
 Afin de valider l'ajustement d'une distribution sur les données empiriques, nous serons souvent contraints à identifier les fonctions de densité et de répartition sous-jacentes. Il existe plusieurs façons de faire. Celle qui nous semble toutefois la plus pertinente et polyvalente exploite le comportement de la fonction \texttt{ecdf}. Cette dernière permet de construire une fonction de répartition empirique à partir des observations fournies en argument. Nous pouvons ensuite construire une fonction de densité empirique en évaluant cette fonction de répartition à deux points autour de la valeur désirée et en divisant ensuite le résultat par la largeur de l'intervalle évalué. Les instructions permettant de construire ces fonctions sont fournies par \autoref{src:fctEmp}. \\
 
@@ -121,7 +121,7 @@ Dans le cadre de notre étude de cas, nous avons performé les tests du Khi carr
 
 Lorsque nous effectuons un test statistique, nous cherchons toujours à répondre à une question binaire représentée sous la forme de deux hypothèses $H_0$ et $H_1$ complémentaires. Une valeur nommée la \texttt{p-value} sera ensuite calculée en acceptant l'hypothèse $H_0$ comme vraie. Cette valeur correspondra à la probabilité d'observer un résultat équivalent ou supérieur du test que nous venons d'exécuter en considérant l'hypothèse nulle comme vraie. En d'autres mots, cette valeur nous indiquera la probabilité de se tromper en rejetant l'hypothèse nulle en considérant l'hypothèse nulle comme vraie initialement. Ainsi, à partir du moment où la \texttt{p-value} sera inférieure au seuil de crédibilité que l'on s'était fixé (habituellement 5\%), nous considérerons l'hypothèse nulle comme fausse. \\ 
 
-Dans le cas du test du Khi carré, l'hypothèse nulle suppose que les deux distributions sont indépendantes. Le test de corrélation suppose tant qu'à lui que la valeur théorique de corrélation est équivalente à 0. Comme nous pouvons le voir avec le \autoref{src:testStat}, nous ne pouvons pas rejeter ces deux hypothèses. \\
+Dans le cas du test du Khi carré, l'hypothèse nulle suppose que les deux distributions sont indépendantes. Quant au test de corrélation, il suppose que la valeur théorique de corrélation est équivalente à 0. Comme nous pouvons le voir avec le \autoref{src:testStat}, nous ne pouvons pas rejeter ces deux hypothèses. \\
 
 \begin{lstlisting}[caption = Tests d'indépendance et de corrélation entre distributions,label=src:testStat]
 > weightsBinded <- cut(compData$weight,25)
@@ -197,9 +197,9 @@ F-statistic: 4.982e+04 on 2 and 99997 DF,  p-value: < 2.2e-16
 \end{lstlisting}
 
 \vspace{\baselineskip}
-L'appel de la fonction \texttt{lm} \cite{Rfunction:lm} est assez élémentaire. Il suffit de fournir une formule de régression contenant les variables explicatives avec lesquelles nous tenons à faire la régression et nous spécifions le nom de la table contenant ces variables. Nous remarquons ici la technique du retour multiple abordée à la \autoref{sec:fctUtil}. Nous voyons aussi que pour chaque coefficient un test de Student a été effectué pour déterminer à quel point les estimations sont significativement différentes de 0. D'autre part, le test de Fisher permet de savoir s'il existe réellement une relation entre les variables explicatives choisies et la variable réponse analysée. \cite{outputLM} \\
+L'appel de la fonction \texttt{lm} \cite{Rfunction:lm} est assez élémentaire. Il suffit de fournir une formule de régression contenant les variables explicatives avec lesquelles nous tenons à faire la régression et nous spécifions le nom de la table contenant ces variables. Nous remarquons ici la technique des retours multiples abordée à la \autoref{sec:fctUtil}. Nous voyons aussi qu'un test de Student a été effectué sur chaque coefficient pour déterminer à quel point les estimations sont significativement différentes de 0. D'autre part, le test de Fisher permet de savoir s'il existe réellement une relation entre les variables explicatives choisies et la variable réponse analysée. \cite{outputLM} \\
 
-Lorsque l'on compare les valeurs réellement utilisées dans le \autoref{src:benchmark} et les coefficients estimés, nous voyons que ces derniers sont très proches les uns des autres. La \autoref{tab:linRegFit} fait la revue de ces valeurs. \\
+Lorsque l'on compare les valeurs réellement utilisées dans le \autoref{src:benchmark} et les coefficients estimés, nous voyons que ces derniers sont très proches les uns des autres. Le \autoref{tab:linRegFit} fait la revue de ces valeurs. \\
 
 \begin{table}[h]
 	\centering
