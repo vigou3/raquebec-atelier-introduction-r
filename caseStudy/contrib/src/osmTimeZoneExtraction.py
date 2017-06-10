@@ -4,10 +4,10 @@ from timezonefinder import TimezoneFinder
 
 # Extraction of the data from OpenFlights
 url = 'https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat'
-airports = pd.read_csv(url,na_values=['\\N'])
+airports = pd.read_csv(url, na_values=['\\N'])
 
-airports.columns = ["AirportID","Name","City","Country","IATA","ICA","Latitude","Longitude",
-                    "Altitude","Timezone","DST","Tz","Type","Source"]
+airports.columns = ["AirportID", "Name", "City", "Country", "IATA", "ICA", "Latitude", "Longitude",
+                    "Altitude", "Timezone", "DST", "Tz", "Type", "Source"]
 
 # Extraction of Canadian airports
 # print(airports.loc[(airports.Country == "Canada")])
@@ -17,7 +17,7 @@ airports.columns = ["AirportID","Name","City","Country","IATA","ICA","Latitude",
 # Using timezonefinder package that is using OSM as background reference
 tf = TimezoneFinder()
 mergedTz = list()
-for i in pd.DataFrame(airports,columns=["Latitude","Longitude"]).iterrows():
+for i in pd.DataFrame(airports, columns=["Latitude", "Longitude"]).iterrows():
     lng = i[1][1]
     lat = i[1][0]
     try:
@@ -34,4 +34,3 @@ divergence = airports.loc[(airports.MergedTz != airports.Tz)]
 path = os.getcwd() + "\\..\\data\\divergence.csv"
 divergence = divergence.dropna(subset=["Tz", "MergedTz"])
 divergence.to_csv(path)
-
