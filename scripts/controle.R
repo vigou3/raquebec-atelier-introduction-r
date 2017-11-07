@@ -79,6 +79,9 @@ f(c(5, 10, 20), 5)
 ##
 ## Voici une première mise en oeuvre de notre fonction 'sqrt'
 ## utilisant la méthode du point fixe.
+##
+## Puisqu'il faut au minimum vérifier si la valeur initiale
+## est un point fixe, nous utilisons une boucle 'repeat'.
 sqrt <- function(x, start = 1, TOL = 1E-10)
 {
     repeat
@@ -94,9 +97,9 @@ sqrt(9, 1)
 sqrt(225, 1)
 sqrt(3047, 50)
 
-## Si nous voulions utiliser la méthode du point fixe pour
-## résoudre une autre équation, il faudrait toutefois écrire
-## une nouvelle fonction qui serait pour l'essentiel
+## Formidable. Toutefois, si nous voulions utiliser la méthode
+## du point fixe pour résoudre une autre équation, il faudrait
+## écrire une nouvelle fonction qui serait pour l'essentiel
 ## identique, sinon pour le calcul de la fonction
 ## (mathématique) f(x) pour laquelle nous cherchons le point
 ## fixe.
@@ -123,7 +126,7 @@ sqrt <- function(x)
     if (x < 0)
         stop("cannot compute square root of negative value")
 
-    fixed.point(function(y) (y + x/y)/2, start = 1)
+    fixed_point(function(y) (y + x/y)/2, start = 1)
 }
 sqrt(9)
 sqrt(25)
