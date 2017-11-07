@@ -21,3 +21,5 @@ missfont.log
 *.vrb
 
 **/Reference/leafletTrafic_files/
+
+**/.idea

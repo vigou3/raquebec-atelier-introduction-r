@@ -1,0 +1,9 @@
+https://en.wikipedia.org/wiki/Tz_database
+
+http://web.cs.ucla.edu/~eggert/tz/tz-link.htm
+
+https://github.com/evansiroky/timezone-boundary-builder
+
+https://pypi.python.org/pypi/timezonefinder
+
+https://github.com/MrMinimal64/timezonefinder

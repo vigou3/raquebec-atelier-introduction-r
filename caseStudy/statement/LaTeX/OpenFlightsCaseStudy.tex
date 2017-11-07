@@ -1,0 +1,202 @@
+\documentclass{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{listings}
+\lstloadlanguages{R}
+\usepackage{graphicx}
+\usepackage{fontawesome}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[hyphens]{url}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+
+% Creation of a command to generate the title page
+\newcommand*{\titlePage}{
+	\begingroup 
+		\hbox{
+			\hspace*{0.1\textwidth}
+			\rule{1.5pt}{\textheight}
+			\hspace*{0.05\textwidth}
+			\parbox[b]{0.75\textwidth}{
+				{\noindent\LARGE\bfseries Étude de cas:} \\[\baselineskip]
+				{\noindent\Huge\bfseries Analyse de marché du} \\
+				{\noindent\Huge\bfseries transport aérien} \\
+				{\noindent\Huge\bfseries canadien avec R} \\[2\baselineskip]
+				% Title
+				{\large\textit{Atelier d'introduction à R}}\\[4\baselineskip]
+				% Author name
+				{\Large\textsc{Cabral Cruz, Samuel}} \\[2\baselineskip]
+				{\large \normalfont{Avec la collaboration de}} \\[\baselineskip]
+				{\large\textsc{Beauchemin, David}} \\[\baselineskip]
+				{\large\textsc{Goulet, Vincent}} \\[4\baselineskip]
+				% Association
+				{\large {Dans le cadre du colloque R à Québec}} \\[\baselineskip]
+				{\large {25 mai 2017}} 
+				\vspace{0.35\textheight}}}\endgroup}
+
+% Default Addition of Pictures
+\graphicspath{{./fig/}}
+\newcommand{\addPicture}[5]{
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=#1\textwidth, height=#2\textheight,keepaspectratio]{#3}
+			\caption{#4}
+			\label{fig:#5}
+		\end{center}
+	\end{figure}}
+	
+% Creation of environment to add additional informations
+\mdfsetup{
+	linecolor=NavyBlue,
+	linewidth=2pt,
+	nobreak=true,
+	backgroundcolor=NavyBlue!10,
+	roundcorner=10pt}	
+\newenvironment{moreInfo}[1]
+	{\begin{mdframed}
+	\textcolor{NavyBlue}{\huge \raisebox{-3.5pt}{\faInfo} 
+	\hspace{0.5cm} \large\bfseries #1}\\[5pt]
+	\normalsize
+	\makebox[0.1\textwidth][l]{}	
+	\begin{minipage}{10cm}}
+	{	\end{minipage}
+	\end{mdframed}}
+
+% Lstlisting configurations
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\renewcommand\lstlistingname{Code Source}
+\renewcommand\lstlistlistingname{Liste des codes sources}
+%\AtBeginDocument{\counterwithin{lstlisting}{chapter}}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{
+	language=R,                     
+	basicstyle=\footnotesize,       
+	numbers=left,                   
+	numberstyle=\tiny\color{gray},  
+	stepnumber=1,                   
+	numbersep=5pt,                  
+	backgroundcolor=\color{white},  
+	showspaces=false,               
+	showstringspaces=false,         
+	showtabs=false,                 
+	frame=b,                   
+	rulecolor=\color{black},        
+	tabsize=2,                      
+	captionpos=t,                   
+	breaklines=true,                
+	breakatwhitespace=false,        
+	title=\lstname,                 
+	keywordstyle=\color{blue},      
+	commentstyle=\color{dkgreen},   
+	stringstyle=\ttfamily\color{mauve},
+	%identifierstyle=\color{magenta},
+	escapeinside={\%*}{*)},
+	%literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1,
+	morekeywords={*,...,seed,strings,header,select}} 
+
+\begin{document}
+
+\renewcommand{\labelitemi}{\tiny $\blacktriangleright$}
+\renewcommand{\labelitemii}{\footnotesize $\bullet$}
+\renewcommand{\labelitemiii}{\tiny \ding{117}}
+\renewcommand{\labelitemiv}{\small $\star$}
+
+\begin{titlepage}
+	\clearpage\thispagestyle{empty}
+	\titlePage
+\end{titlepage}
+\newpage
+\input{tex/license}
+\tableofcontents
+\listoffigures
+\addcontentsline{toc}{chapter}{Table des figures}
+\lstlistoflistings
+\addcontentsline{toc}{chapter}{Liste des codes sources}
+\listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
+\chapter*{Préface}
+\addcontentsline{toc}{chapter}{Préface}
+	\input{tex/preface}
+
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+\setcounter{chapter}{1}
+	\input{tex/introduction}
+
+\chapter*{Étude de cas}
+\addcontentsline{toc}{chapter}{Étude de cas}
+\stepcounter{chapter}
+	
+\section{Extraction, traitement, visualisation et \\analyse des données}
+	\input{tex/part1}
+
+\newpage
+\section{Création de fonctions utilitaires}
+	\label{sec:fctUtil}
+	\input{tex/part2}
+
+\newpage
+\section{Conception de graphiques en R}
+	\input{tex/part3}
+
+\section{Outils d'analyse statistique en R}
+	\label{sec:statsTools}
+	\input{tex/part4}
+
+\section{Ajustement de distributions statistiques sur données empiriques}
+	\label{sec:fitDist}
+	\input{tex/part5}
+
+\section{Analyse par simulation en R}
+	\label{sec:simul}
+	\input{tex/part6}
+	
+\chapter*{Conclusion}
+	\input{tex/conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+\stepcounter{chapter}
+
+\bibliographystyle{plain}
+\bibliography{bib/reference,bib/data,bib/links}
+	\addcontentsline{toc}{chapter}{Bibliographie}
+
+\appendix
+\chapter{Code source du projet}
+	\label{ann:srcProject}
+	Cette annexe présente les codes sources de l'ensemble du projet. Ceux-ci se divisent sous la forme de 6 parties qui correspondent aux différents thèmes abordés dans le présent document. \\
+\lstinputlisting[caption=benchmark.R,label=src:benchmark]{../../src/benchmark.R}
+\lstinputlisting[caption=caseStudy1.R,label=src:caseStudy1]{../../src/caseStudy1.R}
+\lstinputlisting[caption=caseStudy2.R,label=src:caseStudy2]{../../src/caseStudy2.R}
+\lstinputlisting[caption=caseStudy3.R,label=src:caseStudy3]{../../src/caseStudy3.R}
+\lstinputlisting[caption=caseStudy4.R,label=src:caseStudy4]{../../src/caseStudy4.R}
+\lstinputlisting[caption=caseStudy5.R,label=src:caseStudy5]{../../src/caseStudy5.R}
+\lstinputlisting[caption=caseStudy6.R,label=src:caseStudy6]{../../src/caseStudy6.R}
+
+\chapter{Contribution au projet \emph{OpenFlights}}
+	\label{ann:contribOpenFlights}
+Cette annexe présente les développements qui ont mené à notre contribution au projet \emph{OpenFlights}. \\
+
+	\input{tex/contribution}
+\lstinputlisting[caption=tzFormatRefill.R,label = src:tzFormatRefill]{../../contrib/src/tzFormatRefill.R}
+\lstinputlisting[caption=osmTimeZoneExtraction.py,
+label=src:OSMPython]{../../contrib/src/osmTimeZoneExtraction.py}
+	
+\chapter{Premiers pas avec R}
+	\label{ann:gettingStarted}
+	\input{tex/gettingStarted}
+\end{document}

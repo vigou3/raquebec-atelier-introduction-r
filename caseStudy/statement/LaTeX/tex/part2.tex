@@ -1,0 +1,163 @@
+Cette section servira principalement à faire la revue des concepts les plus importants dans la création de fonctions utilitaires. Lorsque nous parlons de fonctions utilitaires, nous faisons référence à des fonctions définies par l'utilisateur afin de favoriser la compréhensibilité de son programme et la réutilisation de tronçons de code. Dans le cadre du projet, nous avons pris l'initiative de construire les trois fonctions suivantes: \\
+\begin{description}[style=multiline,leftmargin=2.5cm]
+	\item[airportsDist] Calcule la distance en kilomètres entre deux aéroports
+	\item[arrivalTime] Calcule l'heure d'arrivée d'un colis posté au moment du calcul
+	\item[shippingCost] Calcule le coût d'une livraison
+\end{description}
+
+Lorsque nous voulons définir une fonction, la structure présentée par le \autoref{src:fct} sera toujours utilisée. 
+
+\begin{lstlisting}[caption = Structure pour la définition d'une fonction,label=src:fct]
+# nom_de_la_fonction <- function( liste_des_arguments )
+# {
+# 	corps_de_la_fonction
+# 	... 
+# 	valeur_retournee_par_la_fonction
+# }
+\end{lstlisting}
+
+\vspace{\baselineskip}
+À partir du \autoref{src:fct}, nous pouvons dès lors déduire plusieurs éléments de théorie. Tout d'abord, le mot clé \texttt{function} sera toujours nécessaire pour mentionner à R que nous sommes en train de définir une fonction, et ce, qu'elle soit anonyme ou non. D'autre part, la valeur retournée par une fonction sera toujours la valeur de la dernière expression évaluée au sein de son corps qui sera délimitée par les accolades. Bien entendu, il est possible de contourner ce processus en introduisant le mot clé \texttt{return} qui aura pour effet d'entreprendre les processus de retour à l'exécution du programme principal tout en ignorant le reste de l'exécution que la fonction aurait pu engendrer. C'est exactement ce que le \autoref{src:return} cherche à expliciter. Bien que la seule différence entre les deux fonctions soit la présence de l'instruction \texttt{return}, ces deux fonctions auront un comportement bien différent puisque la première retournera l'addition des deux paramètres qu'elle aura reçu ($2+3=5$) pendant que la seconde arrêtera son exécution au croisement de l'instruction \texttt{return} pour renvoyer la valeur du premier argument ($2$). En théorie, nous chercherons à éviter l'utilisation du \texttt{return} ou d'autres modificateurs de flux du même genre. Nous préférerons plutôt n'avoir qu'une entrée et une sortie possible pour chaque fonction. En pratique, ce genre d'instructions peuvent simplifier grandement l'écriture du code, mais leur utilisation restera réservée à des situations bien particulières.
+
+\begin{lstlisting}[caption = L'instruction \texttt{return} et le retour standard d'une fonction R ,label=src:return]
+ftest1 <- function(a,b)
+{
+  a+b
+}
+ftest2 <- function(a,b)
+{
+  return(a)
+  a+b
+}
+ftest1(2,3)
+ftest2(2,3)
+\end{lstlisting}
+
+\vspace{\baselineskip}
+L'exemple du \autoref{src:return} combiné à la structure générique présentée précédemment nous accorde un environnement idéal pour introduire les notions d'argumentation. Comme mentionné ci-dessus, le passage des arguments se fera à l'intérieur des parenthèses suivant le nom des fonctions. Il s'agit en fait de la même syntaxe pour toutes les autres fonctions que nous avons déjà utilisées dans la section précédente. Une fois une fonction utilitaire définie correctement par l'utilisateur, celle-ci sera équivalente aux autres fonctions rendues disponibles par les différents paquetages. Si nous examinons le \autoref{src:return}, nous voyons que les fonctions \texttt{ftest1} et \texttt{ftest2} prennent 2 paramètres à titre d'arguments nommés \texttt{a} et \texttt{b}. Une fois les arguments déclarés dans l'en-tête de fonction, nous pourrons les utiliser comme bon nous semble à l'intérieur du corps en utilisant leur étiquette.
+
+\begin{lstlisting}[caption = Définir des valeurs par défauts dans les fonctions utilitaires,label=src:defaultParams]
+ftest3 <- function(a=2,b=3)
+{
+  a+b
+}
+ftest3()
+\end{lstlisting}
+
+\vspace{\baselineskip}
+Comme plusieurs autres langages de programmation, la méthode entreprise pour définir des paramètres par défaut revient simplement à en faire la définition directement dans l'en-tête de la fonction grâce à l'opérateur d'égalité. Bien que la définition de paramètres par défaut puisse sembler anodine pour un nouveau programmeur, vous apprendrez rapidement que vos programmes ne doivent jamais contenir de chiffres magiques. Nous désignons par chiffre magique, tout nombre (et par extension toute expression) constant présent dans un programme sur lequel un utilisateur donné ne pourrait avoir une influence sans directement modifier le code source. Malgré le fait que vous soyez convaincus que votre programme ne sera jamais utile dans un autre dessein que celui qui vous a initialement amené à le créer, ce genre de pratique, en plus d'être inefficace, va directement à l'encontre du but premier de la définition de fonction au sens élargi, soit la réutilisation du code. Un moyen simple d'ajouter de la flexibilité à une fonction sera alors la définition de paramètres par défaut. Vous pourrez retirer que du positif d'adopter de bonnes pratiques de programmation dès vos débuts dans le domaine. À long terme et à l'aide d'une documentation adéquate de vos programmes (et fonctions), vous bénificierez de votre rigueur même si cette dernière vous aura fait perdre un temps précieux au cours de votre apprentissage. \\
+
+D'accord, mais qu'entendons-nous par documentation "adéquate"? Trop souvent, la mauvaise documentation d'un programme ne vient pas d'un mal intentionnellement causé par le développeur, mais bien d'une mauvaise éducation sur ce qui caractérise une bonne documentation. Premièrement, le fait qui vous semble le plus évident au moment du procédé de documentation ne le sera pas nécessairement pour le futur utilisateur.  Par le fait même, une documentation devrait être aussi monotone à lire qu'à écrire. Deuxièmement, une documentation ne devrait pas correspondre à un paragraphe sans structure précise ou encore à un enchaînement de faits complètement désorganisés qui n'auront un sens logique que pour celui qui les aura écrits. Troisièmement, un utilisateur s'attendra à retrouver le même type d'information dans la documentation de deux entités différentes qui sont du même genre. \\
+
+Lorsque nous mettons ces considérations en perspective, on vient donc rapidement à la conclusion qu'une structure standard devrait toujours être utilisée. En plus d'offrir un cadre rigide sur la manière de créer notre documentation, ces outils auront l'avantage de produire des fichiers de référence complets qui possèderont tous les aspects pratiques d'une documentation professionnelle. Un bon exemple de ce genre d'outils est \texttt{Doxygen} \cite{doxygen} qui est très populaire pour la documentation de scripts écrits en C/C++. Le principe derrière cet outil a justement été repris pour l'adapter au code R dans le cadre du développement du paquetage \texttt{roxygen2} \cite{roxygen2}. Nous croyons que l'utilisation de ces balises est indispensable même si aucune documentation officielle ne sera jamais générée. Il s'agit simplement d'une excellente habitude de travail et cela vous aidera à structurer votre documentation selon un modèle standard et reconnu par la communauté.\\
+
+\begin{moreInfo}{\texttt{Doxygen} et \texttt{Roxygen}, ça respire quoi en hiver?}
+	Le principe de ces outils est extrêmement rudimentaire. De manière intuitive, nous utilisons les commentaires afin de faire la documentation de nos programmes. Ce sera toujours le cas! La principale différence provient de l'introduction de balises qui guideront la présentation de l'information lors de la production de la documentation officielle disponible sous plusieurs formats (\texttt{.html}, \texttt{.pdf}, \texttt{.tex} (\LaTeX), etc.) À titre d'exemple, nous utiliserons la balise \@param pour décrire un paramètre, \@return pour décrire le retour et \@examples pour donner des exemples d'utilisation pour documenter une fonction. Dans bien des cas, \LaTeX  sera derrière le formatage de cette documentation. Il est bon de savoir que l'écriture d'une telle documentation sera un prérequis à tous ceux qui seront tentés de créer un paquetage et de le publier sur \emph{Comprehensive R Archive Network (CRAN)}. \\
+	\url{https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text}
+\end{moreInfo}
+
+En reprenant les fonctions \texttt{ftest1}, \texttt{ftest2} et \texttt{ftest3}, nous pouvons faire quelques tests en variant le nombre d'arguments envoyés et le comportement résultant.
+
+\begin{lstlisting}[caption = Passage d'arguments à une fonction,label=src:callFctParam]
+> ftest1(3)
+Error in ftest1(3) : argument "b" is missing, with no default
+> ftest2(3)
+[1] 3
+> ftest2(b=5)
+Error in ftest2(b = 5) : argument "a" is missing, with no default
+> ftest3(3)
+[1] 6
+> ftest3(3,5)
+[1] 8
+> ftest3(b=5)
+[1] 7
+> ftest3(b=5,3)
+[1] 8
+> ftest3(3,5,4)
+Error in ftest3(3, 5, 4) : unused argument (4)
+\end{lstlisting}
+
+\vspace{\baselineskip}
+Comme le montre le \autoref{src:callFctParam}, nous pourrions admettre comme règle que tout argument ne possédant pas de valeur par défaut doit absolument avoir une valeur d'attribuer lors de l'appel de la fonction. De plus, nous observons que la notion d'argument nommé n'a pas vraiment de signification en R. Ainsi, tous les arguments seront traités de manière positionnelle à moins d'indication contraire par la spécification du nom de l'argument dans l'appel de la fonction. Nous pouvons toutefois remarquer un cas particulier avec l'appel de \texttt{ftest2(3)} qui fournira bel et bien la valeur de 3 même si aucune valeur n'a été fournie pour le paramètre \texttt{b} et qu'il n'ait aucune valeur par défaut. Ceci s'explique par le fait que R ne détectera une erreur de valeur manquante qu'au moment de l'exécution plutôt qu'au moment de l'appel de la fonction. Ainsi, R n'aura jamais remarqué l'absence d'une valeur pour \texttt{b} puisque \texttt{ftest2} retournera la valeur de \texttt{a} et que son exécution n'ira jamais évaluer la commande \texttt{a+b}. De manière similaire, une erreur sera produite si nous ne fournissons à \texttt{ftest2} qu'une valeur à \texttt{b}. \\
+
+L'appel \texttt{ftest3(b=5,3)} expose la flexibilité tout aussi incroyable que dangereuse des procédés d'assignation de valeurs lors des appels de fonction en R. Cette flexibilité de pouvoir alterner l'ordre pour spécifier les valeurs à nos paramètres vient du fait que R traitera ces deux processus d'assignation de manière indépendante. Dans un premier temps, l'ensemble des valeurs assignées à des paramètres en spécifiant leur nom sera extrait du vecteur de paramètres fourni et les valeurs restantes seront attribuées de manière positionnelle sur les arguments n'ayant toujours pas reçu de valeur. Il faut toutefois faire attention puisqu’aucune discrimination ne sera effectuée par rapport aux paramètres ayant des valeurs par défaut (\autoref{src:assignPositionalDefault}).
+
+\begin{lstlisting}[caption = L'assignation et les valeurs par défaut,label=src:assignPositionalDefault]
+> ftest4 <- function(a,b=3,c,d)
++ {
++   a+b+c+d
++ }
+> ftest4(c=2,1,3)
+Error in ftest4(c = 2, 1, 3) : argument "d" is missing, with no default
+\end{lstlisting}
+
+\vspace{\baselineskip}
+Votre oeil, déjà très aguerri, a probablement remarqué que les fonctions définies dans le cadre de cette étude de cas utilisaient une technique de retours multiples par l'entremise d'une liste. Cette technique deviendra intéressante dans les cas où une fonction doit effectuer plusieurs sous-calculs distincts. À titre d'exemple, bien qu'une fonction soit destinée à exécuter une tâche précise, son utilisateur pourrait parfois être intéressé par la valeur d'un des calculs intermédiaires réalisés. L'avantage de la liste est la possibilité intrinsèque d'attribuer des noms aux différentes valeurs renvoyées. En plus d'ajouter beaucoup de valeur à vos fonctions sans nécessairement rendre le code source beaucoup plus complexe, ce type de retour vous aidera grandement dans le débogage de ces dernières lors de leur développement. Cette technique possède toutefois les désavantages d'imposer une certaine rigueur au niveau de leur utilisation en obligeant l'utilisateur à récupérer la liste dans un objet pour ensuite faire l'extraction de la valeur désirée avec l'opérateur \texttt{\$}. Le \autoref{src:multipleReturn} offre un exemple concret de cette notion de retours multiples.
+
+\begin{lstlisting}[caption = Retours multiples par l'entremise d'une liste,label=src:multipleReturn]
+> ftest5 <- function(a,b=3,c,d)
++ {
++   returningList <- list()
++   returningList$value <- a+b+c+d
++   returningList$params <- c(a,b,c,d)
++   returningList
++ }
+> (x <- ftest5(c=2,1,3,4))
+$value
+[1] 10
+
+$params
+[1] 1 3 2 4
+
+> x$value
+[1] 10
+\end{lstlisting}
+
+\vspace{\baselineskip}
+Le dernier thème à aborder au sujet des fonctions est la gestion des erreurs. Lorsque nous voulons définir les limites d'utilisation d'une fonction, il est préférable de parfaitement connaître ce qu'elle ne peut accomplir. Nous définirons ensuite des validations pour s'assurer que nous ne sommes pas en présence de ces cas particuliers. Dans le cas contraire, nous renverrons à l'utilisateur un message lui permettant de corriger son appel. La simplicité de R pour générer ce genre de traitement enlève toute raison possible de ne pas le faire. Ce procédé se résume en quatre étapes qui sont:
+\begin{enumerate}
+	\item Identifier une limitation du programme
+	\item Faire la validation nécessaire pour détecter la survenance de cette limitation
+	\item Composer un message concis fournissant toute l'information nécessaire pour corriger l'appel
+	\item Soulever l'erreur à l'exécution à l'aide de l'instruction \texttt{stop} en fournissant à titre d'argument le message composé à l'étape précédente
+\end{enumerate}
+
+\begin{lstlisting}[caption = Gestion des erreurs sous R,label=src:errorManagement]
+> ftest6 <- function(a,b)
++ {
++   if(b == 0)
++   {
++     stop("The value of b is not valid. A division by 0 would be generated.")
++   }
++   a/b
++ }
+> ftest6(3,4)
+[1] 0.75
+> ftest6(3,0)
+Error in ftest6(3, 0) : 
+  The value of b is not valid. A division by 0 would be generated.
+\end{lstlisting}
+
+\begin{moreInfo}{Comment jouer avec le feu sans se brûler?}
+	Parfois où la génération d'erreurs sera inévitable. Advenant cette situation, nous voudrons appliquer un traitement particulier. Nous appelons ce processus la gestion d'exception. Similairement à la majorité des autres langages de programmation, R inclut des méthodes \texttt{try/catch} pour pallier au problème. Nous avons mis cette technique en pratique dans la dernière partie de cette étude de cas. \\
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/try.html} \\
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/try.html}
+\end{moreInfo}
+
+À des fins de validation, nous avons comparé les valeurs retournées par nos fonctions avec les valeurs disponibles directement sur l'outil d'\emph{OpenFlights}. Les résultats sont tout de même très satisfaisants compte tenu de la méthode utilisée. (\autoref{tab:validFunc}) \\
+\begin{table}
+	\begin{tabular}{cccccc}
+		\multicolumn{2}{c}{\textbf{IATA}} & \multicolumn{2}{c}{\textbf{Distance (km)}} & \multicolumn{2}{c}{\textbf{Temps (hh:mm)}} \\
+		\textbf{Source} & \textbf{dest.} & \textbf{\emph{OpenFlights}} & \textbf{\texttt{airportsDist}} & \textbf{\emph{OpenFlights}} & \textbf{\texttt{arrivalTime}} \\  	
+		\hline
+		YUL & YQB & 232 & 233 & 0:47 & 0:36 \\
+		YUL & YVR & 3679 & 3693	& 5:04 & 5:26 \\
+		YUL & YYZ & 505	& 508 & 1:07 & 1:14
+	\end{tabular}
+	\caption{Comparaison entre les informations d'\emph{OpenFlights} et les résultats des fonctions \texttt{airportsDist} ainsi que \texttt{arrivalTime}}
+	\label{tab:validFunc}
+\end{table}
+
+Les différences entre les temps de vol d'\emph{OpenFlights} et le retour de la fonction \texttt{arrivalTime} sont facilement explicables. Si nous examinons le code source de cette fonction, nous remarquons la définition d'une vitesse moyenne de croisière. Cette dernière est déterminée par interpolation linéaire à partir de la vitesse de croisière optimale utilisée pour les vols commerciaux. \cite{project:validCruisingSpeed} Cela a pour effet de nous faire sous-estimer le temps pour des vols de courte durée tout en surestimant celle des vols de longue durée. En effet, plus la proportion du temps de vol destinée à faire décoller et atterrir un avion est importante, moins sa vitesse de croisière moyenne s'approchera de notre estimation. En ce qui concerne les vols de moyenne durée, nos calculs sont très représentatifs de la réalité. \\
+
+La divergence sur la distance entre YUL et YVR est toutefois un peu plus déplaisante à justifier puisque la vraie valeur devrait plutôt se situer quelque part entre les deux distances présentées. \cite{project:validDistanceYULYVR} En considérant la valeur mentionnée sur le site de \emph{Air Miles Calculator}, nous voyons que notre divergence est beaucoup plus acceptable et cohérente avec la légère surestimation que nous retrouvons pour les deux autres destinations.
