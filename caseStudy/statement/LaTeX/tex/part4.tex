@@ -1,6 +1,6 @@
 Une des caractéristiques du langage R sur laquelle sa réputation s'est bâtie est la variété des outils statistiques qu'il place à la disposition de son utilisateur. Sans même avoir à importer une quelconque librairie à partir de CRAN, plusieurs distributions statistiques sont disponibles. Le \autoref{tab:distStatsR} fait la revue des ces distributions et de leur identifiant R correspondant. \cite{distStatsR} \\
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{cc}
 		\textbf{Distribution} & \textbf{identifiant R} \\
@@ -18,7 +18,7 @@ Une des caractéristiques du langage R sur laquelle sa réputation s'est bâtie 
 		Poisson & pois \\
 		Student & t \\
 		Uniforme & unif \\
-		Weibull & weibull	
+		Weibull & weibull
 	\end{tabular}
 	\caption{Liste des distributions statistiques disponibles en R}
 \end{table}
@@ -67,15 +67,15 @@ Ceux qui sont familiers avec les distributions statistiques auront remarqué qu'
 \begin{lstlisting}[caption = Génération de nombres aléatoires,label=src:aleaNorm]
 > y1 <- rnorm(1000,mean,sd)
 > summary(y1)
-    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
- 0.07041  4.70800  6.02800  6.06200  7.35500 12.59000 
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+ 0.07041  4.70800  6.02800  6.06200  7.35500 12.59000
 > sd(y1)
 [1] 1.96455
 > r <- runif(1000)
 > y2 <- qnorm(r,mean,sd)
 > summary(y2)
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
--0.1347  4.7670  6.0830  6.0910  7.5070 12.2400 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+-0.1347  4.7670  6.0830  6.0910  7.5070 12.2400
 > sd(y2)
 [1] 1.966951
 \end{lstlisting}
@@ -119,7 +119,7 @@ Il n'est toutefois pas indispensable de connaître l'utilité de tous ces tests,
 
 Dans le cadre de notre étude de cas, nous avons performé les tests du Khi carré et de corrélation afin de s'assurer que les variables explicatives du poids et de la distance soient indépendantes et sans corrélation. Dans le cas où ce genre de phénomène serait apparu entre nos variables, nous aurions été obligés d'utiliser des modèles de régression plus complexes tels que les modèles linéaires généralisés. \\
 
-Lorsque nous effectuons un test statistique, nous cherchons toujours à répondre à une question binaire représentée sous la forme de deux hypothèses $H_0$ et $H_1$ complémentaires. Une valeur nommée la \texttt{p-value} sera ensuite calculée en acceptant l'hypothèse $H_0$ comme vraie. Cette valeur correspondra à la probabilité d'observer un résultat équivalent ou supérieur du test que nous venons d'exécuter en considérant l'hypothèse nulle comme vraie. En d'autres mots, cette valeur nous indiquera la probabilité de se tromper en rejetant l'hypothèse nulle en considérant l'hypothèse nulle comme vraie initialement. Ainsi, à partir du moment où la \texttt{p-value} sera inférieure au seuil de crédibilité que l'on s'était fixé (habituellement 5\%), nous considérerons l'hypothèse nulle comme fausse. \\ 
+Lorsque nous effectuons un test statistique, nous cherchons toujours à répondre à une question binaire représentée sous la forme de deux hypothèses $H_0$ et $H_1$ complémentaires. Une valeur nommée la \texttt{p-value} sera ensuite calculée en acceptant l'hypothèse $H_0$ comme vraie. Cette valeur correspondra à la probabilité d'observer un résultat équivalent ou supérieur du test que nous venons d'exécuter en considérant l'hypothèse nulle comme vraie. En d'autres mots, cette valeur nous indiquera la probabilité de se tromper en rejetant l'hypothèse nulle en considérant l'hypothèse nulle comme vraie initialement. Ainsi, à partir du moment où la \texttt{p-value} sera inférieure au seuil de crédibilité que l'on s'était fixé (habituellement 5\%), nous considérerons l'hypothèse nulle comme fausse. \\
 
 Dans le cas du test du Khi carré, l'hypothèse nulle suppose que les deux distributions sont indépendantes. Quant au test de corrélation, il suppose que la valeur théorique de corrélation est équivalente à 0. Comme nous pouvons le voir avec le \autoref{src:testStat}, nous ne pouvons pas rejeter ces deux hypothèses. \\
 
@@ -158,8 +158,8 @@ alternative hypothesis: true correlation is not equal to 0
 95 percent confidence interval:
  -0.003382045  0.009013785
 sample estimates:
-        cor 
-0.002815978 
+        cor
+0.002815978
 \end{lstlisting}
 
 \vspace{\baselineskip}
@@ -175,24 +175,24 @@ Pour terminer cette section, jetons un coup d'oeil à la régression linéaire q
 > summary(compModel)
 
 Call:
-lm(formula = price/(profitMargin * avgTaxRate) ~ distance + weight, 
+lm(formula = price/(profitMargin * avgTaxRate) ~ distance + weight,
     data = compData)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--30.0086  -4.6571   0.0157   4.6462  30.4167 
+     Min       1Q   Median       3Q      Max
+-30.0086  -4.6571   0.0157   4.6462  30.4167
 
 Coefficients:
-             Estimate Std. Error t value Pr(>|t|)    
+             Estimate Std. Error t value Pr(>|t|)
 (Intercept) 3.228e+01  7.510e-02  429.83   <2e-16 ***
 distance    2.819e-02  9.202e-05  306.28   <2e-16 ***
 weight      7.254e-01  9.607e-03   75.51   <2e-16 ***
 ---
-Signif. codes:  
+Signif. codes:
 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 6.932 on 99997 degrees of freedom
-Multiple R-squared:  0.4991,	Adjusted R-squared:  0.4991 
+Multiple R-squared:  0.4991,	Adjusted R-squared:  0.4991
 F-statistic: 4.982e+04 on 2 and 99997 DF,  p-value: < 2.2e-16
 \end{lstlisting}
 
@@ -207,7 +207,7 @@ Lorsque l'on compare les valeurs réellement utilisées dans le \autoref{src:ben
 		\textbf{Variable} & \textbf{Valleur réelle} & \textbf{Valeur estimée} \\
 		\hline
 		distance & 0.0275 & 0.02819 \\
-		poids & 0.7 & 0.7254		
+		poids & 0.7 & 0.7254
 	\end{tabular}
 	\caption{Comparaison entre les coefficients réels et estimés par régression linéaire}
 	\label{tab:linRegFit}

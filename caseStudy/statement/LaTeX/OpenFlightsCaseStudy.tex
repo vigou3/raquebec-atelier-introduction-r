@@ -23,7 +23,7 @@
 
 % Creation of a command to generate the title page
 \newcommand*{\titlePage}{
-	\begingroup 
+	\begingroup
 		\hbox{
 			\hspace*{0.1\textwidth}
 			\rule{1.5pt}{\textheight}
@@ -42,33 +42,33 @@
 				{\large\textsc{Goulet, Vincent}} \\[4\baselineskip]
 				% Association
 				{\large {Dans le cadre du colloque R à Québec}} \\[\baselineskip]
-				{\large {25 mai 2017}} 
+				{\large {25 mai 2017}}
 				\vspace{0.35\textheight}}}\endgroup}
 
 % Default Addition of Pictures
 \graphicspath{{./fig/}}
 \newcommand{\addPicture}[5]{
-	\begin{figure}[h]
+	\begin{figure}[ht]
 		\begin{center}
 			\includegraphics[width=#1\textwidth, height=#2\textheight,keepaspectratio]{#3}
 			\caption{#4}
 			\label{fig:#5}
 		\end{center}
 	\end{figure}}
-	
+
 % Creation of environment to add additional informations
 \mdfsetup{
 	linecolor=NavyBlue,
 	linewidth=2pt,
 	nobreak=true,
 	backgroundcolor=NavyBlue!10,
-	roundcorner=10pt}	
+	roundcorner=10pt}
 \newenvironment{moreInfo}[1]
 	{\begin{mdframed}
-	\textcolor{NavyBlue}{\huge \raisebox{-3.5pt}{\faInfo} 
+	\textcolor{NavyBlue}{\huge \raisebox{-3.5pt}{\faInfo}
 	\hspace{0.5cm} \large\bfseries #1}\\[5pt]
 	\normalsize
-	\makebox[0.1\textwidth][l]{}	
+	\makebox[0.1\textwidth][l]{}
 	\begin{minipage}{10cm}}
 	{	\end{minipage}
 	\end{mdframed}}
@@ -84,30 +84,30 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \lstset{
-	language=R,                     
-	basicstyle=\footnotesize,       
-	numbers=left,                   
-	numberstyle=\tiny\color{gray},  
-	stepnumber=1,                   
-	numbersep=5pt,                  
-	backgroundcolor=\color{white},  
-	showspaces=false,               
-	showstringspaces=false,         
-	showtabs=false,                 
-	frame=b,                   
-	rulecolor=\color{black},        
-	tabsize=2,                      
-	captionpos=t,                   
-	breaklines=true,                
-	breakatwhitespace=false,        
-	title=\lstname,                 
-	keywordstyle=\color{blue},      
-	commentstyle=\color{dkgreen},   
+	language=R,
+	basicstyle=\footnotesize,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	backgroundcolor=\color{white},
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	frame=b,
+	rulecolor=\color{black},
+	tabsize=2,
+	captionpos=t,
+	breaklines=true,
+	breakatwhitespace=false,
+	title=\lstname,
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
 	stringstyle=\ttfamily\color{mauve},
 	%identifierstyle=\color{magenta},
 	escapeinside={\%*}{*)},
 	%literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1,
-	morekeywords={*,...,seed,strings,header,select}} 
+	morekeywords={*,...,seed,strings,header,select}}
 
 \begin{document}
 
@@ -141,7 +141,7 @@
 \chapter*{Étude de cas}
 \addcontentsline{toc}{chapter}{Étude de cas}
 \stepcounter{chapter}
-	
+
 \section{Extraction, traitement, visualisation et \\analyse des données}
 	\input{tex/part1}
 
@@ -165,15 +165,15 @@
 \section{Analyse par simulation en R}
 	\label{sec:simul}
 	\input{tex/part6}
-	
+
 \chapter*{Conclusion}
 	\input{tex/conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 \stepcounter{chapter}
 
 \bibliographystyle{plain}
-\bibliography{bib/reference,bib/data,bib/links}
-	\addcontentsline{toc}{chapter}{Bibliographie}
+\bibliography{bib/reference.bib,bib/data.bib,bib/links.bib,bib/R/pkgR.bib,bib/project.bib}
+\addcontentsline{toc}{chapter}{Bibliographie}
 
 \appendix
 \chapter{Code source du projet}
@@ -195,7 +195,7 @@ Cette annexe présente les développements qui ont mené à notre contribution a
 \lstinputlisting[caption=tzFormatRefill.R,label = src:tzFormatRefill]{../../contrib/src/tzFormatRefill.R}
 \lstinputlisting[caption=osmTimeZoneExtraction.py,
 label=src:OSMPython]{../../contrib/src/osmTimeZoneExtraction.py}
-	
+
 \chapter{Premiers pas avec R}
 	\label{ann:gettingStarted}
 	\input{tex/gettingStarted}
